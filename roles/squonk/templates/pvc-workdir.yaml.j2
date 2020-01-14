@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: workdir
+  namespace: {{ sq_namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: '{{ sq_workdir_volume_storageclass }}'
+  resources:
+    requests:
+      storage: '{{ sq_workdir_volume_size_g }}Gi'

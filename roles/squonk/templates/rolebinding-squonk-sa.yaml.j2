@@ -1,0 +1,14 @@
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: squonk-sa
+  namespace: "{{ sq_namespace }}"
+roleRef:
+  kind: Role
+  name: im-psp-unrestricted
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: "{{ sq_namespace_service_account }}"
+  namespace: "{{ sq_namespace }}"

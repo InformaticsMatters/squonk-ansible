@@ -1,0 +1,18 @@
+---
+
+# Are you sure?
+
+- name: Delete Squonk?
+  pause:
+    prompt: |-
+      Are you sure you wanrt to delete Squonk?
+      Hit return to delete it.
+      Hit Ctrl+c and then "a" if you've changed your mind
+
+# Go...
+
+- name: Deleting namespace '{{ sq_namespace }}'
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    wait: yes

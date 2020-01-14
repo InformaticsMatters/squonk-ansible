@@ -1,0 +1,6 @@
+.idea/
+
+kubeconfig
+*parameters
+
+vault-pass.txt

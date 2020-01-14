@@ -1,0 +1,19 @@
+---
+
+# Do we expect to use the Kubernetes cer-manager?
+sq_use_cert_manager: yes
+# The namespace service account
+sq_namespace_service_account: squonk
+
+# Size and class of the Squonk working directory.
+# The class is 'blank', which implies the default class.
+sq_workdir_volume_size_g: 50
+sq_workdir_volume_storageclass: " "
+
+# General variables (non-sq) --------------------------------------------------
+
+# General timeout, generally used within the k8s module,
+# for wait duration
+wait_timeout: 600
+# Volume binding timeout (seconds)
+bind_timeout: 120

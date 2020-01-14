@@ -1,0 +1,5 @@
+---
+
+- hosts: squonk_server
+  roles:
+  - { role: squonk, sq_state: absent }

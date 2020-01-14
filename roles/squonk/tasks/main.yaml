@@ -1,0 +1,8 @@
+---
+
+# Go...
+
+- include_tasks: deploy.yaml
+  when: sq_state|string == 'present'
+- include_tasks: undeploy.yaml
+  when: sq_state|string == 'absent'

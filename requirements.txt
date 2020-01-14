@@ -1,0 +1,4 @@
+ansible == 2.9.2
+boto3 == 1.11.1
+jmespath == 0.9.4
+openshift == 0.10.1
