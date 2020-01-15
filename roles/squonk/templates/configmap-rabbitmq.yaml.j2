@@ -1,0 +1,68 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: rabbitmq-config
+  namespace: {{ sq_namespace }}
+data:
+  rabbitmq.config: |
+    [
+      {rabbit, [
+        {loopback_users, []}
+      ]},
+      {rabbitmq_management, [
+        {load_definitions, "/etc/squonk/definitions.json"}
+      ]}
+    ].
+  definitions.json: |
+    {
+      "rabbit_version": "{{ sq_rabbitmq_version }}",
+      "users": [
+        {
+          "name": "{{ sq_rabbitmq_default_user_fact }}",
+          "password": "{{ sq_rabbitmq_default_user_password_fact }}",
+          "tags": ""
+        },
+        {
+          "name": "admin",
+          "password": "squonk",
+          "tags": ""
+        }
+      ],
+      "vhosts": [
+        {
+          "name": "\/"
+        },
+        {
+          "name": "\/squonk"
+        }
+      ],
+      "permissions": [
+        {
+          "user": "{{ sq_rabbitmq_default_user_fact }}",
+          "vhost": "\/squonk",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        },
+        {
+          "user": "admin",
+          "vhost": "\/squonk",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        },
+        {
+          "user": "admin",
+          "vhost": "\/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+      ],
+      "parameters": [],
+      "policies": [],
+      "queues": [],
+      "exchanges": [],
+      "bindings": []
+    }

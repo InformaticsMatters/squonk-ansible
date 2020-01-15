@@ -1,0 +1,16 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  namespace: {{ sq_namespace }}
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+  - name: control
+    port: 5762
+    targetPort: control
+  - name: management
+    port: 15672
+    targetPort: management

@@ -1,19 +1,53 @@
 ---
 
-# Do we expect to use the Kubernetes cer-manager?
+# Do we expect to use the Kubernetes cert-manager?
 sq_use_cert_manager: yes
 # The namespace service account
 sq_namespace_service_account: squonk
+# The preferred node purpose for our objects
+sq_node_purpose: application
 
 # Size and class of the Squonk working directory.
 # The class is 'blank', which implies the default class.
 sq_workdir_volume_size_g: 50
 sq_workdir_volume_storageclass: " "
 
-# General variables (non-sq) --------------------------------------------------
+# RabbitMQ configuration ------------------------------------------------------
+
+# The RabbitMQ image tag.
+# We deploy using hte image tag '<version>-management-alpine'.
+sq_rabbitmq_version: 3.6.16
+
+sq_rabbitmq_cpu_limit: 1000m
+sq_rabbitmq_mem_limit: 1024Mi
+sq_rabbitmq_cpu_request: 250m
+sq_rabbitmq_mem_request: 1024Mi
+
+# RabbitMQ users, passwords and cookies
+# Set but you cannot change this once RabbitMQ had been deployed
+sq_rabbitmq_default_user: guest
+# Set but you cannot change this once RabbitMQ had been deployed
+sq_rabbitmq_default_user_password: "{{ lookup('password', '/dev/null length=10 chars=ascii_letters,digits') }}"
+# Set but you cannot change this once RabbitMQ had been deployed
+sq_rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=96 chars=ascii_letters,digits') }}"
+
+# General variables -----------------------------------------------------------
 
 # General timeout, generally used within the k8s module,
 # for wait duration
 wait_timeout: 600
 # Volume binding timeout (seconds)
 bind_timeout: 120
+
+# Kubernetes credentials ------------------------------------------------------
+
+# We don't use the Kubernetes credentials directly,
+# but we load them into variables here from their
+# expected environment variables so that we can assert they've been set.
+#
+# If we're using OpenShift credentials these environment variables
+# will not be set and we will therefore rely on them being set
+# from the 'login.yaml' play.
+
+k8s_auth_host: "{{ lookup('env', 'K8S_AUTH_HOST') }}"
+k8s_auth_api_key: "{{ lookup('env', 'K8S_AUTH_API_KEY') }}"

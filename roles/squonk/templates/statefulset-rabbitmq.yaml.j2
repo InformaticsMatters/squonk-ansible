@@ -1,0 +1,88 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: rabbitmq
+  namespace: {{ sq_namespace }}
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: rabbitmq
+  serviceName: rabbitmq
+  template:
+    metadata:
+      name: rabbitmq
+      labels:
+        app: rabbitmq
+    spec:
+      serviceAccountName: {{ sq_namespace_service_account }}
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ sq_node_purpose }}
+
+      # To access the mounted volumes
+      # we set the security context's fsGroup
+      # to the group that will be using the volume
+      # In this case it's the rabbitmq group in the container
+      # (obtained empirically)
+      securityContext:
+        fsGroup: 999
+
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:{{ sq_rabbitmq_version }}-management-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: control
+          containerPort: 5672
+        - name: management
+          containerPort: 15672
+        resources:
+          limits:
+            cpu: {{ sq_rabbitmq_cpu_limit }}
+            memory: {{ sq_rabbitmq_mem_limit }}
+          requests:
+            cpu: {{ sq_rabbitmq_cpu_request }}
+            memory: {{ sq_rabbitmq_mem_request }}
+        volumeMounts:
+        # Configuration
+        - name: rabbitmq-config
+          mountPath: /etc/squonk
+        env:
+        - name: RABBITMQ_VM_MEMORY_HIGH_WATERMARK
+          value: '0.5'
+        - name: RABBITMQ_NODENAME
+          value: rabbit@localhost
+        - name: RABBITMQ_CONFIG_FILE
+          value: /etc/squonk/rabbitmq
+        - name: RABBITMQ_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: default_user
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: default_user_password
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: erlang_cookie
+
+      volumes:
+      - name: rabbitmq-config
+        configMap:
+          name: rabbitmq-config

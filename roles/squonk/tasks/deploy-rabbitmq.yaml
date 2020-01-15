@@ -1,0 +1,65 @@
+---
+
+# Set (or retrieve previously deployed) secrets...
+# If secrets exist we need to use them to avoid
+# a forced re-deploying the application Pod.
+#
+# Basically, once passwords and user names are set (written)
+# they cannot be changed by re-running the playbook/role.
+
+- name: Check RabbitMQ secrets
+  k8s_facts:
+    kind: Secret
+    api_version: v1
+    namespace: "{{ sq_namespace }}"
+    name: rabbitmq
+  register: r_s_result
+
+- name: Set RabbitMQ secret facts (no deployed secrets)
+  set_fact:
+    sq_rabbitmq_default_user_fact: "{{ sq_rabbitmq_default_user }}"
+    sq_rabbitmq_default_user_password_fact: "{{ sq_rabbitmq_default_user_password }}"
+    sq_rabbitmq_erlang_cookie_fact: "{{ sq_rabbitmq_erlang_cookie }}"
+  when: r_s_result.resources|length == 0
+
+- name: Set RabbitMQ secret facts (pre-deployed secrets)
+  set_fact:
+    sq_rabbitmq_default_user_fact: "{{ r_s_result.resources[0].data.default_user|b64decode }}"
+    sq_rabbitmq_default_user_password_fact: "{{ r_s_result.resources[0].data.default_user_password|b64decode }}"
+    sq_rabbitmq_erlang_cookie_fact: "{{ r_s_result.resources[0].data.erlang_cookie|b64decode }}"
+  when: r_s_result.resources|length == 1
+
+- name: Write RabbitMQ secrets
+  k8s:
+    definition: "{{ lookup('template', 'secret-rabbitmq.yaml.j2') }}"
+    wait: yes
+  when: r_s_result.resources|length == 0
+
+- name: Display configuration
+  debug:
+    var: sq_rabbitmq_erlang_cookie_fact
+
+# Go...
+
+- name: Deploy RabbitMQ
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+  loop:
+  - configmap-rabbitmq
+  - service-rabbitmq
+  - statefulset-rabbitmq
+
+- name: Wait for RabbitMQ to become Ready
+  k8s_info:
+    kind: Pod
+    name: rabbitmq-0
+    namespace: "{{ sq_namespace }}"
+  register: r_result
+  until: >-
+    r_result.resources|length == 1
+    and r_result.resources[0].status.containerStatuses|length == 1
+    and r_result.resources[0].status.containerStatuses[0].ready
+  delay: 10
+  retries: "{{ (wait_timeout|int / 10)|int }}"

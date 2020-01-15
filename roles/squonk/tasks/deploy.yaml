@@ -26,7 +26,7 @@
 # e.g. wait until resources[0].status.phase == Bound (initially Pending)
 
 - name: Wait for 'workdir' volume claim to bind
-  k8s_info:
+  k8s_facts:
     kind: PersistentVolumeClaim
     name: workdir
     namespace: "{{ sq_namespace }}"
@@ -34,3 +34,5 @@
   until: workdir_result.resources[0].status.phase == 'Bound'
   delay: 5
   retries: "{{ (bind_timeout|int / 5)|int }}"
+
+- import_tasks: deploy-rabbitmq.yaml
