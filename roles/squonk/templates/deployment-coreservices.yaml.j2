@@ -1,0 +1,80 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: coreservices
+  namespace: {{ sq_namespace }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: coreservices
+  template:
+    metadata:
+      name: coreservices
+      labels:
+        name: coreservices
+    spec:
+      serviceAccountName: {{ sq_namespace_service_account }}
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ sq_node_purpose }}
+
+      containers:
+      - name: coreservices
+        image: squonk/coreservices:{{ sq_core_image_tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RABBITMQ_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: host
+        - name: RABBITMQ_SQUONK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: default_user_password
+        - name: POSTGRES_HOSTNAME
+          value: database.{{ sq_infra_namespace }}.svc
+        - name: POSTGRES_SQUONK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets-squonk
+              key: database_user_password
+        - name: SQUONK_BASIC_CHEM_SERVICES_URL
+          value: http://chemservices:8080
+        - name: SQUONK_DOCKER_SERVICES_DIR
+          value: /var/local/squonk-docker-services
+        - name: JAVA_TOOL_OPTIONS
+          value: "{{ sq_core_java_tool_options }}"
+        ports:
+        - name: http
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /coreservices/rest/ping
+            port: 8080
+          failureThreshold: 3
+          successThreshold: 1
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 60
+        resources:
+          limits:
+            cpu: {{ sq_core_cpu_limit }}
+            memory: {{ sq_core_mem_limit }}
+          requests:
+            cpu: {{ sq_core_cpu_request }}
+            memory: {{ sq_core_mem_request }}

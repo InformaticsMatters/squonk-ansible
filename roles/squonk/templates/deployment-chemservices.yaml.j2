@@ -1,0 +1,93 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: chemservices-basic
+  namespace: {{ sq_namespace }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: chemservices-basic
+  template:
+    metadata:
+      name: chemservices-basic
+      labels:
+        name: chemservices-basic
+    spec:
+      serviceAccountName: {{ sq_namespace_service_account }}
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ sq_node_purpose }}
+
+      # Initialisation Containers...
+      initContainers:
+      - name: wait-for-core-before-chem
+        image: yauritux/busybox-curl
+        name: wait-for-core-before-chem
+        command: ['sh', '-c',
+          'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done']
+
+      containers:
+      - name: chemservices-basic
+        image: squonk/chemservices-basic:{{ sq_chem_image_tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_HOSTNAME
+          value: database.{{ sq_infra_namespace }}.svc
+        - name: POSTGRES_SQUONK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets-squonk
+              key: database_user_password
+        - name: RABBITMQ_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: host
+        - name: RABBITMQ_SQUONK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: default_user_password
+        - name: JAVA_TOOL_OPTIONS
+          value: "{{ sq_chem_java_tool_options }}"
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /chem-services-cdk-basic/rest/ping
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 4
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /chem-services-cdk-basic/rest/ping
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 4
+          periodSeconds: 30
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          limits:
+            cpu: {{ sq_chem_cpu_limit }}
+            memory: {{ sq_chem_mem_limit }}
+          requests:
+            cpu: {{ sq_chem_cpu_request }}
+            memory: {{ sq_chem_mem_request }}

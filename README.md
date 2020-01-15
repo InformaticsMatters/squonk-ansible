@@ -10,6 +10,7 @@ the required modules, roles and collections: -
 
     $ conda activate ansible-squonk
     $ pip install -r requirements.txt
+    $ ansible-galaxy install -r requirements.yaml
 
 ## Cluster pre-requisites
 Your cluster will need: -

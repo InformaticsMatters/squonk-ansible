@@ -6,11 +6,17 @@ metadata:
   namespace: {{ sq_namespace }}
 spec:
   selector:
-    app: rabbitmq
+    name: rabbitmq
   ports:
-  - name: control
+  - name: empd
+    port: 4369
+    targetPort: empd
+  - name: ampq
     port: 5762
-    targetPort: control
-  - name: management
+    targetPort: ampq
+  - name: http
     port: 15672
-    targetPort: management
+    targetPort: http
+  - name: erlang
+    port: 25672
+    targetPort: erlang

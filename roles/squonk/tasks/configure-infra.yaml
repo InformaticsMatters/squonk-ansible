@@ -1,29 +1,27 @@
 ---
 
+# Now that we have a namespace
+# we must create a database for use by Squonk.
+# This is handled by our infrastructure-config Role.
+#
+# Assuming database credentials do no already exist.
+
 - name: Get database secrets
   k8s_facts:
     kind: Secret
     name: database-secrets-squonk
     namespace: "{{ sq_namespace }}"
   register: secret_result
-  when:
-  - sq_delete_db_on_removal|bool
 
-- name: Delete Squonk infrastructure database
+- name: Create infrastructure database for Squonk
   include_role:
     name: informaticsmatters.infrastructure_config
   vars:
-    ic_action: delete
+    ic_action: create
     ic_infra_namespace: "{{ sq_infra_namespace }}"
     ic_db: squonk
     ic_db_user_namespace: "{{ sq_namespace }}"
     ic_db_user: squonk
-  when:
-  - sq_delete_db_on_removal|bool
-  - secret_result.resources|length == 1
+  when: secret_result.resources|length == 0
 
-- name: Deleting namespace '{{ sq_namespace }}'
-  k8s:
-    state: absent
-    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
-    wait: yes
+- import_tasks: infra-db-migration.yaml

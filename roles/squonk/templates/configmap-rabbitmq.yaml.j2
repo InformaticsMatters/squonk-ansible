@@ -19,7 +19,7 @@ data:
       "rabbit_version": "{{ sq_rabbitmq_version }}",
       "users": [
         {
-          "name": "{{ sq_rabbitmq_default_user_fact }}",
+          "name": "squonk",
           "password": "{{ sq_rabbitmq_default_user_password_fact }}",
           "tags": ""
         },
@@ -39,7 +39,7 @@ data:
       ],
       "permissions": [
         {
-          "user": "{{ sq_rabbitmq_default_user_fact }}",
+          "user": "squonk",
           "vhost": "\/squonk",
           "configure": ".*",
           "write": ".*",

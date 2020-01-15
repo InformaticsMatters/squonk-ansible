@@ -6,3 +6,20 @@ sq_state: present
 
 # The application namespace
 sq_namespace: squonk
+# The infrastructure namespace
+# The database is expected here,
+# as the host 'database.{{ sq_infra_namespace }}.svc'
+sq_infra_namespace: im-infra
+
+# Delete the Squonk database when Squonk is removed?
+sq_delete_db_on_removal: yes
+
+# The hostname of the Keycloak server
+# i.e. example.com, 'https://' is assumed
+sq_keycloak_hostname: SetMe
+
+# Squonk container image tags
+sq_core_image_tag: '0.3.5'
+sq_cell_image_tag: '0.3.5'
+sq_chem_image_tag: '0.3.5'
+sq_je_image_tag: '0.3.5'

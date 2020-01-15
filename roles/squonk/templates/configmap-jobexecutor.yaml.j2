@@ -1,0 +1,106 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: jobexecutor-sso-config
+  namespace: {{ sq_namespace }}
+data:
+  keycloak.json: |
+    {
+      "realm": "{{ sq_keycloak_realm }}",
+      "auth-server-url": "https://{{ sq_keycloak_hostname }}/auth",
+      "bearer-only": true,
+      "ssl-required": "external",
+      "disable-trust-manager": true,
+      "resource": "{{ sq_keycloak_je_client_id }}",
+      "use-resource-role-mappings": false,
+      "principal-attribute": "preferred_username"
+    }
+  context.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Context>
+      <Valve className="org.keycloak.adapters.tomcat.KeycloakAuthenticatorValve"/>
+    </Context>
+  web.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+        <display-name>Job Executor</display-name>
+        <listener>
+            <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+        </listener>
+        <servlet>
+            <servlet-name>CamelServlet</servlet-name>
+            <servlet-class>org.apache.camel.component.servlet.CamelHttpTransportServlet</servlet-class>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>CamelServlet</servlet-name>
+            <url-pattern>/rest/*</url-pattern>
+        </servlet-mapping>
+        <security-constraint>
+            <web-resource-collection>
+                <web-resource-name>jobexecutor</web-resource-name>
+                <url-pattern>/rest/v1/*</url-pattern>
+                <http-method-omission>OPTIONS</http-method-omission>
+            </web-resource-collection>
+            <auth-constraint>
+                <role-name>standard-user</role-name>
+            </auth-constraint>
+        </security-constraint>
+        <security-constraint>
+            <web-resource-collection>
+                <web-resource-name>swagger</web-resource-name>
+                <description>Swagger endpoint</description>
+                <url-pattern>/rest/v1/swagger/*</url-pattern>
+            </web-resource-collection>
+            <!-- No auth-constraint means everybody has access! -->
+        </security-constraint>
+        <security-constraint>
+            <web-resource-collection>
+                <web-resource-name>ping</web-resource-name>
+                <description>Ping endpoint</description>
+                <url-pattern>/rest/ping</url-pattern>
+            </web-resource-collection>
+            <!-- No auth-constraint means everybody has access! -->
+        </security-constraint>
+        <login-config>
+            <auth-method>KEYCLOAK</auth-method>
+            <realm-name>{{ sq_keycloak_realm }}</realm-name>
+        </login-config>
+        <security-role>
+            <role-name>standard-user</role-name>
+        </security-role>
+    </web-app>
+  server.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Server port="8005" shutdown="SHUTDOWN">
+      <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+      <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+      <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+      <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+      <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+      <GlobalNamingResources>
+        <Resource name="UserDatabase" auth="Container"
+                  type="org.apache.catalina.UserDatabase"
+                  description="User database that can be updated and saved"
+                  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                  pathname="conf/tomcat-users.xml" />
+      </GlobalNamingResources>
+      <Service name="Catalina">
+        <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"
+                    proxyName="{{ sq_keycloak_hostname }}" proxyPort="443" scheme="https"/>
+        <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+        <Engine name="Catalina" defaultHost="localhost">
+          <Realm className="org.apache.catalina.realm.LockOutRealm">
+            <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+          </Realm>
+          <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+            <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+                   prefix="localhost_access_log" suffix=".txt"
+                   pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+          </Host>
+        </Engine>
+      </Service>
+    </Server>

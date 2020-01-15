@@ -5,3 +5,5 @@
 
 sq_namespace: squonk
 sq_workdir_volume_storageclass: efs
+
+sq_keycloak_hostname: SetMe

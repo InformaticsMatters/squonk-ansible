@@ -1,0 +1,56 @@
+---
+
+- name: Create 'workdir' volume claim
+  k8s:
+    definition: "{{ lookup('template', 'pvc-workdir.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+
+# Best practice ... wait for the PVC to bind.
+# e.g. wait until resources[0].status.phase == Bound (initially Pending)
+
+- name: Wait for 'workdir' volume claim to bind
+  k8s_facts:
+    kind: PersistentVolumeClaim
+    name: workdir
+    namespace: "{{ sq_namespace }}"
+  register: workdir_result
+  until: workdir_result.resources[0].status.phase == 'Bound'
+  delay: 5
+  retries: "{{ (bind_timeout|int / 5)|int }}"
+
+- name: Deploy Squonk Configuration
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - secret-squonk
+  - configmap-jobexecutor
+
+# Deploy the application images.
+#
+# As we 'wait' for individual containers we have to deploy
+# in a dependent order - i.e. as chemservices depends on
+# (i.e. has an init-container that waits) for coreservices
+# then we must deploy coreservices first and we must also deploy
+# services prior to their respective images.
+
+- name: Deploy Squonk
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+  loop:
+  - service-cellexecutor
+  - service-coreservices
+  - service-jobexecutor
+  - service-chemservices
+  - deployment-cellexecutor
+  - deployment-coreservices
+  - deployment-jobexecutor
+  - deployment-chemservices
+#  - jobexecutor-route
+
+# Do we wait?
+# If so we have to get the Pod names from kubernetes
+# they will have randomly assigned names.
