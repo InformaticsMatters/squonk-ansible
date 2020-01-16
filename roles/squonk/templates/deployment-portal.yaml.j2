@@ -74,15 +74,15 @@ spec:
             memory: {{ sq_portal_mem_request }}
         volumeMounts:
           - mountPath: /usr/local/tomcat/conf/context.xml
-            name: squonk-sso-config
+            name: portal-sso-config
             subPath: context.xml
             readOnly: true
           - mountPath: /usr/local/tomcat/webapps/portal/WEB-INF/keycloak.json
-            name: squonk-sso-config
+            name: portal-sso-config
             subPath: keycloak.json
             readOnly: true
 
       volumes:
-        - name: squonk-sso-config
+        - name: portal-sso-config
           configMap:
-            name: squonk-sso-config
+            name: portal-sso-config
