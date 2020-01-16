@@ -26,6 +26,7 @@
   loop:
   - secret-squonk
   - configmap-jobexecutor
+  - configmap-portal
 
 # Deploy the application images.
 #
@@ -45,11 +46,14 @@
   - service-coreservices
   - service-jobexecutor
   - service-chemservices
+  - service-portal
   - deployment-cellexecutor
   - deployment-coreservices
   - deployment-jobexecutor
   - deployment-chemservices
-#  - jobexecutor-route
+#  - deployment-portal
+#  - ingress-jobexecutor
+#  - ingress-portal
 
 # Do we wait?
 # If so we have to get the Pod names from kubernetes

@@ -1,0 +1,13 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: portal
+  namespace: {{ sq_namespace }}
+spec:
+  selector:
+    name: portal
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
