@@ -22,7 +22,33 @@
   - sq_delete_db_on_removal|bool
   - secret_result.resources|length == 1
 
-- name: Deleting namespace '{{ sq_namespace }}'
+- import_tasks: get-keycloak-credentials.yaml
+
+- name: Remove Keycloak JobExecutor client
+  local_action:
+    module: keycloak_client
+    auth_client_id: admin-cli
+    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_realm: master
+    auth_username: "{{ sq_keycloak_admin_user_fact }}"
+    auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
+    realm: "{{ sq_keycloak_realm }}"
+    client_id: "{{ sq_je_keycloak_client_id }}"
+    state: absent
+
+- name: Remove Keycloak Portal (Notebook) client
+  local_action:
+    module: keycloak_client
+    auth_client_id: admin-cli
+    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_realm: master
+    auth_username: "{{ sq_keycloak_admin_user_fact }}"
+    auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
+    realm: "{{ sq_keycloak_realm }}"
+    client_id: "{{ sq_portal_keycloak_client_id }}"
+    state: absent
+
+- name: Delete namespace '{{ sq_namespace }}'
   k8s:
     state: absent
     definition: "{{ lookup('template', 'namespace.yaml.j2') }}"

@@ -10,5 +10,8 @@ sq_db_password: SetMe
 sq_portal_keycloak_client_secret: SetMe
 
 sq_keycloak_hostname: SetMe
+sq_keycloak_admin_user: ''
+sq_keycloak_admin_user_password: ''
+
 sq_je_hostname: SetMe
 sq_portal_hostname: SetMe

@@ -1,15 +1,67 @@
 ---
 
+- import_tasks: get-keycloak-credentials.yaml
+
 # Create the keycloak clients
 # We have a client for the Portal (the web application)
 # and one for the JobExecutor...
 
+- name: Add Keycloak JobExecutor client
+  local_action:
+    module: keycloak_client
+    auth_client_id: admin-cli
+    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_realm: master
+    auth_username: "{{ sq_keycloak_admin_user_fact }}"
+    auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
+    realm: "{{ sq_keycloak_realm }}"
+    client_id: "{{ sq_je_keycloak_client_id }}"
+    name: Squonk JobExecutor
+    protocol: openid-connect
+    base_url: https://{{ sq_je_hostname }}
+    admin_url: https://{{ sq_je_hostname }}
+    redirect_uris:
+    - https://{{ sq_je_hostname }}/jobexecutor/*
+    - http://{{ sq_je_hostname }}/jobexecutor/*
+    public_client: yes
+    service_accounts_enabled: yes
+    direct_access_grants_enabled: yes
+    standard_flow_enabled: yes
+    default_roles:
+    - standard-user
+  when: sq_je_hostname|string|length > 0
 
-# Now that we have a namespace
+- name: Add Keycloak Portal (Notebook) client
+  local_action:
+    module: keycloak_client
+    auth_client_id: admin-cli
+    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_realm: master
+    auth_username: "{{ sq_keycloak_admin_user_fact }}"
+    auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
+    realm: "{{ sq_keycloak_realm }}"
+    client_id: "{{ sq_portal_keycloak_client_id }}"
+    name: Squonk Computational Notebook
+    protocol: openid-connect
+    base_url: https://{{ sq_portal_hostname }}
+    admin_url: https://{{ sq_portal_hostname }}
+    redirect_uris:
+    - https://{{ sq_portal_hostname }}/portal/*
+    - http://{{ sq_portal_hostname }}/portal/*
+    - "{{ sq_portal_logout_redirect_to }}/*"
+    client_authenticator_type: client-secret
+    secret: "{{ sq_portal_keycloak_client_secret }}"
+    public_client: no
+    direct_access_grants_enabled: no
+    standard_flow_enabled: yes
+    default_roles:
+    - standard-user
+  when: sq_portal_hostname|string|length > 0
+
 # we must create a database for use by Squonk.
 # This is handled by our infrastructure-config Role.
 #
-# Assuming database credentials do no already exist.
+# Assuming database credentials do not already exist.
 
 - name: Get database secrets
   k8s_facts:
