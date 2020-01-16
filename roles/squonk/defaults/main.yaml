@@ -13,7 +13,7 @@ sq_infra_namespace: im-infra
 
 # The hostname that routes to the portal
 sq_portal_hostname: ''
-sq_keycloak_logout_redirect_to: http://home.{{ sq_portal_hostname }}/
+sq_portal_logout_redirect_to: ''
 sq_portal_keycloak_client_id: sq-portal
 sq_portal_keycloak_client_secret: ''
 
@@ -23,6 +23,8 @@ sq_je_keycloak_client_id: sq-jobexecutor
 
 # Delete the Squonk database when Squonk is removed?
 sq_delete_db_on_removal: yes
+# Set a database password otherwise it'll be randomly generated.
+sq_db_password: SetMe
 
 # The hostname of the Keycloak server
 # i.e. example.com, 'https://' is assumed
@@ -33,4 +35,5 @@ sq_core_image_tag: '0.3.5'
 sq_cell_image_tag: '0.3.5'
 sq_chem_image_tag: '0.3.5'
 sq_je_image_tag: '0.3.5'
+sq_flyway_image_tag: '0.3.5'
 sq_portal_image_tag: 'latest'

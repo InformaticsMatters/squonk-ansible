@@ -1,5 +1,10 @@
 ---
 
+# Create the keycloak clients
+# We have a client for the Portal (the web application)
+# and one for the JobExecutor...
+
+
 # Now that we have a namespace
 # we must create a database for use by Squonk.
 # This is handled by our infrastructure-config Role.
@@ -22,6 +27,7 @@
     ic_db: squonk
     ic_db_user_namespace: "{{ sq_namespace }}"
     ic_db_user: squonk
+    ic_db_user_password: "{{ sq_db_password }}"
   when: secret_result.resources|length == 0
 
 - import_tasks: infra-db-migration.yaml

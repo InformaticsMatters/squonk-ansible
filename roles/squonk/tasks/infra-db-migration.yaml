@@ -1,1 +1,37 @@
 ---
+
+- name: Remove any existing migration Job
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', 'job-flyway.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+
+- name: Launch new migration Job
+  k8s:
+    definition: "{{ lookup('template', 'job-flyway.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+
+- name: Wait for migration
+  k8s_facts:
+    kind: Job
+    namespace: "{{ sq_namespace }}"
+    name: postgres-migrate
+  register: result
+  until: >-
+    result.resources[0].status.completionTime is defined
+    or result.resources[0].status.failed is defined
+  delay: 4
+  retries: "{{ (wait_timeout|int / 4)|int }}"
+
+- name: Display Job status
+  debug:
+    var: result.resources[0].status
+
+- name: Assert migration success
+  assert:
+    that:
+    - result.resources[0].status.succeeded is defined
+    - result.resources[0].status.succeeded == 1
+    - result.resources[0].status.failed is not defined

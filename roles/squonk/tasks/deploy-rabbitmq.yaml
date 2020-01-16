@@ -50,7 +50,7 @@
   - statefulset-rabbitmq
 
 - name: Wait for RabbitMQ to become Ready
-  k8s_info:
+  k8s_facts:
     kind: Pod
     name: rabbitmq-0
     namespace: "{{ sq_namespace }}"

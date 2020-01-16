@@ -35,7 +35,6 @@ spec:
       initContainers:
       - name: wait-for-core-before-chem
         image: yauritux/busybox-curl
-        name: wait-for-core-before-chem
         command: ['sh', '-c',
           'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done']
 

@@ -19,16 +19,7 @@
   delay: 5
   retries: "{{ (bind_timeout|int / 5)|int }}"
 
-- name: Deploy Squonk Configuration
-  k8s:
-    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
-    wait: yes
-  loop:
-  - secret-squonk
-  - configmap-jobexecutor
-  - configmap-portal
-
-# Deploy the application images.
+# Deploy the main (backend) application images.
 #
 # As we 'wait' for individual containers we have to deploy
 # in a dependent order - i.e. as chemservices depends on
@@ -36,25 +27,61 @@
 # then we must deploy coreservices first and we must also deploy
 # services prior to their respective images.
 
-- name: Deploy Squonk
+- name: Deploy Squonk (BackEnd)
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
     wait_timeout: "{{ wait_timeout }}"
   loop:
+  - secret-squonk
+  - configmap-jobexecutor
   - service-cellexecutor
   - service-coreservices
   - service-jobexecutor
   - service-chemservices
-  - service-portal
   - deployment-cellexecutor
   - deployment-coreservices
   - deployment-jobexecutor
   - deployment-chemservices
-#  - deployment-portal
-#  - ingress-jobexecutor
-#  - ingress-portal
 
-# Do we wait?
-# If so we have to get the Pod names from kubernetes
-# they will have randomly assigned names.
+# Deploy JobExecutor Ingress/Route?
+
+- name: Check JobExecutor certificate issuer
+  assert:
+    that: sq_je_cert_issuer in cert_issuers
+  when: sq_je_hostname|string|length > 0
+
+- name: Deploy JobExecutor ingress
+  k8s:
+    definition: "{{ lookup('template', 'ingress-jobexecutor.yaml.j2') }}"
+    wait: yes
+  when:
+  - sq_use_cert_manager|bool
+  - sq_je_hostname|string|length > 0
+
+# Deploy the Front-End (Portal)
+
+- name: Deploy Squonk (Portal)
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+  loop:
+  - service-portal
+  - configmap-portal
+  - deployment-portal
+
+# Deploy Portal Ingress/Route?
+
+- name: Check Portal certificate issuer
+  assert:
+    that: sq_portal_cert_issuer in cert_issuers
+  when:
+  - sq_use_cert_manager|bool
+  - sq_portal_hostname|string|length > 0
+
+- name: Deploy Portal ingress
+  k8s:
+    definition: "{{ lookup('template', 'ingress-portal.yaml.j2') }}"
+    wait: yes
+  when: sq_portal_hostname|string|length > 0

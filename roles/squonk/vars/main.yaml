@@ -15,6 +15,12 @@ sq_keycloak_je_client_id: sje
 sq_workdir_volume_size_g: 50
 sq_workdir_volume_storageclass: " "
 
+# If using the cert-manager...
+# the Cert-Manager issuers for external ingress
+# (one of 'staging' or 'production')
+sq_je_cert_issuer: staging
+sq_portal_cert_issuer: staging
+
 # The Squonk CellExecutor Pod environment
 sq_pod_env: ''
 
@@ -77,6 +83,12 @@ sq_rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=96 chars=asc
 wait_timeout: 600
 # Volume binding timeout (seconds)
 bind_timeout: 120
+
+# Valid certificate issuers
+# For the kubernetes certificate manager
+cert_issuers:
+- staging
+- production
 
 # Kubernetes credentials ------------------------------------------------------
 

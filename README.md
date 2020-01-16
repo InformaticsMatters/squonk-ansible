@@ -8,9 +8,13 @@ to [Kubernetes].
 Ideally you'll start from a Python 3 virtual environment and then install
 the required modules, roles and collections: -
 
+>   Ansible prior to 2.9.1 will probably have issues with Python 3.8.
+    So, base your environment on Python 3.7 and use Ansible 2.8.7
+    (which is better because AWX runs Ansible 2.8, not 2.9).
+
     $ conda activate ansible-squonk
     $ pip install -r requirements.txt
-    $ ansible-galaxy install -r requirements.yaml
+    $ ansible-galaxy install -r requirements.yaml --force
 
 ## Cluster pre-requisites
 Your cluster will need: -

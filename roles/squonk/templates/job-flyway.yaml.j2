@@ -1,0 +1,42 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: postgres-migrate
+  namespace: {{ sq_namespace }}
+spec:
+  selector:
+    name: postgres-migrate
+  template:
+    metadata:
+      labels:
+        name: postgres-migrate
+    spec:
+      serviceAccountName: {{ sq_namespace_service_account }}
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ sq_node_purpose }}
+
+      containers:
+      - name: postgres-migrate
+        image: squonk/flyway:{{ sq_flyway_image_tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_HOSTNAME
+          value: database.{{ sq_infra_namespace }}.svc
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets-squonk
+              key: database_user_password
+      restartPolicy: Never

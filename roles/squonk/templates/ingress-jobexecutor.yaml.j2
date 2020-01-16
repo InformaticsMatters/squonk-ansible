@@ -1,0 +1,23 @@
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: jobexecutor-ingress
+  namespace: {{ sq_namespace }}
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ sq_je_cert_issuer|lower }}"
+spec:
+  tls:
+  - hosts:
+    - {{ sq_je_hostname }}
+    secretName: im-keycloak-tls
+  rules:
+  - host: {{ sq_je_hostname }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jobexecutor
+          servicePort: http
