@@ -11,13 +11,13 @@
 
 - name: Delete Squonk infrastructure database
   include_role:
-    name: informaticsmatters.infrastructure_config
+    name: informaticsmatters.infrastructure_data
   vars:
-    ic_action: delete
-    ic_infra_namespace: "{{ sq_infra_namespace }}"
-    ic_db: squonk
-    ic_db_user_namespace: "{{ sq_namespace }}"
-    ic_db_user: squonk
+    id_action: delete
+    id_infra_namespace: "{{ sq_infra_namespace }}"
+    id_db: squonk
+    id_db_user_namespace: "{{ sq_namespace }}"
+    id_db_user: squonk
   when:
   - sq_delete_db_on_removal|bool
   - secret_result.resources|length == 1

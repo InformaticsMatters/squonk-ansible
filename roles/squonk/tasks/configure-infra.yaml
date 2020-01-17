@@ -72,14 +72,14 @@
 
 - name: Create infrastructure database for Squonk
   include_role:
-    name: informaticsmatters.infrastructure_config
+    name: informaticsmatters.infrastructure_data
   vars:
-    ic_action: create
-    ic_infra_namespace: "{{ sq_infra_namespace }}"
-    ic_db: squonk
-    ic_db_user_namespace: "{{ sq_namespace }}"
-    ic_db_user: squonk
-    ic_db_user_password: "{{ sq_db_password }}"
+    id_action: create
+    id_infra_namespace: "{{ sq_infra_namespace }}"
+    id_db: squonk
+    id_db_user_namespace: "{{ sq_namespace }}"
+    id_db_user: squonk
+    id_db_user_password: "{{ sq_db_password }}"
   when: secret_result.resources|length == 0
 
 - import_tasks: infra-db-migration.yaml
