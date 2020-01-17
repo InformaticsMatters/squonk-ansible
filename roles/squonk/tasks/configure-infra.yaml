@@ -7,8 +7,7 @@
 # and one for the JobExecutor...
 
 - name: Add Keycloak JobExecutor client
-  local_action:
-    module: keycloak_client
+  keycloak_client:
     auth_client_id: admin-cli
     auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
     auth_realm: master
@@ -29,11 +28,11 @@
     standard_flow_enabled: yes
     default_roles:
     - standard-user
+  delegate_to: localhost
   when: sq_je_hostname|string|length > 0
 
 - name: Add Keycloak Portal (Notebook) client
-  local_action:
-    module: keycloak_client
+  keycloak_client:
     auth_client_id: admin-cli
     auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
     auth_realm: master
@@ -56,6 +55,7 @@
     standard_flow_enabled: yes
     default_roles:
     - standard-user
+  delegate_to: localhost
   when: sq_portal_hostname|string|length > 0
 
 # we must create a database for use by Squonk.

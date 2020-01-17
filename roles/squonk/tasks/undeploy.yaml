@@ -25,8 +25,7 @@
 - import_tasks: get-keycloak-credentials.yaml
 
 - name: Remove Keycloak JobExecutor client
-  local_action:
-    module: keycloak_client
+  keycloak_client:
     auth_client_id: admin-cli
     auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
     auth_realm: master
@@ -35,10 +34,10 @@
     realm: "{{ sq_keycloak_realm }}"
     client_id: "{{ sq_je_keycloak_client_id }}"
     state: absent
+  delegate_to: localhost
 
 - name: Remove Keycloak Portal (Notebook) client
-  local_action:
-    module: keycloak_client
+  keycloak_client:
     auth_client_id: admin-cli
     auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
     auth_realm: master
@@ -47,6 +46,7 @@
     realm: "{{ sq_keycloak_realm }}"
     client_id: "{{ sq_portal_keycloak_client_id }}"
     state: absent
+  delegate_to: localhost
 
 - name: Delete namespace '{{ sq_namespace }}'
   k8s:

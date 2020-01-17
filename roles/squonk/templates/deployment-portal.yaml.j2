@@ -34,8 +34,10 @@ spec:
       initContainers:
       - name: wait-for-core-before-portal
         image: yauritux/busybox-curl
-        command: ['sh', '-c',
-          'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done']
+        command:
+        - 'sh'
+        - '-c'
+        - 'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
 
       containers:
       - image: squonk/portal:{{ sq_portal_image_tag }}
@@ -52,7 +54,7 @@ spec:
         - name: SERVICE_CALLBACK
           value: http://localhost:8080/portal
         - name: LOGOUT_REDIRECT_TO
-          value: {{ sq_portal_logout_redirect_to }}/
+          value: '{{ sq_portal_logout_redirect_to }}/'
         ports:
         - name: http
           containerPort: 8080
@@ -76,16 +78,16 @@ spec:
             cpu: {{ sq_portal_cpu_request }}
             memory: {{ sq_portal_mem_request }}
         volumeMounts:
-          - mountPath: /usr/local/tomcat/conf/context.xml
-            name: portal-sso-config
-            subPath: context.xml
-            readOnly: true
-          - mountPath: /usr/local/tomcat/webapps/portal/WEB-INF/keycloak.json
-            name: portal-sso-config
-            subPath: keycloak.json
-            readOnly: true
+        - mountPath: /usr/local/tomcat/conf/context.xml
+          name: portal-sso-config
+          subPath: context.xml
+          readOnly: true
+        - mountPath: /usr/local/tomcat/webapps/portal/WEB-INF/keycloak.json
+          name: portal-sso-config
+          subPath: keycloak.json
+          readOnly: true
 
       volumes:
-        - name: portal-sso-config
-          configMap:
-            name: portal-sso-config
+      - name: portal-sso-config
+        configMap:
+          name: portal-sso-config
