@@ -1,6 +1,7 @@
 # Ansible Squonk
 
 [![Build Status](https://travis-ci.com/InformaticsMatters/ansible-squonk.svg?branch=master)](https://travis-ci.com/InformaticsMatters/ansible-squonk)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/informaticsmatters/ansible-squonk)
 
 An Ansible role to deploy the Informatics Matters [Squonk] application
 to [Kubernetes].
