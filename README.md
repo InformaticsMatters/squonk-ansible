@@ -67,23 +67,25 @@ as an example: -
 
 And then, using the parameter file, deploy the infrastructure: -
 
-    $ ansible-playbook -e "@parameters" site.yaml
+    $ ansible-playbook -e "@parameters" site-squonk.yaml
 
 If your parameters are encrypted with Ansible [vault] you can use them
 directly, without needing to decrypt them: -
 
-    $ ansible-playbook -e "@site-im-main-parameters.vault" site.yaml \
+    $ ansible-playbook -e "@site-im-main-parameters.vault" site-squonk.yaml \
         --vault-password-file vault-pass.txt
 
 ### Plays
 The following plays are supported, captured in corresponding `site*.yaml`
 playbook files: -
 
--   `site` (for the main Squonk deployment)
+-   `site-squonk` (for the main Squonk deployment)
+-   `site-pipeline` (for pipeline deployment)
 
 ## Deleting Squonk
+The following play deletes Squonk and any deployed pipelines: -
 
-    $ ansible-playbook -e "@parameters" unsite.yaml
+    $ ansible-playbook -e "@parameters" unsite-squonk.yaml
 
 ## Using Ansible Vault to preserve parameters
 Site parameter files can be stored in `.vault` files. These will be written

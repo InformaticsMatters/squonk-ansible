@@ -1,3 +1,4 @@
 ---
 
 - src: informaticsmatters.infrastructure_data
+- src: informaticsmatters.infrastructure_user

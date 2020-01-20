@@ -1,0 +1,9 @@
+---
+
+- hosts: squonk_server
+  roles:
+  - role: pipeline
+    vars:
+      pipeline_name: rdkit
+      pipeline_repository: squonk/rdkit-pipelines-sdposter
+      pipeline_tag: latest

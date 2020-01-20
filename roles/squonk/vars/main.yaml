@@ -27,16 +27,13 @@ sq_pod_env: ''
 sq_pod_log_history: 100
 sq_nextflow_image: informaticsmatters/nextflow:19.10.0
 
-sq_cell_cpu_request: 1000m
+sq_cell_cpu_request: 500m
 sq_cell_mem_request: 400Mi
 sq_cell_cpu_limit: 4000m
 sq_cell_mem_limit: 8Gi
 sq_cell_java_tool_options: -Xmx7800m
 
-oc_squonk_chem_cpu_request: 100m
-oc_squonk_chem_mem_request: 4500Mi
-
-sq_chem_cpu_request: 1000m
+sq_chem_cpu_request: 500m
 sq_chem_mem_request: 400Mi
 sq_chem_cpu_limit: 4000m
 sq_chem_mem_limit: 8Gi
@@ -65,10 +62,10 @@ sq_portal_mem_limit: 8Gi
 # We deploy using hte image tag '<version>-management-alpine'.
 sq_rabbitmq_version: 3.6.16
 
-sq_rabbitmq_cpu_limit: 1000m
-sq_rabbitmq_mem_limit: 1024Mi
 sq_rabbitmq_cpu_request: 250m
 sq_rabbitmq_mem_request: 1024Mi
+sq_rabbitmq_cpu_limit: 1000m
+sq_rabbitmq_mem_limit: 1024Mi
 
 # RabbitMQ passwords and cookies
 # Set but you cannot change this once RabbitMQ had been deployed

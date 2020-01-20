@@ -1,0 +1,27 @@
+---
+
+# A name for the pipeline.
+# This should be unique amongst all pipelines
+# deployed to a given Squonk instance.
+# It defines the name of the pipeline poster Kubernetes Job.
+# The characters allowed in such names are:
+# - digits (0-9)
+# - lower case letters (a-z)
+# - '-'
+# - '.'
+pipeline_name: SetMe
+# The Docker image registry's
+# pipeline poster image repository name.
+# i.e. 'squonk/rdkit-pipelines-sdposter'.
+#
+# If the image resides in a private registry
+# you wil need to have create an image pull secret
+# in kubernetes and name it using the 'pipeline_pull_secret' variable.
+pipeline_repository: SetMe
+# The image tag for the pipeline poster image.
+pipeline_tag: latest
+
+# The image pull secret for images hosted on
+# private registries.
+# Leave blank for public images.
+pipeline_pull_secret: ''

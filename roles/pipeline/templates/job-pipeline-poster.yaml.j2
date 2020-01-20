@@ -1,0 +1,54 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: {{ pipeline_name }}
+  namespace: {{ pipeline_namespace }}
+spec:
+  selector:
+    name: {{ pipeline_name }}
+  template:
+    metadata:
+      labels:
+        name: {{ pipeline_name }}
+    spec:
+      serviceAccountName: {{ pipeline_namespace_service_account }}
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ pipeline_node_purpose }}
+
+      initContainers:
+      - image: yauritux/busybox-curl
+        name: wait-for-core-before-pipelines-post
+        command:
+        - 'sh'
+        - '-c'
+        - 'until (( curl http://coreservices:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
+
+      containers:
+      - image: '{{ pipeline_repository }}:{{ pipeline_tag }}'
+        name: {{ pipeline_name }}
+        imagePullPolicy: {{ pipeline_image_pull_policy }}
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 32Mi
+{% if pipeline_pull_secret|length > 0 %}
+      imagePullSecrets:
+      - name: {{ pipeline_pull_secret }}
+{% endif %}
+
+      restartPolicy: Never

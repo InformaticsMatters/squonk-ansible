@@ -1,0 +1,13 @@
+---
+
+# Pipeline container image pull policy,
+# normally 'always'
+pipeline_image_pull_policy: Always
+
+# The namespace to launch pipelines from,
+# e.g. the Squonk namespace.
+pipeline_namespace: squonk
+# A valid service account in the namespace
+pipeline_namespace_service_account: squonk
+# A preferred node purpose on which to run the Job
+pipeline_node_purpose: application
