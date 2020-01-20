@@ -58,7 +58,7 @@ spec:
         - name: SQUONK_NEXTFLOW_IMAGE
           value: {{ sq_nextflow_image }}
         - name: KEYCLOAK_SERVER_URL
-          value: https://{{ sq_keycloak_hostname }}/auth
+          value: "{{ sq_keycloak_url_fact }}"
         - name: KEYCLOAK_SERVER_REALM
           value: {{ sq_keycloak_realm }}
         - name: JAVA_TOOL_OPTIONS

@@ -29,8 +29,8 @@
   until: >-
     result.resources[0].status.completionTime is defined
     or result.resources[0].status.failed is defined
-  delay: 4
-  retries: "{{ (wait_timeout|int / 4)|int }}"
+  delay: 15
+  retries: "{{ (wait_timeout|int / 15)|int }}"
 
 - name: Display Job status ({{ pipeline_name }})
   debug:

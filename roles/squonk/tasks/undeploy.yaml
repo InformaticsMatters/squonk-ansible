@@ -27,7 +27,7 @@
 - name: Remove Keycloak JobExecutor client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_keycloak_url: "{{ keycloak_server_url }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -39,7 +39,7 @@
 - name: Remove Keycloak Portal (Notebook) client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_keycloak_url: "{{ keycloak_server_url }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -47,6 +47,22 @@
     client_id: "{{ sq_portal_keycloak_client_id }}"
     state: absent
   delegate_to: localhost
+
+# Delete 'Day 1' Keycloak users
+
+- name: Delete infrastructure 'Day 1' Squonk users
+  include_role:
+    name: informaticsmatters.infrastructure_user
+  vars:
+    iu_action: delete
+    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
+    iu_realm: "{{ sq_keycloak_realm }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
+    iu_users: "{{ sq_day1_users }}"
+  when: sq_day1_users|length > 0
+
+# Finally ... remove the Squonk namespace
 
 - name: Delete namespace '{{ sq_namespace }}'
   k8s:

@@ -99,3 +99,18 @@ cert_issuers:
 
 k8s_auth_host: "{{ lookup('env', 'K8S_AUTH_HOST') }}"
 k8s_auth_api_key: "{{ lookup('env', 'K8S_AUTH_API_KEY') }}"
+
+# Keycloak credentials --------------------------------------------------------
+
+# Either leave unset (where credentials will be obtained from the
+# infrastructure namespace on the cluster) or set them, usually when
+# using a remote keycloak server.
+#
+# Normally these are left unset or they're provided by AWX custom credentials.
+
+keycloak_server_url: ''
+keycloak_admin: ''
+keycloak_admin_password: ''
+
+keycloak_realm_manager: ''
+keycloak_realm_manager_password: ''

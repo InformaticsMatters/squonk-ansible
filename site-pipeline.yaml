@@ -1,6 +1,6 @@
 ---
 
-- hosts: squonk_server
+- hosts: localhost
   roles:
   - role: pipeline
     vars:

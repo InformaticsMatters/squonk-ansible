@@ -6,8 +6,7 @@ all:
   vars:
     ansible_connection: local
     ansible_python_interpreter: "/usr/bin/env python"
-
   children:
-    squonk_server:
+    server:
       hosts:
         localhost:

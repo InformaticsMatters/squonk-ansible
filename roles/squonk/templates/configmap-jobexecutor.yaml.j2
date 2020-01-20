@@ -8,7 +8,7 @@ data:
   keycloak.json: |
     {
       "realm": "{{ sq_keycloak_realm }}",
-      "auth-server-url": "https://{{ sq_keycloak_hostname }}/auth",
+      "auth-server-url": "{{ sq_keycloak_url_fact }}",
       "bearer-only": true,
       "ssl-required": "external",
       "disable-trust-manager": true,
@@ -90,7 +90,7 @@ data:
       </GlobalNamingResources>
       <Service name="Catalina">
         <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"
-                    proxyName="{{ sq_keycloak_hostname }}" proxyPort="443" scheme="https"/>
+                    proxyName="{{ sq_keycloak_hostname_fact }}" proxyPort="443" scheme="https"/>
         <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
         <Engine name="Catalina" defaultHost="localhost">
           <Realm className="org.apache.catalina.realm.LockOutRealm">

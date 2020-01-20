@@ -11,6 +11,11 @@ sq_namespace: squonk
 # as the host 'database.{{ sq_infra_namespace }}.svc'
 sq_infra_namespace: im-infra
 
+# A list of Realm users to deploy.
+# This utilises the informaticsmatters.infrastruture_user Role
+# so refer to that role for documentation.
+sq_day1_users: []
+
 # The hostname that routes to the portal
 sq_portal_hostname: ''
 sq_portal_logout_redirect_to: ''
@@ -25,15 +30,6 @@ sq_je_keycloak_client_id: squonk-jobexecutor
 sq_delete_db_on_removal: yes
 # Set a database password otherwise it'll be randomly generated.
 sq_db_password: SetMe
-
-# The hostname of the Keycloak server
-# i.e. example.com, 'https://' is assumed
-sq_keycloak_hostname: SetMe
-# Keycloak admin user credentials.
-# If not defined the playbook will assume that
-# secrets exist in the namespace declared in 'sq_infra_namespace'
-sq_keycloak_admin_user: ''
-sq_keycloak_admin_user_password: ''
 
 # Squonk container image tags
 sq_core_image_tag: '0.3.5'

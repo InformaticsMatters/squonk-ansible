@@ -9,7 +9,7 @@
 - name: Add Keycloak JobExecutor client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_keycloak_url: "{{ sq_keycloak_url_fact }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -34,7 +34,7 @@
 - name: Add Keycloak Portal (Notebook) client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: https://{{ sq_keycloak_hostname }}/auth
+    auth_keycloak_url: "{{ sq_keycloak_url_fact }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -59,7 +59,7 @@
   when: sq_portal_hostname|string|length > 0
 
 # we must create a database for use by Squonk.
-# This is handled by our infrastructure-config Role.
+# This is handled by our infrastructure-data Role.
 #
 # Assuming database credentials do not already exist.
 
@@ -78,8 +78,23 @@
     id_infra_namespace: "{{ sq_infra_namespace }}"
     id_db: squonk
     id_db_user_namespace: "{{ sq_namespace }}"
+    id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
     id_db_user: squonk
     id_db_user_password: "{{ sq_db_password }}"
   when: secret_result.resources|length == 0
 
 - import_tasks: infra-db-migration.yaml
+
+# Create 'Day 1' Keycloak users
+
+- name: Create infrastructure 'Day 1' Squonk users
+  include_role:
+    name: informaticsmatters.infrastructure_user
+  vars:
+    iu_action: create
+    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
+    iu_realm: "{{ sq_keycloak_realm }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
+    iu_users: "{{ sq_day1_users }}"
+  when: sq_day1_users|length > 0
