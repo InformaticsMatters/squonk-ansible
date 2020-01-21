@@ -8,7 +8,9 @@
   - namespace
   - serviceaccount
   - role-squonk-psp-unrestricted
-  - rolebinding-squonk-sa
+  - role-squonk-runner
+  - rolebinding-squonk-psp-unrestricted-sa
+  - rolebinding-squonk-runner-sa
 
 - name: Relax {{ sq_namespace }} 'default' service account (for cert-manager)
   k8s:

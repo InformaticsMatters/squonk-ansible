@@ -1,0 +1,10 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: squonk-runner
+  namespace: "{{ sq_namespace }}"
+rules:
+- apiGroups: ['']
+  resources: ['pods']
+  verbs: ['']
