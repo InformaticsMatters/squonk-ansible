@@ -15,7 +15,10 @@ the required modules, roles and collections: -
 
     $ conda activate ansible-squonk
     $ pip install -r requirements.txt
-    $ ansible-galaxy install -r requirements.yaml --force-with-deps
+
+>   [Ansible Galaxy] roles this project depends upon
+    (those in the `requirements.yaml` file) are downloaded by this project's
+    playbooks. There should be no need to install them separately.
 
 ## Cluster pre-requisites
 Your cluster will need: -
@@ -97,6 +100,7 @@ if your sensitive (unencrypted) parameter files end with the word `parameters`.
 
 ---
 
+[ansible galaxy]: https://galaxy.ansible.com
 [kubernetes]: https://kubernetes.io
 [squonk]: https://squonk.it
 [vault]: https://docs.ansible.com/ansible/latest/user_guide/vault.html

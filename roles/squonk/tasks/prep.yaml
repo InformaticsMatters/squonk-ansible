@@ -15,3 +15,10 @@
     - openshift==0.10.0
     - jmespath==0.9.4
     extra_args: --user
+
+# Install required Ansible Galaxy modules
+
+- name: Install Ansible Galaxy modules
+  command: ansible-galaxy install -r requirements.yaml
+  register: ag_result
+  changed_when: "'downloading role' in ag_result.stdout"
