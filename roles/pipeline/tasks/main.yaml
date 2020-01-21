@@ -1,44 +1,36 @@
 ---
+- include_tasks: prep.yaml
 
-- name: Pre-flight checks ({{ pipeline_name }})
+# If it looks like we're deploying to OpenShift
+# we need to use the k8s authentication module to login
+# and obtain an API key.
+- include_tasks: login.yaml
+  when: okd_master_hostname is defined
+
+# A kubernetes (or OpenShift) host and an API key must be set.
+# We will either have authenticated against an OpenShift server
+# or the AWX kubernetes credentials will have injected suitable
+# values for the K8S_AUTH_HOST and K8S_AUTH_API_KEY environment variables.
+# Either way the ansible variables 'k8s_auth_host' and
+# 'k8s_auth_api_key' will have been set.
+- name: Assert authentication
   assert:
     that:
-    - pipeline_name|length > 0
-    - pipeline_name != 'SetMe'
-    - pipeline_repository|length > 0
-    - pipeline_repository != 'SetMe'
+    - k8s_auth_host|length > 0
+    - k8s_auth_api_key|length > 0
 
-- name: Remove any existing pipeline Job ({{ pipeline_name }})
-  k8s:
-    state: absent
-    definition: "{{ lookup('template', 'job-pipeline-poster.yaml.j2') }}"
-    wait: yes
+# Go...
 
-- name: Launch new pipeline Job ({{ pipeline_name }})
-  k8s:
-    definition: "{{ lookup('template', 'job-pipeline-poster.yaml.j2') }}"
-    wait: yes
-    wait_timeout: "{{ wait_timeout }}"
+- block:
 
-- name: Wait for pipeline ({{ pipeline_name }})
-  k8s_facts:
-    kind: Job
-    namespace: "{{ pipeline_namespace }}"
-    name: "{{ pipeline_name }}"
-  register: result
-  until: >-
-    result.resources[0].status.completionTime is defined
-    or result.resources[0].status.failed is defined
-  delay: 15
-  retries: "{{ (wait_timeout|int / 15)|int }}"
+  - include_tasks: deploy.yaml
 
-- name: Display Job status ({{ pipeline_name }})
-  debug:
-    var: result.resources[0].status
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"
 
-- name: Assert pipeline success ({{ pipeline_name }})
-  assert:
-    that:
-    - result.resources[0].status.succeeded is defined
-    - result.resources[0].status.succeeded == 1
-    - result.resources[0].status.failed is not defined
+# If it looks like we're deploying to OpenShift
+# we now need to logout...
+- include_tasks: logout.yaml
+  when: okd_master_hostname is defined

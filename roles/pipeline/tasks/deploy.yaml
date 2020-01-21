@@ -1,0 +1,44 @@
+---
+
+- name: Pre-flight checks ({{ pipeline_name }})
+  assert:
+    that:
+    - pipeline_name|length > 0
+    - pipeline_name != 'SetMe'
+    - pipeline_repository|length > 0
+    - pipeline_repository != 'SetMe'
+
+- name: Remove any existing pipeline Job ({{ pipeline_name }})
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', 'job-pipeline-poster.yaml.j2') }}"
+    wait: yes
+
+- name: Launch new pipeline Job ({{ pipeline_name }})
+  k8s:
+    definition: "{{ lookup('template', 'job-pipeline-poster.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+
+- name: Wait for pipeline ({{ pipeline_name }})
+  k8s_facts:
+    kind: Job
+    namespace: "{{ pipeline_namespace }}"
+    name: "{{ pipeline_name }}"
+  register: result
+  until: >-
+    result.resources[0].status.completionTime is defined
+    or result.resources[0].status.failed is defined
+  delay: 15
+  retries: "{{ (wait_timeout|int / 15)|int }}"
+
+- name: Display Job status ({{ pipeline_name }})
+  debug:
+    var: result.resources[0].status
+
+- name: Assert pipeline success ({{ pipeline_name }})
+  assert:
+    that:
+    - result.resources[0].status.succeeded is defined
+    - result.resources[0].status.succeeded == 1
+    - result.resources[0].status.failed is not defined

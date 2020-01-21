@@ -13,7 +13,6 @@
   pip:
     name:
     - openshift==0.10.1
-    - jmespath==0.9.4
     extra_args: --user
 
 # Install required Ansible Galaxy modules
