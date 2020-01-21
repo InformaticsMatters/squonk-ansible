@@ -3,7 +3,7 @@
 - name: Get database secrets
   k8s_facts:
     kind: Secret
-    name: database-secrets-squonk
+    name: database-secrets-{{ sq_infra_database }}
     namespace: "{{ sq_namespace }}"
   register: secret_result
   when:
@@ -17,6 +17,7 @@
     id_infra_namespace: "{{ sq_infra_namespace }}"
     id_db: squonk
     id_db_user_namespace: "{{ sq_namespace }}"
+    id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
     id_db_user: squonk
   when:
   - sq_delete_db_on_removal|bool

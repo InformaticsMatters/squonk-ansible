@@ -78,6 +78,11 @@ directly, without needing to decrypt them: -
     $ ansible-playbook -e "@site-im-main-parameters.vault" site-squonk.yaml \
         --vault-password-file vault-pass.txt
 
+And then re-use the parameters for a pipeline deployment: -
+
+    $ ansible-playbook -e "@site-im-main-parameters.vault" site-pipeline.yaml \
+        --vault-password-file vault-pass.txt
+
 ### Plays
 The following plays are supported, captured in corresponding `site*.yaml`
 playbook files: -

@@ -34,10 +34,20 @@ spec:
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets-{{ sq_infra_database }}
+              key: database_name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets-{{ sq_infra_database }}
+              key: database_user
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: database-secrets-squonk
+              name: database-secrets-{{ sq_infra_database }}
               key: database_user_password
         resources:
           limits:

@@ -10,6 +10,10 @@ sq_namespace: squonk
 # The database is expected here,
 # as the host 'database.{{ sq_infra_namespace }}.svc'
 sq_infra_namespace: im-infra
+# The name of the database (and a user that'll own it)
+# that'll be created in the infrastructure's PostgreSQL server
+sq_infra_database: squonk
+sq_infra_database_owner: "{{ sq_infra_database }}"
 
 # A list of Realm users to deploy.
 # This utilises the informaticsmatters.infrastruture_user Role
@@ -32,9 +36,9 @@ sq_delete_db_on_removal: yes
 sq_db_password: SetMe
 
 # Squonk container image tags
-sq_core_image_tag: '0.3.5'
-sq_cell_image_tag: '0.3.5'
-sq_chem_image_tag: '0.3.5'
-sq_je_image_tag: '0.3.5'
-sq_flyway_image_tag: '0.3.5'
-sq_portal_image_tag: 'latest'
+sq_core_image_tag: '0.3.6'
+sq_cell_image_tag: '0.3.6'
+sq_chem_image_tag: '0.3.6'
+sq_je_image_tag: '0.3.6'
+sq_flyway_image_tag: '0.3.6'
+sq_portal_image_tag: '0.3.6'

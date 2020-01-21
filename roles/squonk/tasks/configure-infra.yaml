@@ -66,24 +66,64 @@
 - name: Get database secrets
   k8s_facts:
     kind: Secret
-    name: database-secrets-squonk
+    name: database-secrets-{{ sq_infra_database }}
     namespace: "{{ sq_namespace }}"
   register: secret_result
 
-- name: Create infrastructure database for Squonk
-  include_role:
-    name: informaticsmatters.infrastructure_data
-  vars:
-    id_action: create
-    id_infra_namespace: "{{ sq_infra_namespace }}"
-    id_db: squonk
-    id_db_user_namespace: "{{ sq_namespace }}"
-    id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
-    id_db_user: squonk
-    id_db_user_password: "{{ sq_db_password }}"
+- block:
+
+  - name: Create infrastructure database for Squonk
+    include_role:
+      name: informaticsmatters.infrastructure_data
+    vars:
+      id_action: create
+      id_infra_namespace: "{{ sq_infra_namespace }}"
+      id_db: "{{ sq_infra_database }}"
+      id_db_user_namespace: "{{ sq_namespace }}"
+      id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
+      id_db_user: "{{ sq_infra_database_owner }}"
+      id_db_user_password: "{{ sq_db_password }}"
+
+  - name: Diplay database information
+    debug:
+      msg: >-
+        Database={{ sq_infra_database }}
+        Owner={{ sq_infra_database_owner }}
+        Password={{ sq_db_password }}
+
   when: secret_result.resources|length == 0
 
 - import_tasks: infra-db-migration.yaml
+
+# Create Keycloak Realm (and Roles)
+
+- name: Create infrastructure Realm
+  include_role:
+    name: informaticsmatters.infrastructure_user
+  vars:
+    iu_action: create
+    iu_type: realm
+    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
+    iu_namespace: "{{ sq_namespace }}"
+    iu_realm: "{{ sq_keycloak_realm }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
+    iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
+    iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
+
+- name: Create infrastructure Realm Roles
+  include_role:
+    name: informaticsmatters.infrastructure_user
+  vars:
+    iu_action: create
+    iu_type: role
+    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
+    iu_realm: "{{ sq_keycloak_realm }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
+    iu_roles:
+    - name: standard-user
+      default: yes
 
 # Create 'Day 1' Keycloak users
 
@@ -92,6 +132,7 @@
     name: informaticsmatters.infrastructure_user
   vars:
     iu_action: create
+    iu_type: user
     iu_hostname: "{{ sq_keycloak_hostname_fact }}"
     iu_realm: "{{ sq_keycloak_realm }}"
     iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
