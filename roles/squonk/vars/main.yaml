@@ -18,8 +18,8 @@ sq_workdir_volume_storageclass: " "
 # If using the cert-manager...
 # the Cert-Manager issuers for external ingress
 # (one of 'staging' or 'production')
-sq_je_cert_issuer: staging
-sq_portal_cert_issuer: staging
+sq_je_cert_issuer: production
+sq_portal_cert_issuer: production
 
 # The Squonk CellExecutor Pod environment
 sq_pod_env: ''
