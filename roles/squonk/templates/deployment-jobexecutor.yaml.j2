@@ -57,6 +57,8 @@ spec:
           value: "true"
         - name: SQUONK_NEXTFLOW_IMAGE
           value: {{ sq_nextflow_image }}
+        - name: SQUONK_WORK_DIR_PVC_NAME
+          value: workdir
         - name: KEYCLOAK_SERVER_URL
           value: "{{ sq_keycloak_url_fact }}"
         - name: KEYCLOAK_SERVER_REALM

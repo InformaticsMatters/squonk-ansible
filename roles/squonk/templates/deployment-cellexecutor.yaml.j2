@@ -65,6 +65,8 @@ spec:
           value: "{{ sq_pod_log_history }}"
         - name: SQUONK_NEXTFLOW_IMAGE
           value: {{ sq_nextflow_image }}
+        - name: SQUONK_WORK_DIR_PVC_NAME
+          value: workdir
         - name: SQUONK_DEBUG_MODE
           value: "0"
         - name: SQUONK_POD_DEBUG_MODE
