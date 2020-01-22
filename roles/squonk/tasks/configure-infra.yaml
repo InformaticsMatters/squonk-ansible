@@ -1,7 +1,5 @@
 ---
 
-- import_tasks: get-keycloak-credentials.yaml
-
 # We must create a database for use by Squonk.
 # This is handled by our infrastructure-data Role.
 #
@@ -47,6 +45,8 @@
 
 # Create Keycloak Realm (and Roles)
 
+- import_tasks: get-keycloak-credentials.yaml
+
 - name: Create Keycloak Realm ({{ sq_keycloak_realm }})
   include_role:
     name: informaticsmatters.infrastructure_user
@@ -56,10 +56,16 @@
     iu_hostname: "{{ sq_keycloak_hostname_fact }}"
     iu_namespace: "{{ sq_namespace }}"
     iu_realm: "{{ sq_keycloak_realm }}"
-    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
-    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password }}"
     iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
     iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
+
+# Realm manager secrets should now be present
+# in our namespace, get them (really just a sanity check -
+# we could continue to use the supplied variables...
+
+- import_tasks: get-keycloak-realm-manager-credentials.yaml
 
 - name: Create Keycloak Realm Roles
   include_role:
