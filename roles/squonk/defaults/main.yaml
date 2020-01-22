@@ -19,10 +19,10 @@ sq_infra_namespace: im-infra
 # The name of the database (and a user that'll own it)
 # that'll be created in the infrastructure's PostgreSQL server
 sq_infra_database: squonk
-sq_infra_database_owner: "{{ sq_infra_database }}"
+sq_infra_database_owner: squonk
 # The squonk Keycloak realm
 # by default he name of the namespace
-sq_keycloak_realm: "{{ sq_namespace }}"
+sq_keycloak_realm: squonk
 # Delete the realm on removal?
 sq_delete_keycloak_realm_on_removal: no
 
@@ -34,12 +34,12 @@ sq_day1_users: []
 # The hostname that routes to the portal
 sq_portal_hostname: ''
 sq_portal_logout_redirect_to: ''
-sq_portal_keycloak_client_id: "{{ sq_namespace }}-notebook"
+sq_portal_keycloak_client_id: squonk-notebook
 sq_portal_keycloak_client_secret: ''
 
 # The hostname that routes to the JobExecutor
 sq_je_hostname: ''
-sq_je_keycloak_client_id: "{{ sq_namespace }}-jobexecutor"
+sq_je_keycloak_client_id: squonk-jobexecutor
 
 # Delete the Squonk database when Squonk is removed?
 sq_delete_db_on_removal: yes
