@@ -41,14 +41,6 @@
 - import_tasks: get-keycloak-credentials.yaml
 - import_tasks: get-keycloak-realm-manager-credentials.yaml
 
-- name: Debug
-  debug:
-    msg: >-
-      host={{ sq_keycloak_hostname_fact }}
-      realm={{ sq_keycloak_realm }}
-      manager={{ sq_keycloak_realm_manager_fact }}
-      password={{ sq_keycloak_realm_manager_password_fact }}
-
 - name: Create Keycloak Realm ({{ sq_keycloak_realm }})
   include_role:
     name: informaticsmatters.infrastructure_user
@@ -66,14 +58,6 @@
 # Realm manager secrets should now be present
 # in our namespace, get them (really just a sanity check -
 # we could continue to use the supplied variables...
-
-- name: Debug
-  debug:
-    msg: >-
-      host={{ sq_keycloak_hostname_fact }}
-      realm={{ sq_keycloak_realm }}
-      manager={{ sq_keycloak_realm_manager_fact }}
-      password={{ sq_keycloak_realm_manager_password_fact }}
 
 - name: Create Keycloak Realm Roles
   include_role:
