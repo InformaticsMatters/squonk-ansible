@@ -47,6 +47,14 @@
 
 - import_tasks: get-keycloak-credentials.yaml
 
+- name: Debug
+  debug:
+    msg: >-
+      host={{ sq_keycloak_hostname_fact }}
+      realm={{ sq_keycloak_realm }}
+      manager={{ sq_keycloak_realm_manager }}
+      password={{ sq_keycloak_realm_manager_password }}
+
 - name: Create Keycloak Realm ({{ sq_keycloak_realm }})
   include_role:
     name: informaticsmatters.infrastructure_user
