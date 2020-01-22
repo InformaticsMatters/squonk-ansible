@@ -84,6 +84,11 @@ cert_issuers:
 - staging
 - production
 
+# Variables for the Keycloak realm manager
+# Set or leave for automatic assignment
+keycloak_realm_manager: manager
+keycloak_realm_manager_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits') }}"
+
 # Kubernetes credentials ------------------------------------------------------
 
 # We don't use the Kubernetes credentials directly,
@@ -108,6 +113,3 @@ k8s_auth_api_key: "{{ lookup('env', 'K8S_AUTH_API_KEY') }}"
 keycloak_server_url: ''
 keycloak_admin: ''
 keycloak_admin_password: ''
-
-keycloak_realm_manager: ''
-keycloak_realm_manager_password: ''
