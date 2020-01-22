@@ -61,15 +61,19 @@ the config file and `API_KEY` is the **user-> token** value.
     $ export KUBECONFIG=./kubeconfig
 
 ## Creating Squonk
-You may need to adjust some deployment parameters to suit your needs.
-Do this by creating a `parameters` file using `parameters.template`
-as an example: -
+You will need to adjust some deployment parameters to suit your needs.
+Do this by creating an encrypted `parameters.vault` file in the
+`roles/squonk/vars` directory. You'll find an example there that 
+you can use as a starting point.
 
-    $ cp parameters.template parameters
-    $ [edit parameters]
+The parameter file should be called `<deployment-name>-parameters.vault`
+where `<deployment-name>` is a name to identify the deployment. For example,
+the _main_ Squonk deployment parameters will be found in
+`im-main-parameters.vault`.
 
 And then, to using the correct encrypted parameter file for your deployment,
-deploy Squonk (i.e. the 'im-main' site): -
+deploy Squonk by specifying the deployment name in the `sq_deployment_name`
+variable (i.e. to deploy the 'im-main' site): -
 
     $ ansible-playbook -e sq_deployment_name=im-main site-squonk.yaml \
         --vault-password-file vault-pass.txt
