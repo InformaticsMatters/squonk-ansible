@@ -70,6 +70,11 @@ sq_rabbitmq_default_user_password: "{{ lookup('password', '/dev/null length=10 c
 # Set but you cannot change this once RabbitMQ had been deployed
 sq_rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=96 chars=ascii_letters,digits') }}"
 
+# Variables for the Keycloak realm manager
+# Set or leave for automatic assignment
+sq_keycloak_realm_manager: manager
+sq_keycloak_realm_manager_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits') }}"
+
 # General variables -----------------------------------------------------------
 
 # General timeout, generally used within the k8s module,
@@ -83,11 +88,6 @@ bind_timeout: 120
 cert_issuers:
 - staging
 - production
-
-# Variables for the Keycloak realm manager
-# Set or leave for automatic assignment
-keycloak_realm_manager: manager
-keycloak_realm_manager_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits') }}"
 
 # Kubernetes credentials ------------------------------------------------------
 
