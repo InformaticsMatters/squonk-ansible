@@ -32,13 +32,6 @@
       id_db_user: "{{ sq_infra_database_owner }}"
       id_db_user_password: "{{ sq_db_password }}"
 
-  - name: Diplay database information
-    debug:
-      msg: >-
-        Database={{ sq_infra_database }}
-        Owner={{ sq_infra_database_owner }}
-        Password={{ sq_db_password }}
-
   when: secret_result.resources|length == 0
 
 - import_tasks: infra-db-migration.yaml
@@ -46,14 +39,15 @@
 # Create Keycloak Realm (and Roles)
 
 - import_tasks: get-keycloak-credentials.yaml
+- import_tasks: get-keycloak-realm-manager-credentials.yaml
 
 - name: Debug
   debug:
     msg: >-
       host={{ sq_keycloak_hostname_fact }}
       realm={{ sq_keycloak_realm }}
-      manager={{ sq_keycloak_realm_manager }}
-      password={{ sq_keycloak_realm_manager_password }}
+      manager={{ sq_keycloak_realm_manager_fact }}
+      password={{ sq_keycloak_realm_manager_password_fact }}
 
 - name: Create Keycloak Realm ({{ sq_keycloak_realm }})
   include_role:
@@ -64,16 +58,14 @@
     iu_hostname: "{{ sq_keycloak_hostname_fact }}"
     iu_namespace: "{{ sq_namespace }}"
     iu_realm: "{{ sq_keycloak_realm }}"
-    iu_realm_manager: "{{ sq_keycloak_realm_manager }}"
-    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password }}"
+    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
+    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
     iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
     iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
 
 # Realm manager secrets should now be present
 # in our namespace, get them (really just a sanity check -
 # we could continue to use the supplied variables...
-
-- import_tasks: get-keycloak-realm-manager-credentials.yaml
 
 - name: Debug
   debug:
