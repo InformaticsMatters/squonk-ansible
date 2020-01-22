@@ -24,9 +24,9 @@
 # Each deployment is configured via parameters in a vault file
 # identified by tge deployment name.
 
-- name: Load parameter vault ({{ sq_deployment_name }})
+- name: Load parameter vault ({{ sq_parameter_vault }})
   include_vars:
-    file: "{{ sq_deployment_name }}-parameters.vault"
+    file: "{{ sq_parameter_vault }}-parameters.vault"
 
 # Go...
 

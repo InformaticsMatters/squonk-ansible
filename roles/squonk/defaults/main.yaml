@@ -4,11 +4,11 @@
 # One of 'present' or 'absent'.
 sq_state: present
 
-# A symbolic name for the deployment.
+# A the name of the parameter vault for the deployment.
 # Used to load deployment-specific variables
 # from the file '{{ sq_name }}-parameters.vault'
 # The name it typically different for each deployment.
-sq_deployment_name: im-main
+sq_parameter_vault: im-main
 
 # The application namespace
 sq_namespace: squonk

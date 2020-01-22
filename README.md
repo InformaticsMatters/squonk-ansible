@@ -72,10 +72,10 @@ the _main_ Squonk deployment parameters will be found in
 `im-main-parameters.vault`.
 
 And then, to using the correct encrypted parameter file for your deployment,
-deploy Squonk by specifying the deployment name in the `sq_deployment_name`
+deploy Squonk by specifying the deployment name in the `sq_parameter_vault`
 variable (i.e. to deploy the 'im-main' site): -
 
-    $ ansible-playbook -e sq_deployment_name=im-main site-squonk.yaml \
+    $ ansible-playbook -e sq_parameter_vault=im-main site-squonk.yaml \
         --vault-password-file vault-pass.txt
 
 ### Plays
@@ -88,7 +88,7 @@ playbook files: -
 ## Deleting Squonk
 The following play deletes Squonk and any deployed pipelines: -
 
-    $ ansible-playbook -e sq_deployment_name=im-main unsite-squonk.yaml\
+    $ ansible-playbook -e sq_parameter_vault=im-main unsite-squonk.yaml\
         --vault-password-file vault-pass.txt
 
 ## Using Ansible Vault to preserve parameters

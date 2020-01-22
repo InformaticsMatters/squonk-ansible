@@ -9,7 +9,7 @@ command-line when you run the playbooks.
 ## Encrypted variables (parameters)
 Parameters are stored in vault-encrypted files and these can be used by Ansible
 directly. You can expect a vault file for each deployment, identified
-at run-time by the variable `sq_deployment_name`. Vault files can be edited
+at run-time by the variable `sq_parameter_vault`. Vault files can be edited
 in-situ while preserving the encrypted state of the file.
 
 Armed with the repo's vault password you can edit any encrypted
