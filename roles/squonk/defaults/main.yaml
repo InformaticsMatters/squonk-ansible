@@ -4,6 +4,12 @@
 # One of 'present' or 'absent'.
 sq_state: present
 
+# A symbolic name for the deployment.
+# Used to load deployment-specific variables
+# from the file '{{ sq_name }}-parameters.vault'
+# The name it typically different for each deployment.
+sq_deployment_name: im-main
+
 # The application namespace
 sq_namespace: squonk
 # The infrastructure namespace
@@ -14,6 +20,11 @@ sq_infra_namespace: im-infra
 # that'll be created in the infrastructure's PostgreSQL server
 sq_infra_database: squonk
 sq_infra_database_owner: "{{ sq_infra_database }}"
+# The squonk Keycloak realm
+# by default he name of the namespace
+sq_keycloak_realm: "{{ sq_namespace }}"
+# Delete the realm on removal?
+sq_delete_keycloak_realm_on_removal: no
 
 # A list of Realm users to deploy.
 # This utilises the informaticsmatters.infrastruture_user Role
@@ -23,12 +34,12 @@ sq_day1_users: []
 # The hostname that routes to the portal
 sq_portal_hostname: ''
 sq_portal_logout_redirect_to: ''
-sq_portal_keycloak_client_id: squonk-notebook
+sq_portal_keycloak_client_id: "{{ sq_namespace }}-notebook"
 sq_portal_keycloak_client_secret: ''
 
 # The hostname that routes to the JobExecutor
 sq_je_hostname: ''
-sq_je_keycloak_client_id: squonk-jobexecutor
+sq_je_keycloak_client_id: "{{ sq_namespace }}-jobexecutor"
 
 # Delete the Squonk database when Squonk is removed?
 sq_delete_db_on_removal: yes

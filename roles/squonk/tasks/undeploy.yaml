@@ -1,13 +1,10 @@
 ---
 
-- name: Get database secrets
+- name: Get namespace
   k8s_facts:
-    kind: Secret
-    name: database-secrets-{{ sq_infra_database }}
-    namespace: "{{ sq_namespace }}"
-  register: secret_result
-  when:
-  - sq_delete_db_on_removal|bool
+    kind: Namespace
+    name: "{{ sq_namespace }}"
+  register: n_result
 
 - name: Delete Squonk infrastructure database
   include_role:
@@ -15,20 +12,23 @@
   vars:
     id_action: delete
     id_infra_namespace: "{{ sq_infra_namespace }}"
-    id_db: squonk
+    id_db: "{{ sq_infra_database }}"
     id_db_user_namespace: "{{ sq_namespace }}"
     id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
-    id_db_user: squonk
+    id_db_user: "{{ sq_infra_database_owner }}"
+    id_check_user_secrets_on_delete: no
   when:
   - sq_delete_db_on_removal|bool
-  - secret_result.resources|length == 1
+  - n_result.resources|length > 0
+
+# We delete the Realm (and all its clients)
 
 - import_tasks: get-keycloak-credentials.yaml
 
 - name: Remove Keycloak JobExecutor client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: "{{ keycloak_server_url }}"
+    auth_keycloak_url: "{{ sq_keycloak_url_fact }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -36,11 +36,12 @@
     client_id: "{{ sq_je_keycloak_client_id }}"
     state: absent
   delegate_to: localhost
+  when: not sq_delete_keycloak_realm_on_removal|bool
 
 - name: Remove Keycloak Portal (Notebook) client
   keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: "{{ keycloak_server_url }}"
+    auth_keycloak_url: "{{ sq_keycloak_url_fact }}"
     auth_realm: master
     auth_username: "{{ sq_keycloak_admin_user_fact }}"
     auth_password: "{{ sq_keycloak_admin_user_password_fact }}"
@@ -48,20 +49,22 @@
     client_id: "{{ sq_portal_keycloak_client_id }}"
     state: absent
   delegate_to: localhost
+  when: not sq_delete_keycloak_realm_on_removal|bool
 
-# Delete 'Day 1' Keycloak users
+# Delete the Realm (its Roles and Users)?
 
-- name: Delete infrastructure 'Day 1' Squonk users
+- name: Delete Keycloak Realm ({{ sq_keycloak_realm }})
   include_role:
     name: informaticsmatters.infrastructure_user
   vars:
     iu_action: delete
+    iu_type: realm
     iu_hostname: "{{ sq_keycloak_hostname_fact }}"
+    iu_namespace: "{{ sq_namespace }}"
     iu_realm: "{{ sq_keycloak_realm }}"
-    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
-    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
-    iu_users: "{{ sq_day1_users }}"
-  when: sq_day1_users|length > 0
+    iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
+    iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
+  when: sq_delete_keycloak_realm_on_removal|bool
 
 # Finally ... remove the Squonk namespace
 
@@ -70,3 +73,5 @@
     state: absent
     definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
     wait: yes
+  when:
+  - n_result.resources|length > 0

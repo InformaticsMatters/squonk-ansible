@@ -68,19 +68,10 @@ as an example: -
     $ cp parameters.template parameters
     $ [edit parameters]
 
-And then, using the parameter file, deploy the infrastructure: -
+And then, to using the correct encrypted parameter file for your deployment,
+deploy Squonk (i.e. the 'im-main' site): -
 
-    $ ansible-playbook -e "@parameters" site-squonk.yaml
-
-If your parameters are encrypted with Ansible [vault] you can use them
-directly, without needing to decrypt them: -
-
-    $ ansible-playbook -e "@site-im-main-parameters.vault" site-squonk.yaml \
-        --vault-password-file vault-pass.txt
-
-And then re-use the parameters for a pipeline deployment: -
-
-    $ ansible-playbook -e "@site-im-main-parameters.vault" site-pipeline.yaml \
+    $ ansible-playbook -e sq_deployment_name=im-main site-squonk.yaml \
         --vault-password-file vault-pass.txt
 
 ### Plays
@@ -93,7 +84,8 @@ playbook files: -
 ## Deleting Squonk
 The following play deletes Squonk and any deployed pipelines: -
 
-    $ ansible-playbook -e "@parameters" unsite-squonk.yaml
+    $ ansible-playbook -e sq_deployment_name=im-main unsite-squonk.yaml\
+        --vault-password-file vault-pass.txt
 
 ## Using Ansible Vault to preserve parameters
 Site parameter files can be stored in `.vault` files. These will be written

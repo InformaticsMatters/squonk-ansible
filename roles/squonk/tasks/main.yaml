@@ -20,6 +20,14 @@
     - k8s_auth_host|length > 0
     - k8s_auth_api_key|length > 0
 
+# Load encrypted variables based on the Squonk deployment 'name'.
+# Each deployment is configured via parameters in a vault file
+# identified by tge deployment name.
+
+- name: Load parameter vault ({{ sq_deployment_name }})
+  include_vars:
+    file: "{{ sq_deployment_name }}-parameters.vault"
+
 # Go...
 
 - block:

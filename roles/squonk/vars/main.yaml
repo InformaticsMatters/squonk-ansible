@@ -7,9 +7,6 @@ sq_namespace_service_account: squonk
 # The preferred node purpose for our objects
 sq_node_purpose: application
 
-sq_keycloak_realm: im
-sq_keycloak_je_client_id: sje
-
 # Size and class of the Squonk working directory.
 # The class is 'blank', which implies the default class.
 sq_workdir_volume_size_g: 50

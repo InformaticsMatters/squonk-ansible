@@ -21,6 +21,10 @@ pipeline_repository: SetMe
 # The image tag for the pipeline poster image.
 pipeline_tag: latest
 
+# The namespace to launch pipelines from,
+# e.g. the Squonk namespace.
+pipeline_namespace: squonk
+
 # The image pull secret for images hosted on
 # private registries.
 # Leave blank for public images.
