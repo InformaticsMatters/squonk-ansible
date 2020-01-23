@@ -19,6 +19,19 @@
   delay: 5
   retries: "{{ (bind_timeout|int / 5)|int }}"
 
+# Create secret objects for each image pull secret defined.
+# These are typically used to pull pipeline container and SD-poster images
+# from private registries.
+
+- name: Create image pull secrets
+  k8s:
+    definition: "{{ lookup('template', 'secret-imagepull.yaml.j2') }}"
+    wait: yes
+  vars:
+    pull_name: "{{ item.name }}"
+    pull_secret: "{{ item.secret }}"
+  with_items: "{{ sq_pull_secrets }}"
+
 # Deploy the main (backend) application images.
 #
 # As we 'wait' for individual containers we have to deploy

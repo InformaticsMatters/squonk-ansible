@@ -27,7 +27,7 @@ sq_keycloak_realm: squonk
 sq_delete_keycloak_realm_on_removal: no
 
 # A list of Realm users to deploy.
-# This utilises the informaticsmatters.infrastruture_user Role
+# This utilises the informaticsmatters.infrastructure_user Role
 # so refer to that role for documentation.
 sq_day1_users: []
 
@@ -53,3 +53,19 @@ sq_chem_image_tag: '0.3.6'
 sq_je_image_tag: '0.3.6'
 sq_flyway_image_tag: '0.3.6'
 sq_portal_image_tag: '0.3.6'
+
+# Container credentials used to create secrets
+# in order to pull images from private registries.
+#
+# A list of 'name' and 'secret' values that are used to create secrets
+# in the project namespace.
+#
+# Typically: -
+#
+#   sq_pull_secrets:
+#   - name: abc-gitlab
+#     secret: eyJodHRwczovL2luZGV4L ... J0QUl6RTIifX0=
+#
+# See the project README for instructions
+# on creating the 'secret' value.
+sq_pull_secrets: []
