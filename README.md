@@ -98,7 +98,7 @@ example should help. Set the environment variables `GITLAB_USERNAME` and
 
     $ GITLAB_USERNAME=???
     $ GITLAB_TOKEN=???
-    $ GITLAB_SECRET=$(echo -n "{\"auths\":{\"gitlab.com\":{\"auth\":\"`echo -n "$GITLAB_USERNAME:$GITLAB_TOKEN" | base64`\"}}}" | base64)
+    $ echo -n "{\"auths\":{\"registry.gitlab.com\":{\"auth\":\"`echo -n "$GITLAB_USERNAME:$GITLAB_TOKEN" | base64`\"}}}" | base64
 
 >   The `USER` and `TOKEN` values will come from a Deploy secret created
     in the corresponding GitLab repository to allow `read_registry` access.
