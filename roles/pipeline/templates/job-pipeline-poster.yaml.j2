@@ -39,8 +39,9 @@ spec:
       - image: {{ pipeline_registry }}/{{ pipeline_repository }}:{{ pipeline_tag }}
         name: {{ pipeline_name }}
         imagePullPolicy: {{ pipeline_image_pull_policy }}
-{% if pipeline_registry|length > 0 or pipeline_pull_secret|length > 0 %}
         env:
+        - name: IMAGE_TAG
+          value: latest
 {% if pipeline_registry|length > 0 %}
         - name: IMAGE_REGISTRY
           value: {{ pipeline_registry }}
@@ -48,7 +49,6 @@ spec:
 {% if pipeline_pull_secret|length > 0 %}
         - name: IMAGE_PULL_SECRET
           value: {{ pipeline_pull_secret }}
-{% endif %}
 {% endif %}
         resources:
           limits:
