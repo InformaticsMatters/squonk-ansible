@@ -36,9 +36,18 @@ spec:
         - 'until (( curl http://coreservices:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
 
       containers:
-      - image: '{{ pipeline_repository }}:{{ pipeline_tag }}'
+      - image: '{{ pipeline_registry }}/{{ pipeline_repository }}:{{ pipeline_tag }}'
         name: {{ pipeline_name }}
         imagePullPolicy: {{ pipeline_image_pull_policy }}
+        env:
+{% if pipeline_registry|length > 0 %}
+        - name: IMAGE_REGISTRY
+          value: {{ pipeline_registry }}
+{% endif %}
+{% if pipeline_pull_secret|length > 0 %}
+        - name: IMAGE_PULL_SECRET
+          value: {{ pipeline_pull_secret }}
+{% endif %}
         resources:
           limits:
             cpu: 500m

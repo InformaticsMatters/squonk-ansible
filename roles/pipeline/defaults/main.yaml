@@ -15,7 +15,7 @@ pipeline_name: SetMe
 # i.e. 'squonk/rdkit-pipelines-sdposter'.
 #
 # If the image resides in a private registry
-# you wil need to have create an image pull secret
+# you will need to have create an image pull secret
 # in kubernetes and name it using the 'pipeline_pull_secret' variable.
 pipeline_repository: SetMe
 # The image tag for the pipeline poster image.
@@ -25,6 +25,10 @@ pipeline_tag: latest
 # e.g. the Squonk namespace.
 pipeline_namespace: squonk
 
+# The optional Docker image registry (i.e. 'registry.gitlab.com').
+# If set pipeline images are prefixed with '{{ pipeline_registry }}/'
+# when they're loaded.
+pipeline_registry: ''
 # The image pull secret for images hosted on
 # private registries.
 # Leave blank for public images.
