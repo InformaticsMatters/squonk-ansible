@@ -16,7 +16,7 @@ pipeline_name: SetMe
 #
 # If the image resides in a private registry
 # you will need to have create an image pull secret
-# in kubernetes and name it using the 'pipeline_pull_secret' variable.
+# in kubernetes and name it using the 'pipeline_pull_secret_*' variables.
 pipeline_repository: SetMe
 # The image tag for the pipeline poster image.
 pipeline_tag: latest
@@ -30,6 +30,7 @@ pipeline_namespace: squonk
 # when they're loaded.
 pipeline_registry: ''
 # The image pull secret for images hosted on
-# private registries.
+# private registries. The secret is expected to have been deployed
+# as part of the Squonk deployment.
 # Leave blank for public images.
 pipeline_pull_secret: ''

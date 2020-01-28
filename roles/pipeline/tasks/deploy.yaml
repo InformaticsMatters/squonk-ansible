@@ -8,6 +8,20 @@
     - pipeline_repository|length > 0
     - pipeline_repository != 'SetMe'
 
+- name: Get pull secret
+  k8s_facts:
+    kind: Secret
+    namespace: "{{ pipeline_namespace }}"
+    name: "{{ pipeline_pull_secret }}"
+  register: result
+  when: pipeline_pull_secret|length > 0
+
+- name: Check pull secret
+  assert:
+    that: result.resources|length == 1
+    fail_msg: The pull secret does not exist ({{ pipeline_pull_secret }})
+  when: pipeline_pull_secret|length > 0
+
 - name: Remove any existing pipeline Job ({{ pipeline_name }})
   k8s:
     state: absent
