@@ -13,7 +13,7 @@ the required modules, roles and collections: -
     So, base your environment on Python 3.7 and use Ansible 2.8.7
     (which is better because AWX runs Ansible 2.8, not 2.9).
 
-    $ conda activate ansible-squonk
+    $ conda activate squonk-ansible
     $ pip install -r requirements.txt
 
 >   [Ansible Galaxy] roles this project depends upon
