@@ -29,7 +29,7 @@ spec:
 
       containers:
       - name: postgres-migrate
-        image: squonk/flyway:{{ sq_flyway_image_tag }}
+        image: {{ sq_flyway_image }}:{{ sq_flyway_image_tag }}
         imagePullPolicy: IfNotPresent
         env:
         - name: POSTGRES_HOSTNAME

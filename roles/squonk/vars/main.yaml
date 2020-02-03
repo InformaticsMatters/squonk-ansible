@@ -53,6 +53,9 @@ sq_portal_mem_request: 1Gi
 sq_portal_cpu_limit: 2000m
 sq_portal_mem_limit: 8Gi
 
+# Squonk images (tags are defined in defaults)
+sq_flyway_image: squonk/flyway
+
 # RabbitMQ configuration ------------------------------------------------------
 
 # The RabbitMQ image tag.
