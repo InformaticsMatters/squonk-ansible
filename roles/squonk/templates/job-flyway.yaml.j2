@@ -30,7 +30,7 @@ spec:
       containers:
       - name: postgres-migrate
         image: {{ sq_flyway_image }}:{{ sq_flyway_image_tag }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc
