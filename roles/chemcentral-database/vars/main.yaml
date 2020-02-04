@@ -1,0 +1,42 @@
+---
+
+# The namespace service account
+ccd_namespace_service_account: ccd
+# The preferred node purpose for our objects
+ccd_node_purpose: application
+
+# Size and class of the database directory.
+# The class is 'blank', which implies the default,
+# which the user would typically define.
+ccd_databse_volume_size_g: 50
+ccd_workdir_volume_storageclass: " "
+
+# General variables -----------------------------------------------------------
+
+# General timeout, generally used within the k8s module,
+# for wait duration
+wait_timeout: 600
+# Volume binding timeout (seconds)
+bind_timeout: 120
+
+# -----------------------------------------------------------------------------
+#
+# The search container belongs to Squonk deployment.
+# The database is 'central', i.e. independent of squonk and in its own namespace.
+# So we can have N Squonks and (typically) 1 db.
+# The database Squonk uses for the search is driven by environment variables
+# declared in the ChemcentralConfig class ...
+#
+# "CHEMCENTRAL_HOST"
+# "CHEMCENTRAL_PORT"
+# "CHEMCENTRAL_DB"
+# "CHEMCENTRAL_USER"
+# "CHEMCENTRAL_PASSWORD"
+#
+# Q. And it sounds like a new set of credentials in AWX?
+#    That are injected into the Squonk AWX play (and the search DB deployment play)?
+#    Discuss the real need for DB, USER, PASSWORD with Tim -i.e. are they just 'well known'?
+#
+# Q  Another thought ... is the chemcentral database a completely separate repo?
+#    i.e. an "ansible-chemcentral-database" repo and role or is to so tightly
+#    coupled with Squonk it belongs in Squonk?

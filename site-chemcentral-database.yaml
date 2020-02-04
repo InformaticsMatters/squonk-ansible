@@ -1,0 +1,8 @@
+---
+
+- hosts: localhost
+  roles:
+  - role: chemcentral-database
+    vars:
+      ccd_databse_volume_size_g: 100
+      ccd_workdir_volume_storageclass: gp2
