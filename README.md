@@ -86,22 +86,8 @@ playbook files: -
 -   `site-pipeline` (for pipeline deployment)
 
 ## Image pull secrets
-We often use container images from private registries, especially for
-the pipeline implementations. In order to do this Squonk needs to be provided
-with a _secret_ that records the registry authentication so it can be
-used an an `imagePullSecret` in the corresponding Pod(s). Refer to the
-Kubernetes [private registry] documentation for a discussion of the topic.
-
-To generate a secret (a base64 encoded docker login) the following GitLab
-example should help. Set the environment variables `GITLAB_USERNAME` and
-`GITLAB_TOKEN` as shown below: -
-
-    $ GITLAB_USERNAME=???
-    $ GITLAB_TOKEN=???
-    $ echo -n "{\"auths\":{\"registry.gitlab.com\":{\"auth\":\"`echo -n "$GITLAB_USERNAME:$GITLAB_TOKEN" | base64`\"}}}" | base64
-
->   The `USER` and `TOKEN` values will come from a Deploy secret created
-    in the corresponding GitLab repository to allow `read_registry` access.
+Refer to the Informatics Matters inter-project (developer) documentation
+for details on how to create image pull secrets.
 
 ## Deleting Squonk
 The following play deletes Squonk and any deployed pipelines: -
