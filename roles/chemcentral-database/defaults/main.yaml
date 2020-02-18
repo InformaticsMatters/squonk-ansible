@@ -1,0 +1,8 @@
+---
+
+# Deploy (or un-deploy)?
+# One of 'present' or 'absent'.
+ccd_state: present
+
+# The application namespace
+ccd_namespace: chemcentral-database

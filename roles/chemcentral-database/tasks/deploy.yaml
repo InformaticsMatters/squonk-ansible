@@ -1,0 +1,28 @@
+---
+
+- name: Create namespace '{{ sq_namespace }}'
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - namespace
+  - serviceaccount
+
+- name: Create 'database' volume claim
+  k8s:
+    definition: "{{ lookup('template', 'pvc.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+
+# Best practice ... wait for the PVC to bind.
+# e.g. wait until resources[0].status.phase == Bound (initially Pending)
+
+- name: Wait for 'database' volume claim to bind
+  k8s_facts:
+    kind: PersistentVolumeClaim
+    name: database
+    namespace: "{{ ccd_namespace }}"
+  register: database_result
+  until: database_result.resources[0].status.phase == 'Bound'
+  delay: 5
+  retries: "{{ (bind_timeout|int / 5)|int }}"

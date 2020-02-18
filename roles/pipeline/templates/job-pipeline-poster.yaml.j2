@@ -36,7 +36,11 @@ spec:
         - 'until (( curl http://coreservices:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
 
       containers:
+{% if pipeline_registry == '' %}
+      - image: {{ pipeline_repository }}:{{ pipeline_tag }}
+{% else %}
       - image: {{ pipeline_registry }}/{{ pipeline_repository }}:{{ pipeline_tag }}
+{% endif %}
         name: {{ pipeline_name }}
 {% if pipeline_tag == 'latest' %}
         imagePullPolicy: Always
