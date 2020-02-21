@@ -14,7 +14,7 @@
     wait_timeout: "{{ wait_timeout }}"
 
 - name: Wait for migration
-  k8s_facts:
+  k8s_info:
     kind: Job
     namespace: "{{ sq_namespace }}"
     name: postgres-migrate

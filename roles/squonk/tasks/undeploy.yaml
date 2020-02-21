@@ -1,7 +1,7 @@
 ---
 
 - name: Get namespace
-  k8s_facts:
+  k8s_info:
     kind: Namespace
     name: "{{ sq_namespace }}"
   register: n_result

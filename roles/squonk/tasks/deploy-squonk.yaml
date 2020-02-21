@@ -10,7 +10,7 @@
 # e.g. wait until resources[0].status.phase == Bound (initially Pending)
 
 - name: Wait for 'workdir' volume claim to bind
-  k8s_facts:
+  k8s_info:
     kind: PersistentVolumeClaim
     name: workdir
     namespace: "{{ sq_namespace }}"
