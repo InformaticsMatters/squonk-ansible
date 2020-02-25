@@ -22,3 +22,11 @@
 
 - import_tasks: deploy-rabbitmq.yaml
 - import_tasks: deploy-squonk.yaml
+
+# Display some useful information for the user...
+
+- name: Display portal location
+  debug:
+    msg: >-
+      The Squonk Portal should be available at
+      https://{{ sq_portal_hostname }}/portal
