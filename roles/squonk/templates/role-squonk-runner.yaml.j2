@@ -6,7 +6,7 @@ metadata:
   namespace: "{{ sq_namespace }}"
 rules:
 - apiGroups: ['']
-  resources: ['pods', 'pods/log']
+  resources: ['pods', 'pods/log', 'pods/status']
   verbs: ['get', 'list', 'watch', 'create', 'delete']
 - apiGroups: ['batch', 'extensions']
   resources: ['jobs']
