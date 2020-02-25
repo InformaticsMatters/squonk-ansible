@@ -42,8 +42,12 @@ spec:
 
       containers:
       - name: chemservices-basic
-        image: squonk/chemservices-basic:{{ sq_chem_image_tag }}
+        image: squonk/chemservices-basic:{{ sq_image_tag }}
+{% if sq_image_tag == 'latest' %}
+        imagePullPolicy: Always
+{% else %}
         imagePullPolicy: IfNotPresent
+{% endif %}
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc

@@ -42,7 +42,11 @@ spec:
       containers:
       - image: squonk/portal:{{ sq_portal_image_tag }}
         name: portal
+{% if sq_portal_image_tag == 'latest' %}
+        imagePullPolicy: Always
+{% else %}
         imagePullPolicy: IfNotPresent
+{% endif %}
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc

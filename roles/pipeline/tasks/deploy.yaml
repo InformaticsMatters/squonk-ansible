@@ -9,7 +9,7 @@
     - pipeline_repository != 'SetMe'
 
 - name: Get pull secret
-  k8s_facts:
+  k8s_info:
     kind: Secret
     namespace: "{{ pipeline_namespace }}"
     name: "{{ pipeline_pull_secret }}"
@@ -35,7 +35,7 @@
     wait_timeout: "{{ wait_timeout }}"
 
 - name: Wait for pipeline ({{ pipeline_name }})
-  k8s_facts:
+  k8s_info:
     kind: Job
     namespace: "{{ pipeline_namespace }}"
     name: "{{ pipeline_name }}"

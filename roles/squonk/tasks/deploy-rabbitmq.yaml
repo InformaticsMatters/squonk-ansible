@@ -8,7 +8,7 @@
 # they cannot be changed by re-running the playbook/role.
 
 - name: Check RabbitMQ secrets
-  k8s_facts:
+  k8s_info:
     kind: Secret
     api_version: v1
     namespace: "{{ sq_namespace }}"
@@ -50,7 +50,7 @@
   - statefulset-rabbitmq
 
 - name: Wait for RabbitMQ to become Ready
-  k8s_facts:
+  k8s_info:
     kind: Pod
     name: rabbitmq-0
     namespace: "{{ sq_namespace }}"

@@ -33,8 +33,12 @@ spec:
 
       containers:
       - name: coreservices
-        image: squonk/coreservices:{{ sq_core_image_tag }}
+        image: squonk/coreservices:{{ sq_image_tag }}
+{% if sq_image_tag == 'latest' %}
+        imagePullPolicy: Always
+{% else %}
         imagePullPolicy: IfNotPresent
+{% endif %}
         env:
         - name: RABBITMQ_HOSTNAME
           valueFrom:

@@ -33,8 +33,12 @@ spec:
 
       containers:
       - name: cellexecutor
-        image: squonk/cellexecutor:{{ sq_cell_image_tag }}
+        image: squonk/cellexecutor:{{ sq_image_tag }}
+{% if sq_image_tag == 'latest' %}
+        imagePullPolicy: Always
+{% else %}
         imagePullPolicy: IfNotPresent
+{% endif %}
         env:
         - name: RABBITMQ_HOSTNAME
           valueFrom:

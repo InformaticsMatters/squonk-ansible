@@ -6,7 +6,7 @@
 # Assuming database credentials do not already exist.
 
 - name: Get database secrets
-  k8s_facts:
+  k8s_info:
     kind: Secret
     name: database-secrets-{{ sq_infra_database }}
     namespace: "{{ sq_namespace }}"
