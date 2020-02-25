@@ -24,7 +24,7 @@ sq_infra_database_owner: squonk
 # by default he name of the namespace
 sq_keycloak_realm: squonk
 # Delete the realm on removal?
-sq_delete_keycloak_realm_on_removal: no
+sq_delete_keycloak_realm_on_removal: yes
 
 # A list of Realm users to deploy.
 # This utilises the informaticsmatters.infrastructure_user Role
