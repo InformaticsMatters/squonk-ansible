@@ -50,6 +50,10 @@ sq_db_password: SetMe
 sq_image_tag: '0.3.9'
 sq_portal_image_tag: '0.3.6'
 
+# Debug modes (passed to the cell-executor)
+sq_debug_mode: 0
+sq_pod_debug_mode: 0
+
 # Container credentials used to create secrets
 # in order to pull images from private registries.
 #

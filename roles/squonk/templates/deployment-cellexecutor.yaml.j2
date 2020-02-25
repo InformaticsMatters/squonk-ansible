@@ -72,9 +72,9 @@ spec:
         - name: SQUONK_WORK_DIR_PVC_NAME
           value: workdir
         - name: SQUONK_DEBUG_MODE
-          value: "0"
+          value: '{{ sq_debug_mode }}'
         - name: SQUONK_POD_DEBUG_MODE
-          value: "0"
+          value: '{{ sq_pod_debug_mode }}'
         - name: SQUONK_POD_START_GRACE_PERIOD_M
           value: "5"
         - name: JAVA_TOOL_OPTIONS

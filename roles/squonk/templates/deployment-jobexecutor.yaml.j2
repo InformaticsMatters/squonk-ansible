@@ -57,6 +57,10 @@ spec:
               key: pod-env
         - name: SQUONK_POD_LOG_HISTORY
           value: '{{ sq_pod_log_history }}'
+        - name: SQUONK_DEBUG_MODE
+          value: '{{ sq_debug_mode }}'
+        - name: SQUONK_POD_DEBUG_MODE
+          value: '{{ sq_pod_debug_mode }}'
         - name: SQUONK_JOBEXECUTOR_POLL_FOR_SERVICE_DESCRIPTORS
           value: "true"
         - name: SQUONK_NEXTFLOW_IMAGE
