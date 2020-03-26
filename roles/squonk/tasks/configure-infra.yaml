@@ -55,10 +55,6 @@
     iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
     iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
 
-# Realm manager secrets should now be present
-# in our namespace, get them (really just a sanity check -
-# we could continue to use the supplied variables...
-
 - name: Create Keycloak Realm Roles
   include_role:
     name: informaticsmatters.infrastructure_user
@@ -72,6 +68,7 @@
     iu_roles:
     - name: standard-user
       default: yes
+    - name: fragnet-search
 
 # Create the keycloak clients
 # We have a client for the Portal (the web application)
