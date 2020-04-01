@@ -1,0 +1,72 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: search
+  namespace: {{ ccs_namespace }}
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: search
+  serviceName: search
+  template:
+    metadata:
+      name: search
+      labels:
+        app: search
+    spec:
+      serviceAccountName: ccs
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ ccs_node_purpose }}
+
+      containers:
+      - name: search
+        image: {{ ccs_image_registry }}/{{ ccs_image }}:{{ ccs_image_tag }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: {{ ccs_cpu_limit }}
+            memory: {{ ccs_mem_limit }}
+          requests:
+            cpu: {{ ccs_cpu_request }}
+            memory: {{ ccs_mem_request }}
+        readinessProbe:
+          httpGet:
+            path: /chemcentral-search/rest/ping
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 1
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /chemcentral-search/rest/ping
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 1
+          periodSeconds: 30
+        env:
+        - name: CHEMCENTRAL_HOST
+          value: database.ccs.svc
+        - name: CHEMCENTRAL_USER
+          value: chemcentral
+        - name: CHEMCENTRAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: chemcentral_user_password
+        - name: JAVA_TOOL_OPTIONS
+          value: "{{ ccs_java_tool_options }}"

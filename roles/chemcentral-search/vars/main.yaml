@@ -1,27 +1,44 @@
 ---
 
 # The application namespace
-ccd_namespace: chemcentral-database
-# The namespace service account
-ccd_namespace_service_account: ccd
+ccs_namespace: chemcentral-database
 # The preferred node purpose for our objects
-ccd_node_purpose: application
+ccs_node_purpose: application
+
+# Search resource limits
+ccs_cpu_limit: 2
+ccs_cpu_request: 250m
+ccs_mem_limit: 8Gi
+ccs_mem_request: 1200Mi
 
 # Database image details
-ccd_database_image_registry: docker.io
-ccd_database_image: informaticsmatters/rdkit_cartridge
-ccd_database_image_tag: Release_2017_09_2
+ccs_image_registry: docker.io
+ccs_image: squonk/chemcentral-search
+ccs_image_tag: 0.3.11
+
+# A value used for the Java application's JAVA_TOOL_OPTIONS
+# environment variable. The values are used by the container's
+# underlying JVM. Use of -Xmx for example is a convenient
+# way of setting the maximum JVM heap and should lie somewhere
+# between the MEM_REQUEST and MEM_LIMIT (certainly less than the limit
+# to allow for some 'headroom' for allocations other than from the JVM).
+ccs_java_tool_options: -Xmx7800m
+
+# Database image details
+ccs_database_image_registry: docker.io
+ccs_database_image: informaticsmatters/rdkit_cartridge
+ccs_database_image_tag: Release_2017_09_2
 
 # Database resource limits
-ccd_cpu_limit: 4
-ccd_cpu_request: 100m
-ccd_mem_limit: 2Gi
-ccd_mem_request: 100Mi
+ccs_database_cpu_limit: 4
+ccs_database_cpu_request: 100m
+ccs_database_mem_limit: 2Gi
+ccs_database_mem_request: 100Mi
 
 # Database passwords,
 # randomly assigned unless defined.
-ccd_db_user_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters') }}"
-ccd_db_chemcentral_user_password: "{{ lookup('password', '/dev/null length=14 chars=ascii_letters') }}"
+ccs_database_user_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters') }}"
+ccs_database_chemcentral_user_password: "{{ lookup('password', '/dev/null length=14 chars=ascii_letters') }}"
 
 # General variables -----------------------------------------------------------
 

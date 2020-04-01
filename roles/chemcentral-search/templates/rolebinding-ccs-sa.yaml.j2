@@ -2,13 +2,13 @@
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: ccd-sa
-  namespace: "{{ ccd_namespace }}"
+  name: ccs-sa
+  namespace: "{{ ccs_namespace }}"
 roleRef:
   kind: Role
   name: psp-unrestricted
   apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
-  name: ccd
-  namespace: "{{ ccd_namespace }}"
+  name: ccs
+  namespace: "{{ ccs_namespace }}"

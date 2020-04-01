@@ -2,10 +2,10 @@
 
 # Deploy (or un-deploy)?
 # One of 'present' or 'absent'.
-ccd_state: present
+ccs_state: present
 
 # Size and class of the database directory.
 # The class is 'blank', which implies the default,
 # which the user would typically define.
-ccd_database_volume_size_g: 50
-ccd_database_volume_storageclass: " "
+ccs_database_volume_size_g: 50
+ccs_database_volume_storageclass: " "

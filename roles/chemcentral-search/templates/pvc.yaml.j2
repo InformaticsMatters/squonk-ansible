@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: database
+  namespace: {{ ccs_namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: '{{ ccs_database_volume_storageclass }}'
+  resources:
+    requests:
+      storage: '{{ ccs_database_volume_size_g }}Gi'

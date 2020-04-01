@@ -2,7 +2,7 @@
 
 # It's all in the namespace, so just delete that...
 
-- name: Delete namespace '{{ ccd_namespace }}'
+- name: Delete namespace '{{ ccs_namespace }}'
   k8s:
     state: absent
     definition: "{{ lookup('template', 'namespace.yaml.j2') }}"

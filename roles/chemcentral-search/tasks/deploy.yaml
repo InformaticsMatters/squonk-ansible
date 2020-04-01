@@ -8,7 +8,7 @@
   - namespace
   - serviceaccount
   - role-psp-unrestricted
-  - rolebinding-ccd-sa
+  - rolebinding-ccs-sa
 
 # Check and create database secrets
 
@@ -16,42 +16,42 @@
   k8s_info:
     kind: Secret
     api_version: v1
-    namespace: "{{ ccd_namespace }}"
+    namespace: "{{ ccs_namespace }}"
     name: database
-  register: ccd_s_result
+  register: s_result
 
 - name: Set database secret facts
   set_fact:
-    ccd_db_user_password_fact: "{{ ccd_db_user_password }}"
-    ccd_db_chemcentral_user_password_fact: "{{ ccd_db_chemcentral_user_password }}"
-  when: ccd_s_result.resources|length == 0
+    ccs_database_user_password_fact: "{{ ccs_database_user_password }}"
+    ccs_database_chemcentral_user_password_fact: "{{ ccs_database_chemcentral_user_password }}"
+  when: s_result.resources|length == 0
 
 - name: Set database secret facts (pre-deployed secrets)
   set_fact:
-    ccd_db_user_password_fact: "{{ ccd_s_result.resources[0].data.user_password|b64decode }}"
-    ccd_db_chemcentral_user_password_fact: "{{ ccd_s_result.resources[0].data.chemcentral_user_password|b64decode }}"
-  when: ccd_s_result.resources|length == 1
+    ccs_database_user_password_fact: "{{ s_result.resources[0].data.user_password|b64decode }}"
+    ccs_database_chemcentral_user_password_fact: "{{ s_result.resources[0].data.chemcentral_user_password|b64decode }}"
+  when: s_result.resources|length == 1
 
 - name: Write database secrets
   k8s:
     definition: "{{ lookup('template', 'secret-db.yaml.j2') }}"
     wait: yes
-  when: ccd_s_result.resources|length == 0
+  when: s_result.resources|length == 0
 
 # The database volume (and storage class checks)
 
-- name: Get {{ ccd_database_volume_storageclass }} StorageClass
+- name: Get {{ ccs_database_volume_storageclass }} StorageClass
   k8s_info:
     kind: StorageClass
-    name: "{{ ccd_database_volume_storageclass }}"
+    name: "{{ ccs_database_volume_storageclass }}"
   register: sc_result
-  when: ccd_database_volume_storageclass != " "
+  when: ccs_database_volume_storageclass != " "
 
-- name: Assert {{ ccd_database_volume_storageclass }} StorageClass
+- name: Assert {{ ccs_database_volume_storageclass }} StorageClass
   assert:
     that: sc_result.resources|length == 1
-    fail_msg: The {{ ccd_database_volume_storageclass }} StorageClass must be available on the cluster
-  when: ccd_database_volume_storageclass != " "
+    fail_msg: The {{ ccs_database_volume_storageclass }} StorageClass must be available on the cluster
+  when: ccs_database_volume_storageclass != " "
 
 - name: Create database volume claim
   k8s:
@@ -66,7 +66,7 @@
   k8s_info:
     kind: PersistentVolumeClaim
     name: database
-    namespace: "{{ ccd_namespace }}"
+    namespace: "{{ ccs_namespace }}"
   register: database_result
   until: >-
     database_result.resources|length > 0
@@ -85,3 +85,13 @@
   - configmap-db-init
   - statefulset-db
   - service-db
+
+# Now deploy the search container
+
+- name: Create search
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - statefulset-search
+  - service-search
