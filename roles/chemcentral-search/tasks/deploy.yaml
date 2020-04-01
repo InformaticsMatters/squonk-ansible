@@ -98,8 +98,8 @@
     and database_result.resources[0].status.containerStatuses is defined
     and database_result.resources[0].status.containerStatuses|length == 1
     and database_result.resources[0].status.containerStatuses[0].ready
-  delay: 30
-  retries: "{{ (wait_timeout|int / 30)|int }}"
+  delay: 15
+  retries: "{{ (wait_timeout|int / 15)|int }}"
 
 # Now deploy the search container
 
@@ -123,5 +123,5 @@
     and search_result.resources[0].status.containerStatuses is defined
     and search_result.resources[0].status.containerStatuses|length == 1
     and search_result.resources[0].status.containerStatuses[0].ready
-  delay: 30
-  retries: "{{ (wait_timeout|int / 30)|int }}"
+  delay: 10
+  retries: "{{ (wait_timeout|int / 10)|int }}"
