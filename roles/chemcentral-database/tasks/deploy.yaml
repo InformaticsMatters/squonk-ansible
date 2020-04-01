@@ -28,8 +28,8 @@
 
 - name: Set database secret facts (pre-deployed secrets)
   set_fact:
-    ccd_db_user_password_fact: "{{ ccd_s_result.resources[0].data.user_password_fact|b64decode }}"
-    ccd_db_chemcentral_user_password_fact: "{{ ccd_s_result.resources[0].data.chemcentral_user_password_fact|b64decode }}"
+    ccd_db_user_password_fact: "{{ ccd_s_result.resources[0].data.user_password|b64decode }}"
+    ccd_db_chemcentral_user_password_fact: "{{ ccd_s_result.resources[0].data.chemcentral_user_password|b64decode }}"
   when: ccd_s_result.resources|length == 1
 
 - name: Write database secrets
