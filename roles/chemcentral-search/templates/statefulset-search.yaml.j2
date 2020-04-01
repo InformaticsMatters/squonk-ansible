@@ -8,13 +8,13 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: search
+      name: search
   serviceName: search
   template:
     metadata:
       name: search
       labels:
-        app: search
+        name: search
     spec:
       serviceAccountName: ccs
 
@@ -60,7 +60,7 @@ spec:
           periodSeconds: 30
         env:
         - name: CHEMCENTRAL_HOST
-          value: database.{{ ccs_namespace }}.svc
+          value: database
         - name: CHEMCENTRAL_USER
           value: chemcentral
         - name: CHEMCENTRAL_PASSWORD

@@ -8,13 +8,13 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: database
+      name: database
   serviceName: database
   template:
     metadata:
       name: database
       labels:
-        app: database
+        name: database
     spec:
       serviceAccountName: ccs
 
