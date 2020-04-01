@@ -60,7 +60,7 @@ spec:
           periodSeconds: 30
         env:
         - name: CHEMCENTRAL_HOST
-          value: database.ccs.svc
+          value: database.{{ ccs_namespace }}.svc
         - name: CHEMCENTRAL_USER
           value: chemcentral
         - name: CHEMCENTRAL_PASSWORD
