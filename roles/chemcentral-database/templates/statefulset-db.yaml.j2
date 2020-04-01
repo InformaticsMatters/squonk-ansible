@@ -45,23 +45,26 @@ spec:
             cpu: {{ ccd_cpu_request }}
             memory: {{ ccd_mem_request }}
         readinessProbe:
+          initialDelaySeconds: 30
+          failureThreshold: 9
+          periodSeconds: 15
+          timeoutSeconds: 5
           exec:
             command:
-            - 'sh'
-            - '-c',
-            - 'select=$(echo SELECT 1 | psql --host 127.0.0.1 --username postgres --quiet --no-align --tuples-only) && [ $select = 1 ]'
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
+            - /bin/sh
+            - -i
+            - -c
+            - pg_isready -h 127.0.0.1 -p 5432 -U postgres -q
         livenessProbe:
           # This probe results in PG issuing 'incomplete startup packet'
           # messages to the log. They're the result of probe
           # making a TCP connection but sending no traffic.
           initialDelaySeconds: 60
-          tcpSocket:
-            port: 5432
           timeoutSeconds: 1
           # Default period is 10 seconds
           periodSeconds: 20
+          tcpSocket:
+            port: 5432
         volumeMounts:
         # Persistent volume for data
         - mountPath: /var/lib/postgresql/data
