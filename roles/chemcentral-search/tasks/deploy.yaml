@@ -1,6 +1,6 @@
 ---
 
-- name: Create namespace '{{ sq_namespace }}'
+- name: Create namespace '{{ ccs_namespace }}'
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
