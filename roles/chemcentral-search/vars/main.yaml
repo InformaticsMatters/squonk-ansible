@@ -1,7 +1,7 @@
 ---
 
 # The application namespace
-ccs_namespace: chemcentral-database
+ccs_namespace: chemcentral-search
 # The preferred node purpose for our objects
 ccs_node_purpose: application
 
@@ -11,7 +11,7 @@ ccs_cpu_request: 250m
 ccs_mem_limit: 8Gi
 ccs_mem_request: 1200Mi
 
-# Database image details
+# Search image details
 ccs_image_registry: docker.io
 ccs_image: squonk/chemcentral-search
 ccs_image_tag: 0.3.11
