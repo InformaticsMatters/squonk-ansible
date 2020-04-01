@@ -1,0 +1,31 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: database-init
+  namespace: {{ ccd_namespace }}
+data:
+  init-postgres-db.sh: |
+    #!/bin/bash
+
+    export PGUSER=${POSTGRESQL_USER:-postgres}
+    export PGPASSWORD=${POSTGRESQL_PASSWORD}
+
+    echo "Setting up db as user ${PGUSER}"
+
+    echo "Creating chemcentral user"
+    psql --command "CREATE USER chemcentral"
+    psql --command "ALTER USER chemcentral WITH PASSWORD '${POSTGRES_CHEMCENTRAL_PASSWORD}'"
+    echo "Chemcentral user created with password ${POSTGRES_CHEMCENTRAL_PASSWORD}"
+
+    echo "Creating chemcentral database"
+    createdb -O chemcentral chemcentral
+    echo "Chemcentral database created"
+
+    echo "Deploying RDKit cartridge to chemcentral"
+    psql --command 'create extension rdkit' chemcentral
+    echo "RDKit cartridge deployed to chemcentral"
+
+    echo "Creating vendordbs schema in chemcentral"
+    psql -d chemcentral --command "CREATE SCHEMA vendordbs AUTHORIZATION chemcentral;"
+    echo "vendordbs schema created"

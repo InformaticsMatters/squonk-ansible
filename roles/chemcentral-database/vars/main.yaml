@@ -1,15 +1,27 @@
 ---
 
+# The application namespace
+ccd_namespace: chemcentral-database
 # The namespace service account
 ccd_namespace_service_account: ccd
 # The preferred node purpose for our objects
 ccd_node_purpose: application
 
-# Size and class of the database directory.
-# The class is 'blank', which implies the default,
-# which the user would typically define.
-ccd_databse_volume_size_g: 50
-ccd_workdir_volume_storageclass: " "
+# Database image details
+ccd_database_image_registry: docker.io
+ccd_database_image: informaticsmatters/rdkit_cartridge
+ccd_database_image_tag: Release_2017_09_2
+
+# Database resource limits
+ccd_cpu_limit: 4
+ccd_cpu_request: 100m
+ccd_mem_limit: 2Gi
+ccd_mem_request: 100Mi
+
+# Database passwords,
+# randomly assigned unless defined.
+ccd_db_user_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters') }}"
+ccd_db_chemcentral_user_password: "{{ lookup('password', '/dev/null length=14 chars=ascii_letters') }}"
 
 # General variables -----------------------------------------------------------
 

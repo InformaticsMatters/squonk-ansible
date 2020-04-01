@@ -7,8 +7,53 @@
   loop:
   - namespace
   - serviceaccount
+  - role-psp-unrestricted
+  - rolebinding-ccd-sa
 
-- name: Create 'database' volume claim
+# Check and create database secrets
+
+- name: Check database secrets
+  k8s_info:
+    kind: Secret
+    api_version: v1
+    namespace: "{{ ccd_namespace }}"
+    name: database
+  register: ccd_s_result
+
+- name: Set database secret facts
+  set_fact:
+    ccd_db_user_password_fact: "{{ ccd_db_user_password }}"
+    ccd_db_chemcentral_user_password_fact: "{{ ccd_db_chemcentral_user_password }}"
+  when: ccd_s_result.resources|length == 0
+
+- name: Set database secret facts (pre-deployed secrets)
+  set_fact:
+    ccd_db_user_password_fact: "{{ ccd_s_result.resources[0].data.user_password_fact|b64decode }}"
+    ccd_db_chemcentral_user_password_fact: "{{ ccd_s_result.resources[0].data.chemcentral_user_password_fact|b64decode }}"
+  when: ccd_s_result.resources|length == 1
+
+- name: Write database secrets
+  k8s:
+    definition: "{{ lookup('template', 'secret-db.yaml.j2') }}"
+    wait: yes
+  when: ccd_s_result.resources|length == 0
+
+# The database volume (and storage class checks)
+
+- name: Get {{ ccd_database_volume_storageclass }} StorageClass
+  k8s_info:
+    kind: StorageClass
+    name: "{{ ccd_database_volume_storageclass }}"
+  register: sc_result
+  when: ccd_database_volume_storageclass != " "
+
+- name: Assert {{ ccd_database_volume_storageclass }} StorageClass
+  assert:
+    that: sc_result.resources|length == 1
+    fail_msg: The {{ ccd_database_volume_storageclass }} StorageClass must be available on the cluster
+  when: ccd_database_volume_storageclass != " "
+
+- name: Create database volume claim
   k8s:
     definition: "{{ lookup('template', 'pvc.yaml.j2') }}"
     wait: yes
@@ -23,6 +68,20 @@
     name: database
     namespace: "{{ ccd_namespace }}"
   register: database_result
-  until: database_result.resources[0].status.phase == 'Bound'
+  until: >-
+    database_result.resources|length > 0
+    and database_result.resources[0].status is defined
+    and database_result.resources[0].status.phase == 'Bound'
   delay: 5
   retries: "{{ (bind_timeout|int / 5)|int }}"
+
+# Deploy the ChemCentral database
+
+- name: Create database
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - configmap-db-init
+  - statefulset-db
+  - service-db
