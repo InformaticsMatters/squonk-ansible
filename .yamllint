@@ -7,6 +7,15 @@ yaml-files:
 
 ignore: |
   roles/pipeline/templates/job-pipeline-poster.yaml.j2
+  roles/squonk/templates/job-flyway.yaml.j2
+  roles/squonk/templates/deployment-jobexecutor.yaml.j2
+  roles/squonk/templates/deployment-chemservices.yaml.j2
+  roles/squonk/templates/deployment-cellexecutor.yaml.j2
+  roles/squonk/templates/deployment-portal.yaml.j2
+  roles/squonk/templates/deployment-coreservices.yaml.j2
+  roles/squonk/templates/deployment-chemcentral-search.yaml.j2
+  roles/chemcentral-database/templates/job-loader.yaml.j2
+  roles/chemcentral-database/templates/statefulset.yaml.j2
 
 rules:
   indentation:
