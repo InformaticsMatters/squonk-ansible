@@ -75,7 +75,7 @@ sq_pull_secrets: []
 # ChemCentral Search ----------------------------------------------------------
 
 # Deploy (or undeploy) ChemCentral Search?
-sq_css_state: present
+sq_ccs_state: present
 
 # ChemCentral Search Database namespace.
 # Assume the default location in the cluster.
