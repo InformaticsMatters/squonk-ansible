@@ -78,5 +78,5 @@ sq_pull_secrets: []
 sq_css_state: present
 
 # ChemCentral Search Database namespace.
-# User is required to set this.
-sq_ccs_database_namespace: SetMe
+# Assume the default location in the cluster.
+sq_ccs_database_namespace: chemcentral-database

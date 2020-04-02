@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: loader
+  namespace: {{ ccd_namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: '{{ ccd_database_loader_volume_storageclass }}'
+  resources:
+    requests:
+      storage: '{{ ccd_database_loader_volume_size_g }}Gi'
