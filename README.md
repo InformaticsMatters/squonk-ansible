@@ -83,6 +83,8 @@ The following plays are supported, captured in corresponding `site*.yaml`
 playbook files: -
 
 -   `site-squonk` (for the main Squonk deployment)
+-   `site-chemcentral-database` (for the Squonk ChemCentral Database deployment)
+-   `site-chemcentral-database_run-loader` (to run a ChemCentral DB loader Job)
 -   `site-pipeline` (for pipeline deployment)
 
 ## Image pull secrets
