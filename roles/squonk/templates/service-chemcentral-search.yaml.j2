@@ -1,0 +1,11 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: search
+  namespace: {{ sq_namespace }}
+spec:
+  selector:
+    name: search
+  ports:
+  - port: 8080

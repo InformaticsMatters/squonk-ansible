@@ -47,8 +47,10 @@ sq_delete_db_on_removal: yes
 sq_db_password: SetMe
 
 # Squonk container image tags
-sq_image_tag: '0.3.9'
-sq_portal_image_tag: '0.3.6'
+sq_image_registry: docker.io
+sq_image_tag: '0.3.11'
+sq_portal_registry: docker.io
+sq_portal_image_tag: '0.3.11'
 
 # Debug modes (passed to the cell-executor)
 sq_debug_mode: 0
@@ -69,3 +71,12 @@ sq_pod_debug_mode: 0
 # See the project README for instructions
 # on creating the 'secret' value.
 sq_pull_secrets: []
+
+# ChemCentral Search ----------------------------------------------------------
+
+# Deploy (or undeploy) ChemCentral Search?
+sq_ccs_state: present
+
+# ChemCentral Search Database namespace.
+# Assume the default location in the cluster.
+sq_ccs_database_namespace: chemcentral-database

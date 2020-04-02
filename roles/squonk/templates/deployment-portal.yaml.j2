@@ -16,7 +16,7 @@ spec:
       labels:
         name: portal
     spec:
-      serviceAccountName: {{ sq_namespace_service_account }}
+      serviceAccountName: squonk
 
       # A 'preferred' (not guaranteed)
       # node selection affinity...
@@ -40,7 +40,7 @@ spec:
         - 'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
 
       containers:
-      - image: squonk/portal:{{ sq_portal_image_tag }}
+      - image: {{ sq_portal_registry }}/squonk/portal:{{ sq_portal_image_tag }}
         name: portal
 {% if sq_portal_image_tag == 'latest' %}
         imagePullPolicy: Always

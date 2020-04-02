@@ -1,0 +1,11 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: psp-unrestricted
+  namespace: "{{ ccd_namespace }}"
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames: ['im-core-unrestricted']

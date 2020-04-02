@@ -14,7 +14,7 @@
     id_infra_namespace: "{{ sq_infra_namespace }}"
     id_db: "{{ sq_infra_database }}"
     id_db_user_namespace: "{{ sq_namespace }}"
-    id_db_user_namespace_sa: "{{ sq_namespace_service_account }}"
+    id_db_user_namespace_sa: "squonk"
     id_db_user: "{{ sq_infra_database_owner }}"
     id_check_user_secrets_on_delete: no
   when:

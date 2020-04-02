@@ -1,0 +1,84 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: loader
+  namespace: {{ ccd_namespace }}
+spec:
+  selector:
+    name: loader
+  template:
+    metadata:
+      labels:
+        name: loader
+    spec:
+      serviceAccountName: ccd
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ ccd_node_purpose }}
+
+      containers:
+      - name: loader-{{ ccd_loader_marker }}
+        image: {{ ccd_database_image_registry }}/squonk/chemcentral-loader:{{ ccd_database_loader_image_tag }}
+{% if ccd_database_loader_image_tag in ['latest', 'stable'] %}
+        imagePullPolicy: Always
+{% else %}
+        imagePullPolicy: IfNotPresent
+{% endif %}
+        args:
+        - {{ ccd_loader_class }}
+        env:
+        - name: CHEMCENTRAL_HOST
+          value: database
+        - name: CHEMCENTRAL_USER
+          value: chemcentral
+        - name: CHEMCENTRAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: chemcentral_user_password
+        - name: CHEMCENTRAL_PORT
+          value: '5432'
+        - name: CHEMCENTRAL_DATABASE
+          value: chemcentral
+        - name: CHEMCENTRAL_SCHEMA
+          value: vendordbs
+        - name: CHEMCENTRAL_TABLE
+          value: {{ ccd_loader_table_name }}
+        - name: CHEMCENTRAL_LOADER_FILE
+          value: /data/{{ ccd_loader_file }}
+        - name: CHEMCENTRAL_LOADER_DIR
+          value: /data/{{ ccd_loader_path }}
+        - name: CHEMCENTRAL_LOADER_PATTERN
+          value: '{{ ccd_loader_pattern }}'
+        - name: CHEMCENTRAL_LIMIT
+          value: '{{ ccd_loader_limit }}'
+        - name: CHEMCENTRAL_REPORTING_CHUNK
+          value: '{{ ccd_loader_reporting_chunk }}'
+        resources:
+          limits:
+            cpu: {{ ccd_loader_cpu_limit }}
+            memory: {{ ccd_loader_mem_limit }}
+          requests:
+            cpu: {{ ccd_loader_cpu_request }}
+            memory: {{ ccd_loader_mem_request }}
+        volumeMounts:
+        - mountPath: /data
+          name: data-dir
+
+      volumes:
+      - name: data-dir
+        persistentVolumeClaim:
+          claimName: loader
+
+      restartPolicy: Never

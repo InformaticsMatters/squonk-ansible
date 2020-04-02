@@ -1,0 +1,105 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: database
+  namespace: {{ ccd_namespace }}
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: database
+  serviceName: database
+  template:
+    metadata:
+      name: database
+      labels:
+        name: database
+    spec:
+      serviceAccountName: ccd
+
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ ccd_node_purpose }}
+
+      containers:
+      - name: database
+        image: {{ ccd_database_image_registry }}/{{ ccd_database_image }}:{{ ccd_database_image_tag }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        resources:
+          limits:
+            cpu: {{ ccd_database_cpu_limit }}
+            memory: {{ ccd_database_mem_limit }}
+          requests:
+            cpu: {{ ccd_database_cpu_request }}
+            memory: {{ ccd_database_mem_request }}
+        readinessProbe:
+          initialDelaySeconds: 30
+          failureThreshold: 9
+          periodSeconds: 15
+          timeoutSeconds: 5
+          exec:
+            command:
+            - /bin/sh
+            - -i
+            - -c
+            - pg_isready -h 127.0.0.1 -p 5432 -U postgres -q
+        livenessProbe:
+          # This probe results in PG issuing 'incomplete startup packet'
+          # messages to the log. They're the result of probe
+          # making a TCP connection but sending no traffic.
+          initialDelaySeconds: 60
+          timeoutSeconds: 1
+          # Default period is 10 seconds
+          periodSeconds: 20
+          tcpSocket:
+            port: 5432
+        volumeMounts:
+        # Persistent volume for data
+        - mountPath: /var/lib/postgresql/data
+          name: database-pvc
+        - mountPath: /docker-entrypoint-initdb.d
+          name: database-init
+        env:
+        # PGDATA - the location of persisted database files.
+        # Normally a sub-directory of '/var/lib/postgresql/data'.
+        # The PVC is mounted at '/var/lib/postgresql' and we use
+        # PGDATA to identify a sub-directory in the mount.
+        # If we don't postgres fails to start with the error: -
+        #
+        #   initdb: directory "/var/lib/postgresql/data" exists but is not empty
+        #   It contains a lost+found directory, perhaps due to it being a mount point.
+        #   Using a mount point directly as the data directory is not recommended.
+        #   Create a subdirectory under the mount point.
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: user_password
+        - name: POSTGRES_CHEMCENTRAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: chemcentral_user_password
+      volumes:
+      - name: database-init
+        configMap:
+          name: database-init
+      - name: database-pvc
+        persistentVolumeClaim:
+          claimName: database

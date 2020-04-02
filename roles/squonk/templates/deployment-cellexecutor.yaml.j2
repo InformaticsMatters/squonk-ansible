@@ -16,7 +16,7 @@ spec:
       labels:
         name: cellexecutor
     spec:
-      serviceAccountName: {{ sq_namespace_service_account }}
+      serviceAccountName: squonk
 
       # A 'preferred' (not guaranteed)
       # node selection affinity...
@@ -33,7 +33,7 @@ spec:
 
       containers:
       - name: cellexecutor
-        image: squonk/cellexecutor:{{ sq_image_tag }}
+        image: {{ sq_image_registry }}/squonk/cellexecutor:{{ sq_image_tag }}
 {% if sq_image_tag == 'latest' %}
         imagePullPolicy: Always
 {% else %}
@@ -57,7 +57,7 @@ spec:
         - name: SQUONK_CELL_JOB_PROJECT_NAME
           value: {{ sq_namespace }}
         - name: SQUONK_SERVICE_ACCOUNT
-          value: {{ sq_namespace_service_account }}
+          value: squonk
         - name: SQUONK_POD_BASE_NAME
           value: squonk-cell-pod
         - name: SQUONK_POD_ENVIRONMENT

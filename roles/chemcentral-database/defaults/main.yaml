@@ -4,5 +4,41 @@
 # One of 'present' or 'absent'.
 ccd_state: present
 
-# The application namespace
-ccd_namespace: chemcentral-database
+# Size and class of the database directory.
+# The class is 'blank', which implies the default,
+# which the user would typically define.
+ccd_database_volume_size_g: 50
+ccd_database_volume_storageclass: " "
+
+# Loader variables ------------------------------------------------------------
+
+# Size and class of the database loader directory.
+# The class is 'blank', which implies the default,
+# which the user would typically define.
+ccd_database_loader_volume_size_g: 5
+ccd_database_loader_volume_storageclass: " "
+
+# The Classname of the loader to use.
+# One available int he container image,
+# for example 'org.squonk.rdkit.db.loaders.EMoleculesBBSmilesLoader'
+ccd_loader_class: SetMe
+# A marker to use with the loader.
+# It's a unique identity of the loader.
+# Loaders with different 'markers' can run at the same time.
+ccd_loader_marker: A
+# The data file to load (for single-file loaders).
+# Relative to the mount-point in the container.
+# Something like 'version.smi.gz'
+ccd_loader_file: SetMe
+# The directory of the data to load (for multi-file loaders).
+# Relative to the mount-point in the container
+ccd_loader_path: SetMe
+# The file pattern of the data to load (for multi-file loaders)
+ccd_loader_pattern: SetMe
+# The number of records to load
+# 0 implies all.
+ccd_loader_limit: 0
+# How often to report progress
+ccd_loader_reporting_chunk: 0
+# Name of the database table to load into
+ccd_loader_table_name: SetMe

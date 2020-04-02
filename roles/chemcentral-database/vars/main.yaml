@@ -1,15 +1,33 @@
 ---
 
-# The namespace service account
-ccd_namespace_service_account: ccd
+# The application namespace
+ccd_namespace: chemcentral-database
 # The preferred node purpose for our objects
 ccd_node_purpose: application
 
-# Size and class of the database directory.
-# The class is 'blank', which implies the default,
-# which the user would typically define.
-ccd_databse_volume_size_g: 50
-ccd_workdir_volume_storageclass: " "
+# Database image details
+ccd_database_image_registry: docker.io
+ccd_database_image: informaticsmatters/rdkit_cartridge
+ccd_database_image_tag: Release_2017_09_2
+ccd_database_loader_image_tag: 0.3.11
+
+# Database resource limits
+ccd_database_cpu_limit: 4
+ccd_database_cpu_request: 100m
+ccd_database_mem_limit: 2Gi
+ccd_database_mem_request: 100Mi
+
+# Database passwords,
+# randomly assigned unless defined.
+ccd_database_user_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters') }}"
+ccd_database_chemcentral_user_password: "{{ lookup('password', '/dev/null length=14 chars=ascii_letters') }}"
+
+# Loader variables ------------------------------------------------------------
+
+ccd_loader_cpu_limit: 2
+ccd_loader_cpu_request: 250m
+ccd_loader_mem_limit: 2Gi
+ccd_loader_mem_request: 100Mi
 
 # General variables -----------------------------------------------------------
 
@@ -18,25 +36,3 @@ ccd_workdir_volume_storageclass: " "
 wait_timeout: 600
 # Volume binding timeout (seconds)
 bind_timeout: 120
-
-# -----------------------------------------------------------------------------
-#
-# The search container belongs to Squonk deployment.
-# The database is 'central', i.e. independent of squonk and in its own namespace.
-# So we can have N Squonks and (typically) 1 db.
-# The database Squonk uses for the search is driven by environment variables
-# declared in the ChemcentralConfig class ...
-#
-# "CHEMCENTRAL_HOST"
-# "CHEMCENTRAL_PORT"
-# "CHEMCENTRAL_DB"
-# "CHEMCENTRAL_USER"
-# "CHEMCENTRAL_PASSWORD"
-#
-# Q. And it sounds like a new set of credentials in AWX?
-#    That are injected into the Squonk AWX play (and the search DB deployment play)?
-#    Discuss the real need for DB, USER, PASSWORD with Tim -i.e. are they just 'well known'?
-#
-# Q  Another thought ... is the chemcentral database a completely separate repo?
-#    i.e. an "ansible-chemcentral-database" repo and role or is to so tightly
-#    coupled with Squonk it belongs in Squonk?

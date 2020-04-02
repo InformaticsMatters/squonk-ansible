@@ -2,8 +2,6 @@
 
 # Do we expect to use the Kubernetes cert-manager?
 sq_use_cert_manager: yes
-# The namespace service account
-sq_namespace_service_account: squonk
 # The preferred node purpose for our objects
 sq_node_purpose: application
 
@@ -35,6 +33,12 @@ sq_chem_mem_request: 400Mi
 sq_chem_cpu_limit: 4000m
 sq_chem_mem_limit: 8Gi
 sq_chem_java_tool_options: -Xmx7800m
+
+sq_css_cpu_request: 500m
+sq_css_mem_request: 1200Mi
+sq_css_cpu_limit: 2
+sq_css_mem_limit: 8Gi
+sq_css_java_tool_options: -Xmx7800m
 
 sq_core_cpu_request: 500m
 sq_core_mem_request: 3500Mi
