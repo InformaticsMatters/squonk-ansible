@@ -2,4 +2,4 @@
 
 - hosts: localhost
   roles:
-  - role: chemcentral-search
+  - role: chemcentral-database

@@ -25,9 +25,9 @@
 - block:
 
   - include_tasks: deploy.yaml
-    when: ccs_state|string == 'present'
+    when: ccd_state|string == 'present'
   - include_tasks: undeploy.yaml
-    when: ccs_state|string == 'absent'
+    when: ccd_state|string == 'absent'
 
   module_defaults:
     group/k8s:

@@ -3,7 +3,7 @@ kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: database
-  namespace: {{ ccs_namespace }}
+  namespace: {{ ccd_namespace }}
 spec:
   revisionHistoryLimit: 10
   selector:
@@ -16,7 +16,7 @@ spec:
       labels:
         name: database
     spec:
-      serviceAccountName: ccs
+      serviceAccountName: ccd
 
       # A 'preferred' (not guaranteed)
       # node selection affinity...
@@ -29,21 +29,21 @@ spec:
               - key: purpose
                 operator: In
                 values:
-                - {{ ccs_node_purpose }}
+                - {{ ccd_node_purpose }}
 
       containers:
       - name: database
-        image: {{ ccs_database_image_registry }}/{{ ccs_database_image }}:{{ ccs_database_image_tag }}
+        image: {{ ccd_database_image_registry }}/{{ ccd_database_image }}:{{ ccd_database_image_tag }}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
         resources:
           limits:
-            cpu: {{ ccs_database_cpu_limit }}
-            memory: {{ ccs_database_mem_limit }}
+            cpu: {{ ccd_database_cpu_limit }}
+            memory: {{ ccd_database_mem_limit }}
           requests:
-            cpu: {{ ccs_database_cpu_request }}
-            memory: {{ ccs_database_mem_request }}
+            cpu: {{ ccd_database_cpu_request }}
+            memory: {{ ccd_database_mem_request }}
         readinessProbe:
           initialDelaySeconds: 30
           failureThreshold: 9

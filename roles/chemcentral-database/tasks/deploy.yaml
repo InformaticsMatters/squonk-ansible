@@ -1,6 +1,6 @@
 ---
 
-- name: Create namespace '{{ ccs_namespace }}'
+- name: Create namespace '{{ ccd_namespace }}'
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
@@ -8,7 +8,7 @@
   - namespace
   - serviceaccount
   - role-psp-unrestricted
-  - rolebinding-ccs-sa
+  - rolebinding-ccd-sa
 
 # Check and create database secrets
 
@@ -16,42 +16,42 @@
   k8s_info:
     kind: Secret
     api_version: v1
-    namespace: "{{ ccs_namespace }}"
+    namespace: "{{ ccd_namespace }}"
     name: database
   register: s_result
 
 - name: Set database secret facts
   set_fact:
-    ccs_database_user_password_fact: "{{ ccs_database_user_password }}"
-    ccs_database_chemcentral_user_password_fact: "{{ ccs_database_chemcentral_user_password }}"
+    ccd_database_user_password_fact: "{{ ccd_database_user_password }}"
+    ccd_database_chemcentral_user_password_fact: "{{ ccd_database_chemcentral_user_password }}"
   when: s_result.resources|length == 0
 
 - name: Set database secret facts (pre-deployed secrets)
   set_fact:
-    ccs_database_user_password_fact: "{{ s_result.resources[0].data.user_password|b64decode }}"
-    ccs_database_chemcentral_user_password_fact: "{{ s_result.resources[0].data.chemcentral_user_password|b64decode }}"
+    ccd_database_user_password_fact: "{{ s_result.resources[0].data.user_password|b64decode }}"
+    ccd_database_chemcentral_user_password_fact: "{{ s_result.resources[0].data.chemcentral_user_password|b64decode }}"
   when: s_result.resources|length == 1
 
 - name: Write database secrets
   k8s:
-    definition: "{{ lookup('template', 'secret-db.yaml.j2') }}"
+    definition: "{{ lookup('template', 'secret.yaml.j2') }}"
     wait: yes
   when: s_result.resources|length == 0
 
 # The database volume (and storage class checks)
 
-- name: Get {{ ccs_database_volume_storageclass }} StorageClass
+- name: Get {{ ccd_database_volume_storageclass }} StorageClass
   k8s_info:
     kind: StorageClass
-    name: "{{ ccs_database_volume_storageclass }}"
+    name: "{{ ccd_database_volume_storageclass }}"
   register: sc_result
-  when: ccs_database_volume_storageclass != " "
+  when: ccd_database_volume_storageclass != " "
 
-- name: Assert {{ ccs_database_volume_storageclass }} StorageClass
+- name: Assert {{ ccd_database_volume_storageclass }} StorageClass
   assert:
     that: sc_result.resources|length == 1
-    fail_msg: The {{ ccs_database_volume_storageclass }} StorageClass must be available on the cluster
-  when: ccs_database_volume_storageclass != " "
+    fail_msg: The {{ ccd_database_volume_storageclass }} StorageClass must be available on the cluster
+  when: ccd_database_volume_storageclass != " "
 
 - name: Create database volume claim
   k8s:
@@ -66,7 +66,7 @@
   k8s_info:
     kind: PersistentVolumeClaim
     name: database
-    namespace: "{{ ccs_namespace }}"
+    namespace: "{{ ccd_namespace }}"
   register: database_result
   until: >-
     database_result.resources|length > 0
@@ -83,14 +83,14 @@
     wait: yes
   loop:
   - configmap-db-init
-  - statefulset-db
-  - service-db
+  - statefulset
+  - service
 
 - name: Wait for database to become Ready
   k8s_info:
     kind: Pod
     name: database-0
-    namespace: "{{ ccs_namespace }}"
+    namespace: "{{ ccd_namespace }}"
   register: database_result
   until: >-
     database_result.resources|length == 1
@@ -100,28 +100,3 @@
     and database_result.resources[0].status.containerStatuses[0].ready
   delay: 15
   retries: "{{ (wait_timeout|int / 15)|int }}"
-
-# Now deploy the search container
-
-- name: Create search
-  k8s:
-    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
-    wait: yes
-  loop:
-  - statefulset-search
-  - service-search
-
-- name: Wait for search to become Ready
-  k8s_info:
-    kind: Pod
-    name: search-0
-    namespace: "{{ ccs_namespace }}"
-  register: search_result
-  until: >-
-    search_result.resources|length == 1
-    and search_result.resources[0].status is defined
-    and search_result.resources[0].status.containerStatuses is defined
-    and search_result.resources[0].status.containerStatuses|length == 1
-    and search_result.resources[0].status.containerStatuses[0].ready
-  delay: 10
-  retries: "{{ (wait_timeout|int / 10)|int }}"

@@ -3,6 +3,8 @@
 # Deploy (or un-deploy)?
 # One of 'present' or 'absent'.
 sq_state: present
+# Deploy (or undeploy) ChemCentral Search?
+sq_css_state: present
 
 # A the name of the parameter vault for the deployment.
 # Used to load deployment-specific variables
@@ -47,8 +49,10 @@ sq_delete_db_on_removal: yes
 sq_db_password: SetMe
 
 # Squonk container image tags
-sq_image_tag: '0.3.9'
-sq_portal_image_tag: '0.3.6'
+sq_image_registry: docker.io
+sq_image_tag: '0.3.11'
+sq_portal_registry: docker.io
+sq_portal_image_tag: '0.3.11'
 
 # Debug modes (passed to the cell-executor)
 sq_debug_mode: 0
@@ -69,3 +73,7 @@ sq_pod_debug_mode: 0
 # See the project README for instructions
 # on creating the 'secret' value.
 sq_pull_secrets: []
+
+# ChemCentral Search Database namespace.
+# User is required to set this.
+sq_ccs_database_namespace: SetMe

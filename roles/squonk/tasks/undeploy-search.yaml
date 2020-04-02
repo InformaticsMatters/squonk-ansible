@@ -1,0 +1,21 @@
+---
+
+- name: Check namespace
+  k8s_info:
+    kind: Namespace
+    api_version: v1
+    name: "{{ sq_namespace }}"
+  register: n_result
+
+- name: Assert namespace exists
+  assert:
+    that: s_result.resources|length == 1
+
+- name: Undeploy search
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - service-chemcentral-search
+  - deployment-chemcentral-search

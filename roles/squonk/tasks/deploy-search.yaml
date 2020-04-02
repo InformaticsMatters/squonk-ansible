@@ -1,0 +1,42 @@
+---
+
+- name: Assert database namespace is set
+  assert:
+    that:
+    - sq_ccs_database_namespace|string != 'SetMe'
+    - sq_ccs_database_namespace|string|length > 0
+
+- name: Check database namespace
+  k8s_info:
+    kind: Namespace
+    api_version: v1
+    name: "{{ sq_ccs_database_namespace }}"
+  register: n_result
+
+- name: Assert database namespace exists
+  assert:
+    that: n_result.resources|length == 1
+
+- name: Check database secrets
+  k8s_info:
+    kind: Secret
+    api_version: v1
+    namespace: "{{ sq_ccs_database_namespace }}"
+    name: database
+  register: s_result
+
+- name: Assert database secrets exist
+  assert:
+    that: s_result.resources|length == 1
+
+- name: Get database secrets
+  set_fact:
+    ccd_database_chemcentral_user_password_fact: "{{ s_result.resources[0].data.chemcentral_user_password|b64decode }}"
+
+- name: Deploy search
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - deployment-chemcentral-search
+  - service-chemcentral-search

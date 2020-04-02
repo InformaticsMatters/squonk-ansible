@@ -34,8 +34,15 @@
 
   - include_tasks: deploy.yaml
     when: sq_state|string == 'present'
+  - include_tasks: deploy-search.yaml
+    when: sq_ccs_state|string == 'present'
+
   - include_tasks: undeploy.yaml
     when: sq_state|string == 'absent'
+  - include_tasks: undeploy-search.yaml
+    when:
+    - sq_state|string == 'present'
+    - sq_ccs_state|string == 'absent'
 
   module_defaults:
     group/k8s:
