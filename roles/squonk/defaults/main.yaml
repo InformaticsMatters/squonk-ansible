@@ -3,8 +3,6 @@
 # Deploy (or un-deploy)?
 # One of 'present' or 'absent'.
 sq_state: present
-# Deploy (or undeploy) ChemCentral Search?
-sq_css_state: present
 
 # A the name of the parameter vault for the deployment.
 # Used to load deployment-specific variables
@@ -73,6 +71,11 @@ sq_pod_debug_mode: 0
 # See the project README for instructions
 # on creating the 'secret' value.
 sq_pull_secrets: []
+
+# ChemCentral Search ----------------------------------------------------------
+
+# Deploy (or undeploy) ChemCentral Search?
+sq_css_state: present
 
 # ChemCentral Search Database namespace.
 # User is required to set this.
