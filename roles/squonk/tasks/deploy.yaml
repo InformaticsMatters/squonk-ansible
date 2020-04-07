@@ -36,7 +36,7 @@
 
   - name: Set sq_portal_logout_redirect_to fact (from website)
     set_fact:
-      sq_portal_logout_redirect_to_fact: https://{{ sq_website_hostname }/portal
+      sq_portal_logout_redirect_to_fact: https://{{ sq_website_hostname }}/portal
     when: sq_portal_logout_redirect_to|length == 0
 
   - name: Set sq_portal_logout_redirect_to fact
