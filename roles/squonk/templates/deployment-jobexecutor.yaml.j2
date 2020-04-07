@@ -39,6 +39,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: SQUONK_CONTAINER_RUNNER_TYPE
           value: openshift

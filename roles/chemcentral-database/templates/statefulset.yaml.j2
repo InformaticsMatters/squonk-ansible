@@ -35,6 +35,7 @@ spec:
       - name: database
         image: {{ ccd_database_image_registry }}/{{ ccd_database_image }}:{{ ccd_database_image_tag }}
         imagePullPolicy: IfNotPresent
+        terminationMessagePolicy: FallbackToLogsOnError
         ports:
         - containerPort: 5432
         resources:

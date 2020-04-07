@@ -43,6 +43,7 @@ spec:
       - name: rabbitmq
         image: rabbitmq:{{ sq_rabbitmq_version }}-management-alpine
         imagePullPolicy: IfNotPresent
+        terminationMessagePolicy: FallbackToLogsOnError
         ports:
         - name: empd
           containerPort: 4369

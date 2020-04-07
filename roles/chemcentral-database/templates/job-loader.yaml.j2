@@ -35,6 +35,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         args:
         - {{ ccd_loader_class }}
         env:

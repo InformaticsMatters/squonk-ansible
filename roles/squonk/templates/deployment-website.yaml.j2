@@ -38,6 +38,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         ports:
         - containerPort: 80
           name: http

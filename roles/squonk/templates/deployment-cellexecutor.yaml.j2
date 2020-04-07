@@ -39,6 +39,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: RABBITMQ_HOSTNAME
           valueFrom:

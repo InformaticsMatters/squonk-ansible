@@ -47,6 +47,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: IMAGE_TAG
           value: {{ pipeline_tag }}

@@ -35,6 +35,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc

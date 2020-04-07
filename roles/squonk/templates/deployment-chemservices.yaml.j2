@@ -35,6 +35,7 @@ spec:
       initContainers:
       - name: wait-for-core-before-chem
         image: yauritux/busybox-curl
+        terminationMessagePolicy: FallbackToLogsOnError
         command:
         - 'sh'
         - '-c'
@@ -48,6 +49,7 @@ spec:
 {% else %}
         imagePullPolicy: IfNotPresent
 {% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: POSTGRES_HOSTNAME
           value: database.{{ sq_infra_namespace }}.svc
