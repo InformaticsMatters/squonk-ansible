@@ -113,6 +113,8 @@
     base_url: https://{{ sq_portal_hostname_fact }}
     admin_url: https://{{ sq_portal_hostname_fact }}
     redirect_uris:
+    - https://{{ sq_portal_hostname_fact }}/portal/*
+    - http://{{ sq_portal_hostname_fact }}/portal/*
     - "{{ sq_portal_logout_redirect_to_fact }}/*"
     client_authenticator_type: client-secret
     secret: "{{ sq_portal_keycloak_client_secret }}"
