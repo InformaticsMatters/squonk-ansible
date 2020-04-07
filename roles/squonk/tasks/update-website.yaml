@@ -40,7 +40,7 @@
 
   - name: Assert namespace exists
     assert:
-      that: s_result.resources|length == 1
+      that: n_result.resources|length == 1
 
   - name: Re-deploy website
     k8s:
