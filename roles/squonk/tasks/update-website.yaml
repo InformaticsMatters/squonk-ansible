@@ -1,0 +1,27 @@
+---
+
+# A play to update a previously deployed website.
+# Here we simply re-apply the deployment.
+# It has a label that changes each time we use it,
+# forcing the Pod to bounce and pull the latest image.
+
+- name: Assert hostname
+  assert:
+    that: sq_website_hostname|length >0
+
+- name: Check namespace
+  k8s_info:
+    kind: Namespace
+    api_version: v1
+    name: "{{ sq_namespace }}"
+  register: n_result
+
+- name: Assert namespace exists
+  assert:
+    that: s_result.resources|length == 1
+
+- name: Re-deploy website
+  k8s:
+    definition: "{{ lookup('template', 'deployment-website.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"

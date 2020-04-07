@@ -16,7 +16,6 @@
   k8s:
     definition: "{{ lookup('template', 'rolebinding-default-sa.yaml.j2') }}"
     wait: yes
-  when: sq_use_cert_manager|bool
 
 - import_tasks: configure-infra.yaml
 

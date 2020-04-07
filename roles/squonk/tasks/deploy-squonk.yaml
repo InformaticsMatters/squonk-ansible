@@ -1,5 +1,53 @@
 ---
 
+# A number of basic assertions,
+# and some automated variable definitions
+
+- block:
+
+  # The website URL is not defined.
+
+  - name: Assert hostname variable state (website not set)
+    assert:
+      that:
+      - sq_portal_hostname|length > 0
+      - sq_portal_logout_redirect_to|length > 0
+
+  - name: Set portal facts
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_portal_hostname }}"
+      sq_portal_logout_redirect_to_fact: "{{ sq_portal_logout_redirect_to }}"
+
+  when: sq_website_hostname|length == 0
+
+- block:
+
+  # The website URL is defined.
+
+  - name: Set sq_portal_hostname_fact fact (from website)
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_website_hostname }}"
+    when: sq_portal_hostname|length == 0
+
+  - name: Set sq_portal_hostname_fact fact
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_portal_hostname }}"
+    when: sq_portal_hostname|length > 0
+
+  - name: Set sq_portal_logout_redirect_to fact (from website)
+    set_fact:
+      sq_portal_logout_redirect_to_fact: https://{{ sq_website_hostname }/portal
+    when: sq_portal_logout_redirect_to|length == 0
+
+  - name: Set sq_portal_logout_redirect_to fact
+    set_fact:
+      sq_portal_logout_redirect_to_fact: "{{ sq_portal_logout_redirect_to }}"
+    when: sq_portal_logout_redirect_to|length > 0
+
+  when: sq_website_hostname|length > 0
+
+# Go...
+
 - name: Create 'workdir' volume claim
   k8s:
     definition: "{{ lookup('template', 'pvc-workdir.yaml.j2') }}"
@@ -20,8 +68,8 @@
   retries: "{{ (bind_timeout|int / 5)|int }}"
 
 # Create secret objects for each image pull secret defined.
-# These are typically used to pull pipeline container and SD-poster images
-# from private registries.
+# These are typically used to pull pipeline container, SD-poster
+# and website images from private registries.
 
 - name: Create image pull secrets
   k8s:
@@ -31,6 +79,20 @@
     pull_name: "{{ item.name }}"
     pull_secret: "{{ item.secret }}"
   with_items: "{{ sq_pull_secrets }}"
+
+# Deploy the website, its service and ingress
+# (if a hostname for it has been defined)
+
+- name: Deploy website
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ wait_timeout }}"
+  loop:
+  - deployment-website
+  - service-website
+  - ingress-website
+  when: sq_website_hostname|length > 0
 
 # Deploy the main (backend) application images.
 #
@@ -68,9 +130,7 @@
   k8s:
     definition: "{{ lookup('template', 'ingress-jobexecutor.yaml.j2') }}"
     wait: yes
-  when:
-  - sq_use_cert_manager|bool
-  - sq_je_hostname|string|length > 0
+  when: sq_je_hostname|string|length > 0
 
 # Deploy the Front-End (Portal)
 
@@ -89,12 +149,10 @@
 - name: Check Portal certificate issuer
   assert:
     that: sq_portal_cert_issuer in cert_issuers
-  when:
-  - sq_use_cert_manager|bool
-  - sq_portal_hostname|string|length > 0
+  when: sq_portal_hostname|string|length > 0
 
 - name: Deploy Portal ingress
   k8s:
     definition: "{{ lookup('template', 'ingress-portal.yaml.j2') }}"
     wait: yes
-  when: sq_portal_hostname|string|length > 0
+  when: sq_portal_hostname_fact|string|length > 0
