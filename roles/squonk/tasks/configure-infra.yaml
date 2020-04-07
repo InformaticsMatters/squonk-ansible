@@ -110,12 +110,12 @@
     client_id: "{{ sq_portal_keycloak_client_id }}"
     name: Squonk Computational Notebook
     protocol: openid-connect
-    base_url: https://{{ sq_portal_hostname }}
-    admin_url: https://{{ sq_portal_hostname }}
+    base_url: https://{{ sq_portal_hostname_fact }}
+    admin_url: https://{{ sq_portal_hostname_fact }}
     redirect_uris:
-    - https://{{ sq_portal_hostname }}/portal/*
-    - http://{{ sq_portal_hostname }}/portal/*
-    - "{{ sq_portal_logout_redirect_to }}/*"
+    - https://{{ sq_portal_hostname_fact }}/portal/*
+    - http://{{ sq_portal_hostname_fact }}/portal/*
+    - "{{ sq_portal_logout_redirect_to_fact }}/*"
     client_authenticator_type: client-secret
     secret: "{{ sq_portal_keycloak_client_secret }}"
     public_client: no
@@ -124,7 +124,7 @@
     default_roles:
     - standard-user
   delegate_to: localhost
-  when: sq_portal_hostname|string|length > 0
+  when: sq_portal_hostname_fact|string|length > 0
 
 # Create 'Day 1' Keycloak users
 

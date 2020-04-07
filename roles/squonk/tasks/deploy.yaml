@@ -1,5 +1,53 @@
 ---
 
+# A number of basic assertions,
+# and some automated variable definitions
+
+- block:
+
+  # The website hostname is not defined.
+
+  - name: Assert hostname variable state (website not set)
+    assert:
+      that:
+      - sq_portal_hostname|length > 0
+      - sq_portal_logout_redirect_to|length > 0
+
+  - name: Set portal facts
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_portal_hostname }}"
+      sq_portal_logout_redirect_to_fact: "{{ sq_portal_logout_redirect_to }}"
+
+  when: sq_website_hostname|length == 0
+
+- block:
+
+  # The website hostname is defined.
+
+  - name: Set sq_portal_hostname_fact fact (from website)
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_website_hostname }}"
+    when: sq_portal_hostname|length == 0
+
+  - name: Set sq_portal_hostname_fact fact
+    set_fact:
+      sq_portal_hostname_fact: "{{ sq_portal_hostname }}"
+    when: sq_portal_hostname|length > 0
+
+  - name: Set sq_portal_logout_redirect_to fact (from website)
+    set_fact:
+      sq_portal_logout_redirect_to_fact: https://{{ sq_website_hostname }}/portal
+    when: sq_portal_logout_redirect_to|length == 0
+
+  - name: Set sq_portal_logout_redirect_to fact
+    set_fact:
+      sq_portal_logout_redirect_to_fact: "{{ sq_portal_logout_redirect_to }}"
+    when: sq_portal_logout_redirect_to|length > 0
+
+  when: sq_website_hostname|length > 0
+
+# Go...
+
 - name: Creating namespace '{{ sq_namespace }}'
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
@@ -16,7 +64,6 @@
   k8s:
     definition: "{{ lookup('template', 'rolebinding-default-sa.yaml.j2') }}"
     wait: yes
-  when: sq_use_cert_manager|bool
 
 - import_tasks: configure-infra.yaml
 

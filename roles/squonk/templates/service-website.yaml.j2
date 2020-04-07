@@ -1,0 +1,13 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: website
+  namespace: {{ sq_namespace }}
+spec:
+  selector:
+    name: website
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

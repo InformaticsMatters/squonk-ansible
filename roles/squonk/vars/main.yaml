@@ -1,7 +1,5 @@
 ---
 
-# Do we expect to use the Kubernetes cert-manager?
-sq_use_cert_manager: yes
 # The preferred node purpose for our objects
 sq_node_purpose: application
 
@@ -15,6 +13,7 @@ sq_workdir_volume_storageclass: " "
 # (one of 'staging' or 'production')
 sq_je_cert_issuer: production
 sq_portal_cert_issuer: production
+sq_website_cert_issuer: production
 
 # The Squonk CellExecutor Pod environment
 sq_pod_env: ''

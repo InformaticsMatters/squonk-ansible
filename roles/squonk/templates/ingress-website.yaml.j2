@@ -2,22 +2,22 @@
 kind: Ingress
 apiVersion: networking.k8s.io/v1beta1
 metadata:
-  name: portal
+  name: website
   namespace: {{ sq_namespace }}
   annotations:
     ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ sq_portal_cert_issuer|lower }}"
+    cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ sq_website_cert_issuer|lower }}"
 spec:
   tls:
   - hosts:
-    - {{ sq_portal_hostname_fact }}
-    secretName: portal-tls
+    - {{ sq_website_hostname }}
+    secretName: website-tls
   rules:
-  - host: {{ sq_portal_hostname_fact }}
+  - host: {{ sq_website_hostname }}
     http:
       paths:
-      - path: /portal
+      - path: /
         backend:
-          serviceName: portal
+          serviceName: website
           servicePort: http
