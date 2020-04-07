@@ -7,7 +7,7 @@
 
 - name: Assert hostname
   assert:
-    that: sq_website_hostname|length >0
+    that: sq_website_hostname|length > 0
 
 - name: Check namespace
   k8s_info:
