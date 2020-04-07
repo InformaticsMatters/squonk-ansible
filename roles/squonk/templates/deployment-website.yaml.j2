@@ -33,7 +33,7 @@ spec:
       containers:
       - name: website
         image: {{ sq_website_registry }}/informaticsmatters/squonk-website:{{ sq_website_image_tag }}
-{% if sw_image_tag in ['latest', 'stable'] %}
+{% if sq_website_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
         imagePullPolicy: IfNotPresent
