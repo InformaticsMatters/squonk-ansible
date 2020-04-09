@@ -97,7 +97,6 @@
     default_roles:
     - standard-user
   delegate_to: localhost
-  when: sq_je_hostname|string|length > 0
 
 - name: Add Keycloak Portal (Notebook) client
   keycloak_client:
