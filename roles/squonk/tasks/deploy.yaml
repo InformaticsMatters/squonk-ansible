@@ -54,5 +54,5 @@
 - name: Display portal location
   debug:
     msg: >-
-      Use https://{{ sq_portal_hostname }}/portal
+      Use https://{{ sq_hostname }}/portal
       for the Squonk Portal
