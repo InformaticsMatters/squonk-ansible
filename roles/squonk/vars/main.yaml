@@ -22,39 +22,39 @@ sq_pod_log_history: 100
 sq_nextflow_image: informaticsmatters/nextflow:19.10.0
 
 sq_cell_cpu_request: 500m
-sq_cell_mem_request: 400Mi
+sq_cell_mem_request: 700Mi
 sq_cell_cpu_limit: 4000m
-sq_cell_mem_limit: 8Gi
+sq_cell_mem_limit: 5Gi
 sq_cell_java_tool_options: -Xmx4096m
 
 sq_chem_cpu_request: 500m
-sq_chem_mem_request: 400Mi
+sq_chem_mem_request: 4500Mi
 sq_chem_cpu_limit: 4000m
 sq_chem_mem_limit: 8Gi
 sq_chem_java_tool_options: -Xmx4096m
 
 sq_ccs_cpu_request: 500m
-sq_ccs_mem_request: 1200Mi
+sq_ccs_mem_request: 1800Mi
 sq_ccs_cpu_limit: 2
-sq_ccs_mem_limit: 8Gi
+sq_ccs_mem_limit: 5Gi
 sq_ccs_java_tool_options: -Xmx4096m
 
 sq_core_cpu_request: 500m
-sq_core_mem_request: 3500Mi
+sq_core_mem_request: 3800Mi
 sq_core_cpu_limit: 2000m
-sq_core_mem_limit: 8Gi
+sq_core_mem_limit: 5Gi
 sq_core_java_tool_options: -Xmx4096m
 
 sq_je_cpu_request: 500m
-sq_je_mem_request: 2200Mi
+sq_je_mem_request: 3400Mi
 sq_je_cpu_limit: 4000m
-sq_je_mem_limit: 8Gi
+sq_je_mem_limit: 5Gi
 sq_je_java_tool_options: -Xmx4096m
 
-sq_portal_cpu_request: 500m
+sq_portal_cpu_request: 1900m
 sq_portal_mem_request: 1Gi
 sq_portal_cpu_limit: 2000m
-sq_portal_mem_limit: 8Gi
+sq_portal_mem_limit: 3Gi
 sq_portal_java_tool_options: -Xmx2048m
 
 # Squonk images (tags are defined in defaults)
