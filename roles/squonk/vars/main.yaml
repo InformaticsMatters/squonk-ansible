@@ -58,6 +58,10 @@ sq_portal_java_tool_options: -Xmx2048m
 # Squonk images (tags are defined in defaults)
 sq_flyway_image: squonk/flyway
 
+# Ingress adjustments (nginx)
+# Maximum upload body size
+sq_nginx_client_max_body_size: 100m
+
 # RabbitMQ configuration ------------------------------------------------------
 
 # The RabbitMQ image tag.
