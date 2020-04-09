@@ -1,12 +1,27 @@
 ---
 
-# Go...
+# Some sanity-checks...
 
 - name: Assert hostname is set
   assert:
     that:
     - sq_hostname|string|length > 0
     - sq_cert_issuer in cert_issuers
+
+- name: Get {{ sq_workdir_volume_storageclass }} StorageClass
+  k8s_info:
+    kind: StorageClass
+    name: "{{ sq_workdir_volume_storageclass }}"
+  register: sc_result
+  when: sq_workdir_volume_storageclass != " "
+
+- name: Assert {{ sq_workdir_volume_storageclass }} StorageClass
+  assert:
+    that: sc_result.resources|length == 1
+    fail_msg: The {{ sq_workdir_volume_storageclass }} StorageClass must be available on the cluster
+  when: sq_workdir_volume_storageclass != " "
+
+# Go...
 
 - name: Set sq_portal_logout_redirect_to fact
   set_fact:
