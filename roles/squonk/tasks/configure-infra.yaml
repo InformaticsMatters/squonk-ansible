@@ -85,11 +85,11 @@
     client_id: "{{ sq_je_keycloak_client_id }}"
     name: Squonk JobExecutor
     protocol: openid-connect
-    base_url: https://{{ sq_je_hostname }}
-    admin_url: https://{{ sq_je_hostname }}
+    base_url: https://{{ sq_hostname }}
+    admin_url: https://{{ sq_hostname }}
     redirect_uris:
-    - https://{{ sq_je_hostname }}/jobexecutor/*
-    - http://{{ sq_je_hostname }}/jobexecutor/*
+    - https://{{ sq_hostname }}/jobexecutor/*
+    - http://{{ sq_hostname }}/jobexecutor/*
     public_client: yes
     service_accounts_enabled: yes
     direct_access_grants_enabled: yes
@@ -110,12 +110,11 @@
     client_id: "{{ sq_portal_keycloak_client_id }}"
     name: Squonk Computational Notebook
     protocol: openid-connect
-    base_url: https://{{ sq_portal_hostname_fact }}
-    admin_url: https://{{ sq_portal_hostname_fact }}
+    base_url: https://{{ sq_hostname }}/portal
+    admin_url: https://{{ sq_hostname }}/portal
     redirect_uris:
-    - https://{{ sq_portal_hostname_fact }}/portal/*
-    - http://{{ sq_portal_hostname_fact }}/portal/*
-    - "{{ sq_portal_logout_redirect_to_fact }}/*"
+    - https://{{ sq_hostname }}/portal/*
+    - http://{{ sq_hostname }}/portal/*
     client_authenticator_type: client-secret
     secret: "{{ sq_portal_keycloak_client_secret }}"
     public_client: no
@@ -124,7 +123,6 @@
     default_roles:
     - standard-user
   delegate_to: localhost
-  when: sq_portal_hostname_fact|string|length > 0
 
 # Create 'Day 1' Keycloak users
 

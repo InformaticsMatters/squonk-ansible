@@ -3,6 +3,7 @@
 # Deploy (or un-deploy)?
 # One of 'present' or 'absent'.
 sq_state: present
+sq_website_state: present
 
 # A the name of the parameter vault for the deployment.
 # Used to load deployment-specific variables
@@ -31,29 +32,20 @@ sq_delete_keycloak_realm_on_removal: yes
 # so refer to that role for documentation.
 sq_day1_users: []
 
-# The hostname that routes to the website.
-# If not set the website is not deployed.
-# If this is defined but the sq_portal_hostname
-# and sq_portal_logout_redirect_to is not defined they
-# will be formed from the sq_website_hostname.
+# Hostname definitions (ingress)
+# There is essentially one hostname for Squonk,
+# but a number of paths. Typically we deploy
+# a deployment-specific website, the portal (Squonk notebook),
+# and the JobExecutor, available at the following URLs:-
 #
-# For example if sq_website_hostname is 'squonk.example.org'
-# then (if not defined): -
-# sq_portal_hostname will be '{{ sq_website_hostname }}'
-# sq_portal_logout_redirect_to will be 'https://{{ sq_website_hostname }}/portal'
-sq_website_hostname: ''
+# website: https://{{ sq_hostname }}
+# website: https://{{ sq_hostname }}/portal
+# website: https://{{ sq_hostname }}/jobexecutor
+sq_hostname: ''
 
-# The hostname that routes to the portal
-# Set automatically if not set but the sq_website_hostname is set.
-sq_portal_hostname: ''
-# The URL that is used as a redirection when logging out for the portal.
-# Set automatically if not set but the sq_website_hostname is set.
-sq_portal_logout_redirect_to: ''
+# Keycloak material...
 sq_portal_keycloak_client_id: squonk-notebook
 sq_portal_keycloak_client_secret: ''
-
-# The hostname that routes to the JobExecutor
-sq_je_hostname: ''
 sq_je_keycloak_client_id: squonk-jobexecutor
 
 # Delete the Squonk database when Squonk is removed?

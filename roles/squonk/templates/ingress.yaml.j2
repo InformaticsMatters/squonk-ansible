@@ -1,0 +1,35 @@
+---
+
+# Ingress definition that acts for the Squonk-specific website,
+# Squonk notebook (portal) and the JobExecutor.
+
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: squonk
+  namespace: {{ sq_namespace }}
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ sq_cert_issuer|lower }}"
+spec:
+  tls:
+  - hosts:
+    - {{ sq_hostname }}
+    secretName: squonk-tls
+  rules:
+  - host: {{ sq_hostname }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: website
+          servicePort: http
+      - path: /portal
+        backend:
+          serviceName: portal
+          servicePort: http
+      - path: /jobexecutor
+        backend:
+          serviceName: jobexecutor
+          servicePort: http

@@ -32,8 +32,7 @@
     pull_secret: "{{ item.secret }}"
   with_items: "{{ sq_pull_secrets }}"
 
-# Deploy the website, its service and ingress
-# (if a hostname for it has been defined)
+# Deploy the website and its service
 
 - name: Deploy website
   k8s:
@@ -43,8 +42,7 @@
   loop:
   - deployment-website
   - service-website
-  - ingress-website
-  when: sq_website_hostname|length > 0
+  when: sq_website_state|string == 'present'
 
 # Deploy the main (backend) application images.
 #
@@ -71,19 +69,6 @@
   - deployment-jobexecutor
   - deployment-chemservices
 
-# Deploy JobExecutor Ingress/Route?
-
-- name: Check JobExecutor certificate issuer
-  assert:
-    that: sq_je_cert_issuer in cert_issuers
-  when: sq_je_hostname|string|length > 0
-
-- name: Deploy JobExecutor ingress
-  k8s:
-    definition: "{{ lookup('template', 'ingress-jobexecutor.yaml.j2') }}"
-    wait: yes
-  when: sq_je_hostname|string|length > 0
-
 # Deploy the Front-End (Portal)
 
 - name: Deploy Squonk (Portal)
@@ -96,15 +81,7 @@
   - configmap-portal
   - deployment-portal
 
-# Deploy Portal Ingress/Route?
-
-- name: Check Portal certificate issuer
-  assert:
-    that: sq_portal_cert_issuer in cert_issuers
-  when: sq_portal_hostname|string|length > 0
-
-- name: Deploy Portal ingress
+- name: Deploy Squonk ingress
   k8s:
-    definition: "{{ lookup('template', 'ingress-portal.yaml.j2') }}"
+    definition: "{{ lookup('template', 'ingress.yaml.j2') }}"
     wait: yes
-  when: sq_portal_hostname_fact|string|length > 0
