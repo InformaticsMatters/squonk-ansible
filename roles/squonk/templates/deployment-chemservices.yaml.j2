@@ -91,7 +91,7 @@ spec:
           timeoutSeconds: 4
           periodSeconds: 20
           successThreshold: 1
-          failureThreshold: 3
+          failureThreshold: 6
         livenessProbe:
           httpGet:
             path: /chem-services-cdk-basic/rest/ping

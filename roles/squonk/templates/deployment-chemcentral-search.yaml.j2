@@ -44,11 +44,11 @@ spec:
         - containerPort: 8080
         resources:
           limits:
-            cpu: {{ sq_css_cpu_limit }}
-            memory: {{ sq_css_mem_limit }}
+            cpu: {{ sq_ccs_cpu_limit }}
+            memory: {{ sq_ccs_mem_limit }}
           requests:
-            cpu: {{ sq_css_cpu_request }}
-            memory: {{ sq_css_mem_request }}
+            cpu: {{ sq_ccs_cpu_request }}
+            memory: {{ sq_ccs_mem_request }}
         readinessProbe:
           httpGet:
             path: /chemcentral-search/rest/ping
@@ -81,4 +81,4 @@ spec:
               name: rabbitmq
               key: default_user_password
         - name: JAVA_TOOL_OPTIONS
-          value: "{{ sq_css_java_tool_options }}"
+          value: "{{ sq_ccs_java_tool_options }}"
