@@ -64,6 +64,9 @@ sq_website_image_tag: stable
 # Debug modes (passed to the cell-executor)
 sq_debug_mode: 0
 sq_pod_debug_mode: 0
+# The Pod CPU resource (and limit) for cell and job-executor Jobs.
+# Passed to squonk containers via the resources/cpu/limit and request.
+sq_pod_cpu_resource: '1'
 
 # Container credentials used to create secrets
 # in order to pull images from private registries.
