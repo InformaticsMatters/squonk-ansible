@@ -15,11 +15,8 @@ in-situ while preserving the encrypted state of the file.
 Armed with the repo's vault password you can edit any encrypted
 parameter file with: -
 
-    $ ansible-vault edit roles/squonk/vars/im-demo-parameters.vault \
-        --vault-password-file vault-pass.txt
-
-    $ ansible-vault edit roles/squonk/vars/im-main-parameters.vault \
-        --vault-password-file vault-pass.txt
+    $ IM_VAULT=im-demo
+    $ ansible-vault edit roles/squonk/vars/${IM_VAULT}-parameters.vault
 
 ---
 
