@@ -19,7 +19,8 @@
     pull_secret: "{{ item.secret }}"
   with_items: "{{ sq_pull_secrets }}"
 
-# Deploy the website and its service
+# Deploy the website and its service.
+# The website is a Deployment in the Squonk namespace
 
 - name: Deploy website
   k8s:
@@ -29,7 +30,9 @@
   loop:
   - deployment-website
   - service-website
-  when: sq_website_state|string == 'present'
+  when:
+  - sq_state|string == 'present'
+  - sq_website_state|string == 'present'
 
 # Deploy the main (backend) application images.
 #
