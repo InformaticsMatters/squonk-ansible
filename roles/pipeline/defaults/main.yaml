@@ -10,9 +10,9 @@
 # - '-'
 # - '.'
 pipeline_name: SetMe
-# The Docker image registry's
-# pipeline poster image repository name.
+# The pipeline poster image repository name.
 # i.e. 'squonk/rdkit-pipelines-sdposter'.
+# This is not necessarily the repository of the pipeline image.
 #
 # If the image resides in a private registry
 # you will need to have create an image pull secret
