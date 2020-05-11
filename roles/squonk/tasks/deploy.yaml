@@ -38,6 +38,7 @@
   - role-squonk-runner
   - rolebinding-squonk-psp-unrestricted-sa
   - rolebinding-squonk-runner-sa
+  - limitrange
 
 - name: Relax {{ sq_namespace }} 'default' service account (for cert-manager)
   k8s:
