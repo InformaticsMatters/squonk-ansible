@@ -3,11 +3,6 @@
 # The preferred node purpose for our objects
 sq_node_purpose: application
 
-# Size and class of the Squonk working directory.
-# The class is 'blank', which implies the default class.
-sq_workdir_volume_size_g: 50
-sq_workdir_volume_storageclass: " "
-
 # If using the cert-manager...
 # the Cert-Manager issuers for external ingress
 # (one of 'staging' or 'production')
