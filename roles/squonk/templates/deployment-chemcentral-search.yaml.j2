@@ -73,7 +73,7 @@ spec:
         - name: CHEMCENTRAL_USER
           value: chemcentral
         - name: CHEMCENTRAL_PASSWORD
-          value: {{ ccd_database_chemcentral_user_password_fact }}
+          value: {{ ccd_database_chemcentral_user_password_fact|default('undefined', true) }}
         - name: RABBITMQ_HOSTNAME
           valueFrom:
             secretKeyRef:
