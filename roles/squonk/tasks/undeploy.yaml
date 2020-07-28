@@ -21,7 +21,7 @@
   - sq_delete_db_on_removal|bool
   - n_result.resources|length > 0
 
-# We delete the Realm (and all its clients)
+# We remove the notebook client from the Realm
 
 - import_tasks: get-keycloak-credentials.yaml
 
@@ -50,21 +50,6 @@
     state: absent
   delegate_to: localhost
   when: not sq_delete_keycloak_realm_on_removal|bool
-
-# Delete the Realm (its Roles and Users)?
-
-- name: Delete Keycloak Realm ({{ sq_keycloak_realm }})
-  include_role:
-    name: informaticsmatters.infrastructure_user
-  vars:
-    iu_action: delete
-    iu_type: realm
-    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
-    iu_namespace: "{{ sq_namespace }}"
-    iu_realm: "{{ sq_keycloak_realm }}"
-    iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
-    iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
-  when: sq_delete_keycloak_realm_on_removal|bool
 
 # Finally ... remove the Squonk namespace
 

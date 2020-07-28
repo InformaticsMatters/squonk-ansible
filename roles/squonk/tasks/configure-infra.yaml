@@ -41,35 +41,6 @@
 - import_tasks: get-keycloak-credentials.yaml
 - import_tasks: get-keycloak-realm-manager-credentials.yaml
 
-- name: Create Keycloak Realm ({{ sq_keycloak_realm }})
-  include_role:
-    name: informaticsmatters.infrastructure_user
-  vars:
-    iu_action: create
-    iu_type: realm
-    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
-    iu_namespace: "{{ sq_namespace }}"
-    iu_realm: "{{ sq_keycloak_realm }}"
-    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
-    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
-    iu_admin_user: "{{ sq_keycloak_admin_user_fact }}"
-    iu_admin_password: "{{ sq_keycloak_admin_user_password_fact }}"
-
-- name: Create Keycloak Realm Roles
-  include_role:
-    name: informaticsmatters.infrastructure_user
-  vars:
-    iu_action: create
-    iu_type: role
-    iu_hostname: "{{ sq_keycloak_hostname_fact }}"
-    iu_realm: "{{ sq_keycloak_realm }}"
-    iu_realm_manager: "{{ sq_keycloak_realm_manager_fact }}"
-    iu_realm_manager_password: "{{ sq_keycloak_realm_manager_password_fact }}"
-    iu_roles:
-    - name: standard-user
-      default: yes
-    - name: fragnet-search
-
 # Create the keycloak clients
 # We have a client for the Portal (the web application)
 # and one for the JobExecutor...

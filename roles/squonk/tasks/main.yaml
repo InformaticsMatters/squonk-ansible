@@ -39,6 +39,14 @@
     - sq_state|string == 'present'
     - sq_ccs_state|string == 'present'
 
+  # Undeploy is a little more interesting...
+  #
+  # We undeploy when sq_state is 'absent'
+  # (which deletes everything). But we must
+  # also cater for removal of ChemCentral when
+  # squonk is expected to remain,
+  # i.e. sq_state is 'present' and sq_ccs_state is 'absent'
+
   - include_tasks: undeploy.yaml
     when: sq_state|string == 'absent'
   - include_tasks: undeploy-search.yaml
