@@ -81,8 +81,12 @@ spec:
           containerPort: 8080
         resources:
           limits:
+{% if sq_je_cpu_limit %}
             cpu: {{ sq_je_cpu_limit }}
+{% endif %}
+{% if sq_je_mem_limit %}
             memory: {{ sq_je_mem_limit }}
+{% endif %}
           requests:
             cpu: {{ sq_je_cpu_request }}
             memory: {{ sq_je_mem_request }}

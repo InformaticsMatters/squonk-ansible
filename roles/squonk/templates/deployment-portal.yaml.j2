@@ -90,8 +90,12 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
+{% if sq_portal_cpu_limit %}
             cpu: {{ sq_portal_cpu_limit }}
+{% endif %}
+{% if sq_portal_mem_limit %}
             memory: {{ sq_portal_mem_limit }}
+{% endif %}
           requests:
             cpu: {{ sq_portal_cpu_request }}
             memory: {{ sq_portal_mem_request }}

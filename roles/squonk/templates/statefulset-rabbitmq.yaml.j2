@@ -55,8 +55,12 @@ spec:
           containerPort: 25672
         resources:
           limits:
+{% if sq_rabbitmq_cpu_limit %}
             cpu: {{ sq_rabbitmq_cpu_limit }}
+{% endif %}
+{% if sq_rabbitmq_mem_limit %}
             memory: {{ sq_rabbitmq_mem_limit }}
+{% endif %}
           requests:
             cpu: {{ sq_rabbitmq_cpu_request }}
             memory: {{ sq_rabbitmq_mem_request }}

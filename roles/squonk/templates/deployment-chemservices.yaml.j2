@@ -103,8 +103,12 @@ spec:
           failureThreshold: 3
         resources:
           limits:
+{% if sq_chem_cpu_limit %}
             cpu: {{ sq_chem_cpu_limit }}
+{% endif %}
+{% if sq_chem_mem_limit %}
             memory: {{ sq_chem_mem_limit }}
+{% endif %}
           requests:
             cpu: {{ sq_chem_cpu_request }}
             memory: {{ sq_chem_mem_request }}

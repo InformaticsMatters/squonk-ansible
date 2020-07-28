@@ -88,8 +88,12 @@ spec:
           periodSeconds: 60
         resources:
           limits:
+{% if sq_core_cpu_limit %}
             cpu: {{ sq_core_cpu_limit }}
+{% endif %}
+{% if sq_core_mem_limit %}
             memory: {{ sq_core_mem_limit }}
+{% endif %}
           requests:
             cpu: {{ sq_core_cpu_request }}
             memory: {{ sq_core_mem_request }}

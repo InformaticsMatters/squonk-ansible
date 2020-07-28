@@ -14,6 +14,11 @@ sq_pod_env: ''
 sq_pod_log_history: 100
 sq_nextflow_image: informaticsmatters/nextflow:19.10.0
 
+# CPU and Memory Requests and Limits
+# for the various Pods (Deployments) we have.
+#
+# All out Pods *MUST* have a request (CPU and Memory)
+# but if a limit is blank then a limit is not set.
 sq_cell_cpu_request: 500m
 sq_cell_mem_request: 700Mi
 sq_cell_cpu_limit: 4000m
