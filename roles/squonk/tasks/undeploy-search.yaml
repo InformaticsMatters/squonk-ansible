@@ -9,7 +9,7 @@
 
 - name: Assert namespace exists
   assert:
-    that: s_result.resources|length == 1
+    that: n_result.resources|length == 1
 
 - name: Undeploy search
   k8s:
