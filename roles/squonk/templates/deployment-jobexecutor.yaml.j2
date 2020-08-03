@@ -58,6 +58,8 @@ spec:
               key: pod-env
         - name: SQUONK_POD_LOG_HISTORY
           value: '{{ sq_pod_log_history }}'
+        - name: SQUONK_POD_IMAGE_PULL_POLICY
+          value: '{{ sq_pod_image_pull_policy }}'
         - name: SQUONK_DEBUG_MODE
           value: '{{ sq_debug_mode }}'
         - name: SQUONK_POD_DEBUG_MODE

@@ -61,6 +61,9 @@ sq_portal_image_tag: '0.3.11'
 sq_website_registry: registry.gitlab.com
 sq_website_image_tag: stable
 
+# Pipeline (Pod) pull policy
+sq_pod_image_pull_policy: IfNotPresent
+
 # Size and class of the Squonk working directory.
 # The class is 'blank', which implies the default class.
 sq_workdir_volume_size_g: 1
