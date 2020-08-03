@@ -63,7 +63,7 @@ sq_website_image_tag: stable
 
 # Size and class of the Squonk working directory.
 # The class is 'blank', which implies the default class.
-sq_workdir_volume_size_g: 50
+sq_workdir_volume_size_g: 1
 sq_workdir_volume_storageclass: " "
 
 # Debug modes (passed to the cell-executor)
