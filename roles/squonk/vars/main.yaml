@@ -12,7 +12,7 @@ sq_cert_issuer: production
 sq_pod_env: ''
 
 sq_pod_log_history: 100
-sq_nextflow_image: informaticsmatters/nextflow:19.10.0
+sq_nextflow_image: informaticsmatters/nextflow:20.07.1
 
 # CPU and Memory Requests and Limits
 # for the various Pods (Deployments) we have.
