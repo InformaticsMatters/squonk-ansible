@@ -43,6 +43,7 @@ spec:
         - containerPort: 80
           name: http
         env:
+{% if sq_website_image_tag in ['latest', 'stable'] %}
         # CICD_TRIGGER_ID is variable whose value is used to force
         # a redeployment of the underlying pods. This is used in
         # situations where the origin image's tag may not have changed
@@ -51,6 +52,7 @@ spec:
         # a roll-out will not occur if the tag has not changed.
         - name: CICD_TRIGGER_ID
           value: '{{ ansible_date_time.iso8601_micro }}'
+{% endif %}
         readinessProbe:
           httpGet:
             port: 80

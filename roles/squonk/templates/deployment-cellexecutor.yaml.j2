@@ -34,7 +34,7 @@ spec:
       containers:
       - name: cellexecutor
         image: {{ sq_image_registry }}/squonk/cellexecutor:{{ sq_image_tag }}
-{% if sq_image_tag == 'latest' %}
+{% if sq_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
         imagePullPolicy: IfNotPresent
@@ -84,6 +84,16 @@ spec:
           value: "{{ sq_cell_java_tool_options }}"
 #        - name: JAVA_OPTS
 #          value: "-Djava.util.logging.config.file=/logging.properties"
+{% if sq_image_tag in ['latest', 'stable'] %}
+        # CICD_TRIGGER_ID is variable whose value is used to force
+        # a redeployment of the underlying containers. This is used in
+        # situations where the origin image's tag may not have changed
+        # (e.g. it's 'latest' or 'stable') but a new build is expected to
+        # be available. Without changing something in the Deployment spec
+        # a roll-out will not occur if the tag has not changed.
+        - name: CICD_TRIGGER_ID
+          value: '{{ ansible_date_time.iso8601_micro }}'
+{% endif %}
         ports:
         - name: http
           containerPort: 8080
