@@ -49,8 +49,6 @@ spec:
 {% endif %}
         terminationMessagePolicy: FallbackToLogsOnError
         env:
-        - name: IMAGE_TAG
-          value: {{ pipeline_tag }}
 {% if pipeline_registry|length > 0 %}
         - name: IMAGE_REGISTRY
           value: {{ pipeline_registry }}
@@ -61,10 +59,9 @@ spec:
 {% endif %}
         resources:
           limits:
-            cpu: 500m
-            memory: 128Mi
+            cpu: 250m
           requests:
-            cpu: 100m
+            cpu: 250m
             memory: 32Mi
 {% if pipeline_pull_secret|length > 0 %}
       imagePullSecrets:
