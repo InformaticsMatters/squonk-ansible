@@ -19,7 +19,7 @@ ccd_database_loader_volume_size_g: 5
 ccd_database_loader_volume_storageclass: " "
 
 # The Classname of the loader to use.
-# One available int he container image,
+# One available in the container image,
 # for example 'org.squonk.rdkit.db.loaders.EMoleculesBBSmilesLoader'
 ccd_loader_class: SetMe
 # A marker to use with the loader.
