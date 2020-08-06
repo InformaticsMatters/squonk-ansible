@@ -53,6 +53,44 @@
       that: namespace_info.resources|length > 0
       fail_msg: Namespace '{{ ccd_namespace }}' does not exist
 
+  # The loader volume (and storage class checks)
+
+  - name: Get {{ ccd_database_loader_volume_storageclass }} StorageClass
+    k8s_info:
+      kind: StorageClass
+      name: "{{ ccd_database_loader_volume_storageclass }}"
+    register: sc_result
+    when: ccd_database_loader_volume_storageclass != " "
+
+  - name: Assert {{ ccd_database_loader_volume_storageclass }} StorageClass
+    assert:
+      that: sc_result.resources|length == 1
+      fail_msg: The {{ ccd_database_loader_volume_storageclass }} StorageClass must be available on the cluster
+    when: ccd_database_loader_volume_storageclass != " "
+
+  - name: Create loader volume claim
+    k8s:
+      definition: "{{ lookup('template', 'pvc-loader.yaml.j2') }}"
+      wait: yes
+      wait_timeout: "{{ wait_timeout }}"
+
+  # Best practice ... wait for the PVC to bind.
+  # e.g. wait until resources[0].status.phase == Bound (initially Pending)
+
+  - name: Wait for loader volume claim to bind
+    k8s_info:
+      kind: PersistentVolumeClaim
+      name: loader
+      namespace: "{{ ccd_namespace }}"
+    register: loader_v_result
+    until: >-
+      loader_v_result.resources|length > 0
+      and loader_v_result.resources[0].status is defined
+      and loader_v_result.resources[0].status.phase == 'Bound'
+    delay: 5
+    retries: "{{ (bind_timeout|int / 5)|int }}"
+    when: bind_timeout|int > 0
+
   - name: Remove existing loader
     k8s:
       state: absent

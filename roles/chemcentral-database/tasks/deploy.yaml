@@ -53,22 +53,19 @@
     fail_msg: The {{ ccd_database_volume_storageclass }} StorageClass must be available on the cluster
   when: ccd_database_volume_storageclass != " "
 
-- name: Create volume claims
+- name: Create database volume claim
   k8s:
-    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    definition: "{{ lookup('template', 'pvc-db.yaml.j2') }}"
     wait: yes
     wait_timeout: "{{ wait_timeout }}"
-  loop:
-  - pvc-db
-  - pvc-loader
 
 # Best practice ... wait for the PVC to bind.
 # e.g. wait until resources[0].status.phase == Bound (initially Pending)
 
-- name: Wait for volume claims to bind
+- name: Wait for database volume claim to bind
   k8s_info:
     kind: PersistentVolumeClaim
-    name: "{{ item }}"
+    name: database
     namespace: "{{ ccd_namespace }}"
   register: database_result
   until: >-
@@ -77,9 +74,6 @@
     and database_result.resources[0].status.phase == 'Bound'
   delay: 5
   retries: "{{ (bind_timeout|int / 5)|int }}"
-  loop:
-  - database
-  - loader
   when: bind_timeout|int > 0
 
 # Deploy the ChemCentral database

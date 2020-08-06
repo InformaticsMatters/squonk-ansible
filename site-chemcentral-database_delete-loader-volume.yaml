@@ -3,4 +3,4 @@
   tasks:
   - include_role:
       name: chemcentral-database
-      tasks_from: run-loader.yaml
+      tasks_from: delete-loader-volume.yaml
