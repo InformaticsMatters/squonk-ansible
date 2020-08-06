@@ -7,7 +7,7 @@ ccd_node_purpose: application
 
 # Database image details
 ccd_database_image_registry: docker.io
-ccd_database_image: informaticsmatters/rdkit_cartridge
+ccd_database_image: informaticsmatters/rdkit_cartridge_debian
 ccd_database_image_tag: Release_2020_03_4
 ccd_database_loader_image_tag: 0.3.11
 
