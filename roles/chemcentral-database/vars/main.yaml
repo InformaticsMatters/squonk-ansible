@@ -35,4 +35,5 @@ ccd_loader_mem_request: 100Mi
 # for wait duration
 wait_timeout: 600
 # Volume binding timeout (seconds)
+# Set to 0 to avoid waiting
 bind_timeout: 120

@@ -80,6 +80,7 @@
   loop:
   - database
   - loader
+  when: bind_timeout|int > 0
 
 # Deploy the ChemCentral database
 
