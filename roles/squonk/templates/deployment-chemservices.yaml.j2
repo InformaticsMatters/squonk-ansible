@@ -40,6 +40,12 @@ spec:
         - 'sh'
         - '-c'
         - 'until (( curl http://coreservices.{{ sq_namespace }}.svc:8080/rest/ping --connect-timeout 5 )); do sleep 2; done'
+        resources:
+          limits:
+            cpu: 250m
+          requests:
+            cpu: 250m
+            memory: 64Mi
 
       containers:
       - name: chemservices-basic
