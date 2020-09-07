@@ -49,7 +49,7 @@ sq_je_cpu_limit: 4000m
 sq_je_mem_limit: 5Gi
 sq_je_java_tool_options: -Xmx4096m
 
-sq_portal_cpu_request: 1900m
+sq_portal_cpu_request: 500m
 sq_portal_mem_request: 1Gi
 sq_portal_cpu_limit: 2000m
 sq_portal_mem_limit: 3Gi
