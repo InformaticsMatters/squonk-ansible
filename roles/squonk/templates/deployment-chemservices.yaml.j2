@@ -86,8 +86,6 @@ spec:
               key: default_user_password
         - name: JAVA_TOOL_OPTIONS
           value: "{{ sq_chem_java_tool_options }}"
-        - name: CHEMAXON_LICENSE_URL
-          value: /usr/local/tomcat/license.cxl
 {% if sq_image_tag in ['latest', 'stable'] %}
         # CICD_TRIGGER_ID is variable whose value is used to force
         # a redeployment of the underlying containers. This is used in
@@ -131,9 +129,10 @@ spec:
             cpu: {{ sq_chem_cpu_request }}
             memory: {{ sq_chem_mem_request }}
         volumeMounts:
-        - mountPath: /usr/local/tomcat/license.cxl
+        - mountPath: /home/tomcat/.chemaxon/license.cxl
           name: chemaxon-license-config
           subPath: license.cxl
+          readOnly: true
 
       volumes:
       - name: chemaxon-license-config
