@@ -92,6 +92,17 @@ sq_pod_cpu_resource: '1'
 # on creating the 'secret' value.
 sq_pull_secrets: []
 
+# ChemAxon License File.
+# This is mapped into the ChemServices container
+# using a config map. The license is empty by default.
+#
+# If you want to use ChemAxon services you must supply a license
+# in this variable.
+sq_chemaxon_license: |
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  <ChemAxon>
+  </ChemAxon>
+
 # ChemCentral Search ----------------------------------------------------------
 
 # Deploy (or undeploy) ChemCentral Search?

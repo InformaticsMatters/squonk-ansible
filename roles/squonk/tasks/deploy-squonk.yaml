@@ -49,6 +49,7 @@
     wait_timeout: "{{ wait_timeout }}"
   loop:
   - secret-squonk
+  - configmap-chemaxon-license
   - configmap-jobexecutor
   - service-cellexecutor
   - service-coreservices

@@ -1,0 +1,11 @@
+---
+# The ChemAxon license.
+# Normally mapped into the ChemServices container
+# (typically at /usr/local/tomcat/license.cxl)
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: chemaxon-license-config
+  namespace: {{ sq_namespace }}
+data:
+  license.cxl: {{ sq_chemaxon_license }}
