@@ -98,7 +98,7 @@ sq_pull_secrets: []
 #
 # If you want to use ChemAxon services you must supply a license
 # in this variable.
-sq_chemaxon_license: |
+sq_chemaxon_license: >-
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <ChemAxon>
   </ChemAxon>
