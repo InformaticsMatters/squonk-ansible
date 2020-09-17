@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/InformaticsMatters/squonk-ansible.svg?branch=master)](https://travis-ci.com/InformaticsMatters/squonk-ansible)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/informaticsmatters/squonk-ansible)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/squonk-ansible/badge)](https://www.codefactor.io/repository/github/informaticsmatters/squonk-ansible)
+
 An Ansible role to deploy the Informatics Matters [Squonk] application
 to [Kubernetes].
 
