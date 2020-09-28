@@ -14,19 +14,6 @@ spec:
     spec:
       serviceAccountName: {{ pipeline_namespace_service_account }}
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: purpose
-                operator: In
-                values:
-                - {{ pipeline_node_purpose }}
-
       initContainers:
       - image: yauritux/busybox-curl
         name: wait-for-core-before-pipelines-post

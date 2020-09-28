@@ -18,18 +18,16 @@ spec:
     spec:
       serviceAccountName: ccd
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
+      # Must be a 'core' node
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: purpose
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: informaticsmatters.com/purpose
                 operator: In
                 values:
-                - {{ ccd_node_purpose }}
+                - core
 
       containers:
       - name: database

@@ -2,8 +2,6 @@
 
 # A valid service account in the namespace
 pipeline_namespace_service_account: squonk
-# A preferred node purpose on which to run the Job
-pipeline_node_purpose: application
 
 # General variables -----------------------------------------------------------
 

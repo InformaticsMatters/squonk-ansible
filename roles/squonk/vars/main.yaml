@@ -1,8 +1,5 @@
 ---
 
-# The preferred node purpose for our objects
-sq_node_purpose: application
-
 # If using the cert-manager...
 # the Cert-Manager issuers for external ingress
 # (one of 'staging' or 'production')

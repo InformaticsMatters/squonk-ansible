@@ -2,8 +2,6 @@
 
 # The application namespace
 ccd_namespace: chemcentral-database
-# The preferred node purpose for our objects
-ccd_node_purpose: application
 
 # Database image details
 ccd_database_image_registry: docker.io

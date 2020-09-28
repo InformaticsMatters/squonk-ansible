@@ -14,19 +14,6 @@ spec:
     spec:
       serviceAccountName: squonk
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: purpose
-                operator: In
-                values:
-                - {{ sq_node_purpose }}
-
       containers:
       - name: postgres-migrate
         image: {{ sq_flyway_image }}:{{ sq_image_tag }}
