@@ -5,13 +5,3 @@
 # Expose ansible version
 - debug:
     var: ansible_version.full
-
-# Basic pre-playbook prerequisites.
-# We need the openshift/kubernetes module amongst other things...
-
-- name: Install prerequisite Python modules
-  pip:
-    name:
-    - kubernetes==10.0.1
-    - openshift==0.10.1
-    extra_args: --user
