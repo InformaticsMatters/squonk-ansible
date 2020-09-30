@@ -18,8 +18,8 @@ spec:
     spec:
       serviceAccountName: squonk
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
+      # Affinity - avoid 'worker' nodes,
+      # and prefer 'application' nodes
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

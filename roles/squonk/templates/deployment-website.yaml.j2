@@ -17,8 +17,8 @@ spec:
     spec:
       serviceAccountName: squonk
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
+      # Affinity - avoid 'worker' nodes,
+      # and prefer 'application' nodes
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -72,10 +72,14 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 32Mi
+{% if sq_web_cpu_limit %}
+            cpu: {{ sq_web_cpu_limit }}
+{% endif %}
+{% if sq_web_mem_limit %}
+            memory: {{ sq_web_mem_limit }}
+{% endif %}
           requests:
-            cpu: 100m
-            memory: 32Mi
+            cpu: {{ sq_web_cpu_request }}
+            memory: {{ sq_web_mem_request }}
       imagePullSecrets:
       - name: website-pull-secret

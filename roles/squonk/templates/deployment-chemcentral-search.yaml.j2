@@ -2,24 +2,24 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: search
+  name: chemcentral-search
   namespace: {{ sq_namespace }}
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      name: search
+      name: chemcentral-search
   template:
     metadata:
-      name: search
+      name: chemcentral-search
       labels:
-        name: search
+        name: chemcentral-search
     spec:
       serviceAccountName: squonk
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
+      # Affinity - avoid 'worker' nodes,
+      # and prefer 'application' nodes
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -39,7 +39,7 @@ spec:
                 - application
 
       containers:
-      - name: search
+      - name: chemcentral-search
         image: {{ sq_image_registry }}/squonk/chemcentral-search:{{ sq_image_tag }}
 {% if sq_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always

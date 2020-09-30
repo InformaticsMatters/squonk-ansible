@@ -2,10 +2,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: search
+  name: chemcentral-search
   namespace: {{ sq_namespace }}
 spec:
   selector:
-    name: search
+    name: chemcentral-search
   ports:
   - port: 8080
