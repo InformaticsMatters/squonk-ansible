@@ -15,22 +15,22 @@ pipeline_name: SetMe
 # This is not necessarily the repository of the pipeline image.
 #
 # If the image resides in a private registry
-# you will need to have create an image pull secret
-# in kubernetes and name it using the 'pipeline_pull_secret_*' variables.
+# you will need to create an image pull secret
+# in kubernetes and name it using the 'pipeline_pull_secret' variable.
 pipeline_repository: SetMe
 # The image tag for the pipeline poster image.
 pipeline_tag: latest
 
 # The namespace to launch pipelines from,
-# e.g. the Squonk namespace.
+# e.g. the namespace into which you have deployed Squonk.
 pipeline_namespace: squonk
 
 # The optional Docker image registry (i.e. 'registry.gitlab.com').
-# If set pipeline images are prefixed with '{{ pipeline_registry }}/'
+# If set, pipeline images are prefixed with '{{ pipeline_registry }}/'
 # when they're loaded.
 pipeline_registry: ''
 # The image pull secret for images hosted on
 # private registries. The secret is expected to have been deployed
-# as part of the Squonk deployment.
+# as part of the Squonk deployment into the chosen Squonk namespace.
 # Leave blank for public images.
 pipeline_pull_secret: ''
