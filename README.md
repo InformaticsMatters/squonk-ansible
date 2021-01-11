@@ -1,6 +1,6 @@
 # Squonk (Ansible)
 
-![lint](https://github.com/InformaticsMatters/squonk-ansible/workflows/yamllint/badge.svg)
+![lint](https://github.com/InformaticsMatters/squonk-ansible/workflows/lint/badge.svg)
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/informaticsmatters/squonk-ansible)
 
