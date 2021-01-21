@@ -29,10 +29,23 @@
 
 - name: Creating namespace '{{ sq_namespace }}'
   k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    wait: yes
+
+- name: Create DockerHub image pull secret
+  k8s:
+    definition: "{{ lookup('template', 'secret-dh-imagepull.yaml.j2') }}"
+    wait: yes
+  vars:
+    pull_namespace: "{{ sq_namespace }}"
+    pull_secret: "{{ sq_dockerhub_pullsecret }}"
+  when: sq_dockerhub_pullsecret|string|length > 0
+
+- name: Creating namespace material
+  k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
   loop:
-  - namespace
   - serviceaccount
   - role-squonk-psp-unrestricted
   - role-squonk-runner

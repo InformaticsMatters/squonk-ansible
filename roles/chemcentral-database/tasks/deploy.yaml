@@ -1,11 +1,24 @@
 ---
 
-- name: Create namespace '{{ ccd_namespace }}'
+- name: Creating namespace '{{ ccd_namespace }}'
+  k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    wait: yes
+
+- name: Create DockerHub image pull secret
+  k8s:
+    definition: "{{ lookup('template', 'secret-dh-imagepull.yaml.j2') }}"
+    wait: yes
+  vars:
+    pull_namespace: "{{ ccd_namespace }}"
+    pull_secret: "{{ ccd_dockerhub_pullsecret }}"
+  when: ccd_dockerhub_pullsecret|string|length > 0
+
+- name: Create namespace material
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
   loop:
-  - namespace
   - serviceaccount
   - role-psp-unrestricted
   - rolebinding-ccd-sa
