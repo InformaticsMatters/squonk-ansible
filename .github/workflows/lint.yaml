@@ -1,6 +1,18 @@
 ---
 name: lint
 
+# -----------------
+# Control variables (GitHub Secrets)
+# -----------------
+#
+# (n/a)
+#
+# -----------
+# Environment (GitHub Environments)
+# -----------
+#
+# Environment         (n/a)
+
 on:
 - push
 
