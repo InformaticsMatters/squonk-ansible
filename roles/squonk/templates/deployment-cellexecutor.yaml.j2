@@ -89,6 +89,10 @@ spec:
           value: '5'
         - name: SQUONK_POD_IMAGE_PULL_POLICY
           value: '{{ sq_pod_image_pull_policy }}'
+        - name: SQUONK_POD_NODE_AFFINITY_VALUE
+          value: '{{ sq_pod_node_affinity_value }}'
+        - name: SQUONK_NF_QUEUE_SIZE
+          value: '{{ sq_nf_queue_size }}'
         - name: JAVA_TOOL_OPTIONS
           value: '{{ sq_cell_java_tool_options }}'
 #        - name: JAVA_OPTS

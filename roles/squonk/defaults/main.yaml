@@ -76,6 +76,12 @@ sq_pod_debug_mode: 0
 # The Pod CPU resource (and limit) for cell and job-executor Jobs.
 # Passed to squonk containers via the resources/cpu/limit and request.
 sq_pod_cpu_resource: '1'
+# Worker pod affinity value.
+# Cells are required to run on nodes with our affinity label
+sq_pod_node_affinity_value: worker
+# The Squonk Pod Nextflow Queue size
+# Internal default is 100.
+sq_nf_queue_size: 20
 
 # Container credentials used to create secrets
 # in order to pull images from private registries.
