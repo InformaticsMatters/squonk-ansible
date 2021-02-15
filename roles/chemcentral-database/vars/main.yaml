@@ -11,7 +11,7 @@ ccd_database_loader_image_tag: 0.3.11
 
 # Database resource limits
 ccd_database_cpu_limit: 4
-ccd_database_cpu_request: 1
+ccd_database_cpu_request: 100m
 ccd_database_mem_limit: 4Gi
 ccd_database_mem_request: 1Gi
 
