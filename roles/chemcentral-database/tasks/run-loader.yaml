@@ -30,8 +30,9 @@
 - name: Check multi-file loader control variables
   assert:
     that:
+    - ccd_loader_path|string|length > 0
     - ccd_loader_pattern|string|length > 0
-    - ccd_loader_pattern|string != SetMe
+    - ccd_loader_pattern|string != 'SetMe'
   when: ccd_loader_path|string != 'SetMe'
 
 # Deploy the loader
