@@ -70,7 +70,7 @@ spec:
             memory: {{ ccd_s3_loader_mem_request }}
         volumeMounts:
         - mountPath: /data
-          name: graph-volume
+          name: data-dir
 {% if ccd_s3_endpoint %}
         - name: s3-config
           mountPath: /home/loader/.aws/config
