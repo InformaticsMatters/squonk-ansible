@@ -20,7 +20,8 @@
     - k8s_auth_host|length > 0
     - k8s_auth_api_key|length > 0
 
-- block:
+- name: Delete loader volume
+  block:
 
   - name: Get expected namespace
     k8s_info:

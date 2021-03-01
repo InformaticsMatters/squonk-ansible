@@ -32,7 +32,7 @@ spec:
       initContainers:
       - name: graph-loader
         image: "{{ ccd_s3_loader_image_registry }}/{{ ccd_s3_loader_image }}:{{ ccd_s3_loader_image_tag }}"
-{% if ccd_graph_tag in ['latest', 'stable'] %}
+{% if ccd_s3_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
         imagePullPolicy: IfNotPresent
