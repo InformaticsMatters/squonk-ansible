@@ -104,8 +104,12 @@ spec:
           value: chemcentral
         - name: CHEMCENTRAL_SCHEMA
           value: vendordbs
+{% if ccd_loader_table_name %}
+        # The table name has a default for each loader class.
+        # Be explicit if it's set.
         - name: CHEMCENTRAL_TABLE
           value: {{ ccd_loader_table_name }}
+{% endif %}
         - name: CHEMCENTRAL_LOADER_FILE
           value: /data/{{ ccd_loader_file }}
         - name: CHEMCENTRAL_LOADER_DIR

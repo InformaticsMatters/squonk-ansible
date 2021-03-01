@@ -48,7 +48,8 @@ ccd_loader_limit: 0
 # How often to report progress
 ccd_loader_reporting_chunk: 0
 # Name of the database table to load into
-ccd_loader_table_name: SetMe
+# Class loader implement a default, so this is not normally required.
+ccd_loader_table_name: ''
 
 # A pull-secret for public images pulled from DockerHub.
 # If set this is the base-64 string that can be used as the value

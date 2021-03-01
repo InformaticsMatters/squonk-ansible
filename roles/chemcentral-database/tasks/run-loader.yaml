@@ -21,8 +21,6 @@
 - name: Check control variables
   assert:
     that:
-    - ccd_loader_table_name|string|length > 0
-    - ccd_loader_table_name|string != 'SetMe'
     - ccd_loader_class|string|length > 0
     - ccd_loader_class|string != 'SetMe'
     - ccd_bucket_path|string|length > 0
