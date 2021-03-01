@@ -35,7 +35,7 @@ spec:
 {% if ccd_s3_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
 {% endif %}
         terminationMessagePolicy: FallbackToLogsOnError
         env:
