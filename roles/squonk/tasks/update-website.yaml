@@ -7,12 +7,6 @@
 
 - include_tasks: prep.yaml
 
-# If it looks like we're deploying to OpenShift
-# we need to use the k8s authentication module to login
-# and obtain an API key.
-- include_tasks: login.yaml
-  when: okd_master_hostname is defined
-
 # A kubernetes (or OpenShift) host and an API key must be set.
 # We will either have authenticated against an OpenShift server
 # or the AWX kubernetes credentials will have injected suitable
@@ -25,7 +19,8 @@
     - k8s_auth_host|length > 0
     - k8s_auth_api_key|length > 0
 
-- block:
+- name: Update website
+  block:
 
   - name: Assert hostname
     assert:
@@ -52,8 +47,3 @@
     group/k8s:
       host: "{{ k8s_auth_host }}"
       api_key: "{{ k8s_auth_api_key }}"
-
-# If it looks like we're deploying to OpenShift
-# we now need to logout...
-- include_tasks: logout.yaml
-  when: okd_master_hostname is defined
