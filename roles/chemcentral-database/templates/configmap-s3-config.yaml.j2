@@ -1,0 +1,18 @@
+---
+
+# The AWS S3 configuration file.
+# Rendered as 'config' in '$HOME/.aws' when ccd_s3_endpoint is defined.
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: s3-config
+  namespace: {{ ccd_namespace }}
+data:
+  config: |
+    [plugins]
+    endpoint = awscli_plugin_endpoint
+    [profile default]
+    region =
+    s3 =
+        endpoint_url = https://{{ ccd_s3_endpoint }}

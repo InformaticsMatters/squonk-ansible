@@ -27,6 +27,15 @@ ccd_loader_cpu_request: 250m
 ccd_loader_mem_limit: 2Gi
 ccd_loader_mem_request: 100Mi
 
+ccd_s3_loader_cpu_limit: 250m
+ccd_s3_loader_cpu_request: 250m
+ccd_s3_loader_mem_limit: 1Gi
+ccd_s3_loader_mem_request: 1Gi
+
+ccd_s3_loader_image_registry: docker.io
+ccd_s3_loader_image: informaticsmatters/neo4j-s3-loader
+ccd_s3_loader_image_tage: 3.5.25
+
 # General variables -----------------------------------------------------------
 
 # General timeout, generally used within the k8s module,

@@ -25,6 +25,58 @@ spec:
                 values:
                 - core
 
+      # The initContainers section simply invokes our S3 loader image
+      # which is responsible for synchronising the chosen S3
+      # data with the container's '/data' directory, which it
+      # shares with the ChemCentral loader.
+      initContainers:
+      - name: graph-loader
+        image: "{{ ccd_s3_loader_image_registry }}/{{ ccd_s3_loader_image }}:{{ ccd_s3_loader_image_tag }}"
+{% if ccd_graph_tag in ['latest', 'stable'] %}
+        imagePullPolicy: Always
+{% else %}
+        imagePullPolicy: IfNotPresent
+{% endif %}
+        terminationMessagePolicy: FallbackToLogsOnError
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: s3-secrets
+              key: aws_access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-secrets
+              key: aws_secret_access_key
+        - name: AWS_DEFAULT_REGION
+          value: "{{ ccd_aws_default_region }}"
+        - name: AWS_BUCKET
+          value: "{{ ccd_bucket }}"
+        - name: AWS_BUCKET_PATH
+          value: "{{ ccd_bucket_path }}"
+        - name: SYNC_PATH
+          value: ""
+        - name: GRAPH_WIPE
+          value: "yes"
+        - name: CYPHER_ROOT
+          value: ""
+        resources:
+          limits:
+            cpu: {{ ccd_s3_loader_cpu_limit }}
+            memory: {{ ccd_s3_loader_mem_limit }}
+          requests:
+            cpu: {{ ccd_s3_loader_cpu_request }}
+            memory: {{ ccd_s3_loader_mem_request }}
+        volumeMounts:
+        - mountPath: /data
+          name: graph-volume
+{% if ccd_s3_endpoint %}
+        - name: s3-config
+          mountPath: /home/loader/.aws/config
+          subPath: config
+{% endif %}
+
       containers:
       - name: loader-{{ ccd_loader_marker }}
         image: {{ ccd_database_image_registry }}/squonk/chemcentral-loader:{{ ccd_database_loader_image_tag }}
@@ -79,5 +131,10 @@ spec:
       - name: data-dir
         persistentVolumeClaim:
           claimName: loader
+{% if ccd_s3_endpoint %}
+      - name: s3-config
+        configMap:
+          name: s3-config
+{% endif %}
 
       restartPolicy: Never

@@ -12,6 +12,13 @@ ccd_database_volume_storageclass: " "
 
 # Loader variables ------------------------------------------------------------
 
+# The bucket and path for the (RAW) vendor data.
+# The ccd_s3_endpoint is set if not using AWS.
+# It's the endpoint of the non-AWS S£ service.
+ccd_s3_endpoint: ''
+ccd_bucket: im-fragnet
+ccd_bucket_path: SetMe
+
 # Size and class of the database loader directory.
 # The class is 'blank', which implies the default,
 # which the user would typically define.
@@ -49,3 +56,12 @@ ccd_loader_table_name: SetMe
 # If set it is applied to the ServiceAccount in the namespace
 # and applied to Pods that use that namespace.
 ccd_dockerhub_pullsecret: ''
+
+#------------------------------------------------------------------------------
+
+# Picked up from the environment
+# (typically injected by AWX/Tower)...
+
+aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+aws_default_region: eu-central-1
