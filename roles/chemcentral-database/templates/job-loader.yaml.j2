@@ -30,7 +30,7 @@ spec:
       # data with the container's '/data' directory, which it
       # shares with the ChemCentral loader.
       initContainers:
-      - name: graph-loader
+      - name: ccd-s3-downloader
         image: "{{ ccd_s3_loader_image_registry }}/{{ ccd_s3_loader_image }}:{{ ccd_s3_loader_image_tag }}"
 {% if ccd_s3_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
@@ -58,7 +58,7 @@ spec:
         - name: SYNC_PATH
           value: "{{ ccd_loader_path }}"
         - name: GRAPH_WIPE
-          value: "yes"
+          value: "no"
         - name: CYPHER_ROOT
           value: ""
         resources:
@@ -78,7 +78,7 @@ spec:
 {% endif %}
 
       containers:
-      - name: loader-{{ ccd_loader_marker }}
+      - name: ccd-loader-{{ ccd_loader_marker }}
         image: {{ ccd_database_image_registry }}/squonk/chemcentral-loader:{{ ccd_database_loader_image_tag }}
 {% if ccd_database_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
