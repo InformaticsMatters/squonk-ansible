@@ -22,7 +22,7 @@
   assert:
     that:
     - aws_access_key_id|string|length > 0
-      aws_secret_access_key|string|length > 0
+    - aws_secret_access_key|string|length > 0
     - ccd_loader_class|string|length > 0
     - ccd_loader_class|string != 'SetMe'
     - ccd_bucket_path|string|length > 0
