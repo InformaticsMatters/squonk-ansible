@@ -55,9 +55,9 @@ sq_db_password: SetMe
 
 # Squonk container image registries and tags
 sq_image_registry: docker.io
-sq_image_tag: '0.4.0'
+sq_image_tag: '0.5.4'
 sq_portal_registry: docker.io
-sq_portal_image_tag: '0.3.11'
+sq_portal_image_tag: '0.4.0'
 sq_website_registry: registry.gitlab.com
 sq_website_image: informaticsmatters/squonk-website
 sq_website_image_tag: stable
