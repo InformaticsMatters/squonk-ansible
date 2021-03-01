@@ -34,7 +34,7 @@ ccd_s3_loader_mem_request: 1Gi
 
 ccd_s3_loader_image_registry: docker.io
 ccd_s3_loader_image: informaticsmatters/neo4j-s3-loader
-ccd_s3_loader_image_tage: 3.5.25
+ccd_s3_loader_image_tag: 3.5.25
 
 # General variables -----------------------------------------------------------
 

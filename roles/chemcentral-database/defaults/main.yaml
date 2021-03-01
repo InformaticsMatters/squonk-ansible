@@ -14,7 +14,7 @@ ccd_database_volume_storageclass: " "
 
 # The bucket and path for the (RAW) vendor data.
 # The ccd_s3_endpoint is set if not using AWS.
-# It's the endpoint of the non-AWS S£ service.
+# It's the endpoint of the non-AWS S3 service.
 ccd_s3_endpoint: ''
 ccd_bucket: im-fragnet
 ccd_bucket_path: SetMe
