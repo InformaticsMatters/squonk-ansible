@@ -62,7 +62,6 @@
   - name: Deploy secrets
     k8s:
       definition: "{{ lookup('template', 'secret-s3.yaml.j2') }}"
-    when: s3_s_result.resources|length == 0
 
   - name: Deploy non-AWS config
     k8s:
