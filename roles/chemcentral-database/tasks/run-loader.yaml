@@ -25,15 +25,14 @@
     - ccd_loader_class|string != 'SetMe'
     - ccd_bucket_path|string|length > 0
     - ccd_bucket_path|string != 'SetMe'
-    - ccd_loader_file|string != 'SetMe'
-    - ccd_loader_path|string != 'SetMe'
+    - ccd_loader_file|string != 'SetMe' or ccd_loader_path|string != 'SetMe'
 
 - name: Check multi-file loader control variables
   assert:
     that:
     - ccd_loader_pattern|string|length > 0
     - ccd_loader_pattern|string != SetMe
-  when: ccd_loader_path != 'SetMe'
+  when: ccd_loader_path|string != 'SetMe'
 
 # Deploy the loader
 
