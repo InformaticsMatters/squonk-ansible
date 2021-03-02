@@ -30,7 +30,8 @@ ccd_database_loader_volume_storageclass: " "
 # for example 'org.squonk.rdkit.db.loaders.EMoleculesBBSmilesLoader'
 ccd_loader_class: SetMe
 # A marker to use with the loader.
-# It's a unique identity of the loader.
+# It's a unique identity of the loader and used to set the loader and job name.
+# The value must be a valid kubernetes name when converted to lower-case.
 # Loaders with different 'markers' can run at the same time.
 ccd_loader_marker: A
 # The data file to load (for single-file loaders).

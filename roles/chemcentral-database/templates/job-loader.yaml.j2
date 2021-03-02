@@ -2,15 +2,15 @@
 kind: Job
 apiVersion: batch/v1
 metadata:
-  name: loader
+  name: loader-{{ ccd_loader_marker|lower }}
   namespace: {{ ccd_namespace }}
 spec:
   selector:
-    name: loader
+    name: loader-{{ ccd_loader_marker|lower }}
   template:
     metadata:
       labels:
-        name: loader
+        name: loader-{{ ccd_loader_marker|lower }}
     spec:
       serviceAccountName: ccd
       # An arbitrary fsGroup
@@ -82,7 +82,7 @@ spec:
 {% endif %}
 
       containers:
-      - name: ccd-loader-{{ ccd_loader_marker }}
+      - name: ccd-db-loader
         image: {{ ccd_database_image_registry }}/squonk/chemcentral-loader:{{ ccd_database_loader_image_tag }}
 {% if ccd_database_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
