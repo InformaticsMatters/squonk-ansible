@@ -29,8 +29,8 @@ ccd_loader_mem_request: 128Mi
 
 ccd_s3_loader_cpu_limit: 250m
 ccd_s3_loader_cpu_request: 250m
-ccd_s3_loader_mem_limit: 500Mi
-ccd_s3_loader_mem_request: 1Gi
+ccd_s3_loader_mem_limit: 1Gi
+ccd_s3_loader_mem_request: 500Mi
 
 ccd_s3_loader_image_registry: docker.io
 ccd_s3_loader_image: informaticsmatters/neo4j-s3-loader
