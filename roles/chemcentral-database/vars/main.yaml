@@ -22,13 +22,13 @@ ccd_database_chemcentral_user_password: "{{ lookup('password', '/dev/null length
 
 # Loader variables ------------------------------------------------------------
 
-ccd_loader_cpu_limit: 2
+ccd_loader_cpu_limit: 1
 ccd_loader_cpu_request: 500m
 ccd_loader_mem_limit: 2Gi
-ccd_loader_mem_request: 128Mi
+ccd_loader_mem_request: 1Gi
 
-ccd_s3_loader_cpu_limit: 250m
-ccd_s3_loader_cpu_request: 250m
+ccd_s3_loader_cpu_limit: 1
+ccd_s3_loader_cpu_request: 500m
 ccd_s3_loader_mem_limit: 1Gi
 ccd_s3_loader_mem_request: 500Mi
 
