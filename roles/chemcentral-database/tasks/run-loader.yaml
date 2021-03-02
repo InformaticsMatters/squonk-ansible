@@ -28,14 +28,26 @@
     - ccd_bucket_path|string|length > 0
     - ccd_bucket_path|string != 'SetMe'
     - ccd_loader_file|string != 'SetMe' or ccd_loader_path|string != 'SetMe'
+    - ccd_loader_file|string != '' or ccd_loader_path|string != ''
 
 - name: Check multi-file loader control variables
   assert:
     that:
-    - ccd_loader_path|string|length > 0
     - ccd_loader_pattern|string|length > 0
     - ccd_loader_pattern|string != 'SetMe'
-  when: ccd_loader_path|string != 'SetMe'
+    - ccd_loader_file|string|length == 0 or ccd_loader_file|string == 'SetMe'
+  when:
+  - ccd_loader_path|string != 'SetMe'
+  - ccd_loader_path|string|length > 0
+
+- name: Check single-file loader control variables
+  assert:
+    that:
+    - ccd_loader_path|string|length == 0 or ccd_loader_path|string == 'SetMe'
+    - ccd_loader_pattern|string|length == 0 or ccd_loader_pattern|string == 'SetMe'
+  when:
+  - ccd_loader_file|string != 'SetMe'
+  - ccd_loader_file|string|length > 0
 
 # Deploy the loader
 

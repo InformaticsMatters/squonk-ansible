@@ -36,6 +36,10 @@ ccd_loader_marker: A
 # The data file to load (for single-file loaders).
 # Relative to the mount-point in the container.
 # Something like 'version.smi.gz'
+#
+# Set ccd_loader_file
+# Or ccd_loader_path and ccd_loader_pattern
+# ...but not both.
 ccd_loader_file: SetMe
 # The directory of the data to load (for multi-file loaders).
 # Relative to the mount-point in the container
