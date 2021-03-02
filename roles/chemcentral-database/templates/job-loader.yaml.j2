@@ -87,7 +87,7 @@ spec:
 {% if ccd_database_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
 {% endif %}
         terminationMessagePolicy: FallbackToLogsOnError
         args:
