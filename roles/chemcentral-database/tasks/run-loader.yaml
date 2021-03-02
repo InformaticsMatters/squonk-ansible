@@ -28,7 +28,7 @@
     - ccd_bucket_path|string|length > 0
     - ccd_bucket_path|string != 'SetMe'
     - ccd_loader_file|string != 'SetMe' or ccd_loader_path|string != 'SetMe'
-    - ccd_loader_file|string != '' or ccd_loader_path|string != ''
+    - ccd_loader_file|string|length > 0 or ccd_loader_path|string|length > 0
 
 - name: Check multi-file loader control variables
   assert:
