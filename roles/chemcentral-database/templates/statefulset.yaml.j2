@@ -65,11 +65,27 @@ spec:
           tcpSocket:
             port: 5432
         volumeMounts:
+        # Container shared-memory work-around.
+        # See https://github.com/kubernetes/kubernetes/issues/28272
+        - mountPath: /dev/shm
+          name: dshm
+        # Postgres configuration
+        - mountPath: /etc/postgresql/postgresql.conf
+          name: database-conf
+          subPath: postgresql.conf
+          readOnly: true
+{% if ccd_pg_extra_configuration %}
+        # Optional (extra) configuration
+        - mountPath: /etc/postgresql/extra.conf
+          name: database-extra-conf
+          subPath: extra.conf
+          readOnly: true
+{% endif %}
+        - mountPath: /docker-entrypoint-initdb.d
+          name: database-init
         # Persistent volume for data
         - mountPath: /var/lib/postgresql/data
           name: database-pvc
-        - mountPath: /docker-entrypoint-initdb.d
-          name: database-init
         env:
         # PGDATA - the location of persisted database files.
         # Normally a sub-directory of '/var/lib/postgresql/data'.
@@ -95,10 +111,22 @@ spec:
             secretKeyRef:
               name: database
               key: chemcentral_user_password
+
       volumes:
       - name: database-init
         configMap:
           name: database-init
+      - name: database-conf
+        configMap:
+          name: database-conf
+{% if ccd_pg_extra_configuration %}
+      - name: database-extra-conf
+        configMap:
+          name: database-extra-conf
+{% endif %}
+      - name: dshm
+        emptyDir:
+          medium: Memory
       - name: database-pvc
         persistentVolumeClaim:
           claimName: database

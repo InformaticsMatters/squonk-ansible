@@ -56,6 +56,19 @@ ccd_loader_reporting_chunk: 0
 # Class loader implement a default, so this is not normally required.
 ccd_loader_table_name: ''
 
+# An optional (additional) postgres configuration.
+#
+# The default configuration file (which is defined in 'configmap-db-conf')
+# includes some important (built-in) values. If you require additional
+# parameters then you can provide your own postgres-compatible configuration
+# settings here and it will be 'included' when the database starts.
+#
+# For example, to set shared_buffers to 12GB you'd provide the following: -
+#
+#   ccd_pg_extra_configuration: |
+#     shared_buffers = 12GB
+ccd_pg_extra_configuration: ''
+
 # A pull-secret for public images pulled from DockerHub.
 # If set this is the base-64 string that can be used as the value
 # in our Kubernetes Secret as the .dockerconfigjson value.

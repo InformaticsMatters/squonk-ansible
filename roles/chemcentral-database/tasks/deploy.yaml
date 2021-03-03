@@ -91,12 +91,19 @@
 
 # Deploy the ChemCentral database
 
+- name: Deploy extra config
+  k8s:
+    definition: "{{ lookup('template', 'configmap-db-extra-conf.yaml.j2') }}"
+    wait: yes
+  when: ccd_pg_extra_configuration|string|length > 1
+
 - name: Create database
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
   loop:
   - configmap-db-init
+  - configmap-db-conf
   - statefulset
   - service
 

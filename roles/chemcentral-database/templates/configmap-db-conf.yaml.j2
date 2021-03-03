@@ -1,0 +1,10 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: database-conf
+  namespace: {{ ccd_namespace }}
+data:
+  postgresql.conf: |
+    listen_addresses = '*'
+    include_if_exists 'extra.conf'
