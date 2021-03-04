@@ -83,7 +83,7 @@ spec:
 
       containers:
       - name: ccd-db-loader
-        image: {{ ccd_database_image_registry }}/squonk/chemcentral-loader:{{ ccd_database_loader_image_tag }}
+        image: {{ ccd_database_loader_image_registry }}/{{ ccd_database_loader_image }}:{{ ccd_database_loader_image_tag }}
 {% if ccd_database_loader_image_tag in ['latest', 'stable'] %}
         imagePullPolicy: Always
 {% else %}
