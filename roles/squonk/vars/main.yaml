@@ -16,15 +16,17 @@ sq_nextflow_image: informaticsmatters/nextflow:20.07.1
 #
 # All out Pods *MUST* have a request (CPU and Memory)
 # but if a limit is 0 then a limit is not set.
+# Remember - if you do not set a limit but do deploy a limit-range object
+# (as we do) then the limit you do not set will be set by the limit-range object.
 sq_cell_cpu_request: 100m
 sq_cell_mem_request: 700Mi
-sq_cell_cpu_limit: 0
+sq_cell_cpu_limit: 4
 sq_cell_mem_limit: 5Gi
 sq_cell_java_tool_options: -Xmx4096m
 
 sq_chem_cpu_request: 1
 sq_chem_mem_request: 2Gi
-sq_chem_cpu_limit: 0
+sq_chem_cpu_limit: 4
 sq_chem_mem_limit: 5Gi
 sq_chem_java_tool_options: -Xmx4096m
 
@@ -36,13 +38,13 @@ sq_ccs_java_tool_options: -Xmx4096m
 
 sq_core_cpu_request: 200m
 sq_core_mem_request: 800Mi
-sq_core_cpu_limit: 1000m
+sq_core_cpu_limit: 1
 sq_core_mem_limit: 5Gi
 sq_core_java_tool_options: -Xmx4096m
 
 sq_je_cpu_request: 100m
 sq_je_mem_request: 1700Mi
-sq_je_cpu_limit: 0
+sq_je_cpu_limit: 4
 sq_je_mem_limit: 5Gi
 sq_je_java_tool_options: -Xmx4096m
 
