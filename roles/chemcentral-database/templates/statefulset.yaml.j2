@@ -112,13 +112,10 @@ spec:
       - name: database-init
         configMap:
           name: database-init
+{% if ccd_pg_configuration %}
       - name: database-conf
         configMap:
           name: database-conf
-{% if ccd_pg_extra_configuration %}
-      - name: database-extra-conf
-        configMap:
-          name: database-extra-conf
 {% endif %}
       - name: dshm
         emptyDir:

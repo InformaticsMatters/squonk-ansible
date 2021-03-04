@@ -64,7 +64,7 @@ ccd_loader_table_name: ''
 #
 # For example, to set shared_buffers to 12GB you'd provide the following: -
 #
-#   ccd_pg_extra_configuration: |
+#   ccd_pg_configuration: |
 #     listen_addresses = '*'
 #     shared_buffers = 12GB
 ccd_pg_configuration: ''
