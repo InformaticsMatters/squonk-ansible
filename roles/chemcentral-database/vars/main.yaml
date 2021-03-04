@@ -10,7 +10,7 @@ ccd_database_image_tag: Release_2020_03_4
 
 # Database resource limits
 ccd_database_cpu_limit: 4
-ccd_database_cpu_request: 100m
+ccd_database_cpu_request: 500m
 ccd_database_mem_limit: 14Gi
 ccd_database_mem_request: 14Gi
 
