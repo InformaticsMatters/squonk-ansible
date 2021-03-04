@@ -5,6 +5,4 @@ metadata:
   name: database-conf
   namespace: {{ ccd_namespace }}
 data:
-  postgresql.conf: |
-    listen_addresses = '*'
-    include_if_exists 'extra.conf'
+  postgresql.conf: "{{ ccd_pg_configuration|replace('\n', '\\n') }}"

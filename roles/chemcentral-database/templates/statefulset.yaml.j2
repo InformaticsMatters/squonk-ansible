@@ -67,25 +67,21 @@ spec:
         volumeMounts:
         # Container shared-memory work-around.
         # See https://github.com/kubernetes/kubernetes/issues/28272
-        - mountPath: /dev/shm
-          name: dshm
-        # Postgres configuration
-        - mountPath: /etc/postgresql/postgresql.conf
-          name: database-conf
-          subPath: postgresql.conf
-          readOnly: true
-{% if ccd_pg_extra_configuration %}
-        # Optional (extra) configuration
-        - mountPath: /etc/postgresql/extra.conf
-          name: database-extra-conf
-          subPath: extra.conf
-          readOnly: true
-{% endif %}
-        - mountPath: /docker-entrypoint-initdb.d
-          name: database-init
         # Persistent volume for data
         - mountPath: /var/lib/postgresql/data
           name: database-pvc
+        - mountPath: /dev/shm
+          name: dshm
+{% if ccd_pg_configuration %}
+        # Postgres configuration
+        # Written to the data volume that's mounted prior to this
+        # and is part of the data directory defined by PGDATA
+        - mountPath: /var/lib/postgresql/data/pgdata/postgresql.conf
+          name: database-conf
+          subPath: postgresql.conf
+{% endif %}
+        - mountPath: /docker-entrypoint-initdb.d
+          name: database-init
         env:
         # PGDATA - the location of persisted database files.
         # Normally a sub-directory of '/var/lib/postgresql/data'.
