@@ -1,4 +1,4 @@
-ansible == 2.9.13
+ansible == 2.10.0
 boto3 == 1.15.8
 jmespath == 0.10.0
 kubernetes == 10.0.1
