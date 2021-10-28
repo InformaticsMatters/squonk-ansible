@@ -11,7 +11,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ sq_cert_issuer|lower }}"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: "{{ sq_nginx_client_max_body_size }}"
 spec:
   tls:
