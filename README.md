@@ -9,14 +9,14 @@
 An Ansible role to deploy the Informatics Matters [Squonk] application
 to [Kubernetes].
 
-Ideally you'll start from a Python 3 virtual environment and then install
+Ideally you'll start from a Python 3 virtual environment
+(and tested using Python 3.7.6) and then install
 the required modules, roles and collections: -
 
->   Ansible prior to 2.9.1 will probably have issues with Python 3.8.
-    So, base your environment on Python 3.7 and use Ansible 2.8.7
-    (which is better because AWX runs Ansible 2.8, not 2.9).
+    $ python -m venv venv
+    $ source ./venv/bin/activate
+    $ pip install --upgrade pip
 
-    $ conda activate squonk-ansible
     $ pip install -r requirements.txt
 
 >   [Ansible Galaxy] roles this project depends upon
