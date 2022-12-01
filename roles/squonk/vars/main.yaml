@@ -24,7 +24,7 @@ sq_cell_cpu_limit: 4
 sq_cell_mem_limit: 5Gi
 sq_cell_java_tool_options: -Xmx4096m
 
-sq_chem_cpu_request: 1
+sq_chem_cpu_request: 500m
 sq_chem_mem_request: 2Gi
 sq_chem_cpu_limit: 4
 sq_chem_mem_limit: 5Gi
