@@ -25,18 +25,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: informaticsmatters.com/purpose
-                operator: NotIn
-                values:
-                - worker
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: informaticsmatters.com/purpose
-                operator: In
-                values:
-                - application
+              - key: informaticsmatters.com/purpose-application
+                operator: Exists
 
       # To access the mounted volumes
       # we set the security context's fsGroup
