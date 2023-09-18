@@ -1,5 +1,6 @@
 .idea/
 venv/
+**/.DS_Store
 
 kubeconfig
 *parameters
